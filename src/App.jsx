@@ -1,7 +1,14 @@
-export default function App() {
+import React from "react";
+import { Header, Footer, Content } from "./components";
+
+const App = () => {
   return (
-    <h1 className="text-3xl font-bold underline text-emerald-400">
-      Hello world!
-    </h1>
+    <>
+      <Header />
+      <Content />
+      <Footer />
+    </>
   );
-}
+};
+
+export default App;
