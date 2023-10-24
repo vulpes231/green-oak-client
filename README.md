@@ -1,8 +1,3 @@
-# React + Vite
+Green Oak
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Welcome to GreenOak, a cutting-edge virtual bank experience designed to make your financial life simpler and more convenient. Explore our range of online banking services, including secure mobile banking, easy fund transfers, and powerful financial tools
