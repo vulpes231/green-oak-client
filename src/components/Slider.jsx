@@ -4,7 +4,7 @@ import Article from "./Article";
 
 const Slider = () => {
   return (
-    <section className="p-6 flex flex-col gap-6 ">
+    <section className="p-6 grid gap-8 md:grid-cols-2 lg:grid-cols-4 md:pt-10 lg:max-w-[1100px] mx-auto">
       <Article
         icon={<BsSafe className="text-6xl text-[#347338]" />}
         title="
