@@ -6,7 +6,10 @@ import { navLinks } from "../constants";
 import { motion } from "framer-motion";
 import Button from "./Button";
 
+import { Link, useNavigate } from "react-router-dom";
+
 const Header = () => {
+  const navigate = useNavigate();
   const [toggle, setToggle] = useState(false);
 
   const links = navLinks.map((lnk) => {
@@ -25,16 +28,22 @@ const Header = () => {
     setToggle(false);
   }
 
+  function goToLogin() {
+    navigate("/login");
+  }
+
   return (
     <header
       className={`fixed top-0 w-full h-[80px] p-4 bg-[#F2F2F2] grid content-center z-50 text-[#333]`}
     >
       <nav className="flex justify-between items-center">
         {/* logo */}
-        <span className="flex justify-between items-center gap-2">
+        <Link to="/" className="flex justify-between items-center gap-2">
           <img src={logo} alt="" width={30} />
-          <h1 className="text-2xl font-bold">GreenOak</h1>
-        </span>
+          <h1 className="text-2xl font-bold">
+            Green<span className="text-[#347338]">Oak</span>
+          </h1>
+        </Link>
 
         {/* monbile links */}
         <motion.ul
@@ -55,6 +64,7 @@ const Header = () => {
           <Button
             title="Log In"
             className="bg-[#347338] px-8 py-2 text-[#fff] rounded-md"
+            onClick={goToLogin}
           />
         )}
 
