@@ -41,11 +41,12 @@ const Footer = () => {
             Green<span className="text-[#347338]">Oak</span>
           </h1>
         </figure>
-        <h4>
-          Customer service line: <span>800-321-9807</span>
+        <h4 className="font-semibold capitalize">
+          Customer service line:{" "}
+          <span className="font-normal">800-321-9807</span>
         </h4>
         <address className="flex flex-col items-center lg:items-start text-center lg:text-left">
-          <span>Corporate offices</span>
+          <span className="font-semibold capitalize">Corporate offices:</span>
           <p>
             (Not open to the public. No branches or ATMs) 11545 W. Touhy Ave,
             Chicago, IL 60666
@@ -72,9 +73,9 @@ const Footer = () => {
       {/* social */}
       <article className="flex flex-col gap-4 items-center  lg:w-[20%]">
         <div className="flex gap-4">
-          <FaPinterest />
-          <FaReddit />
-          <FaTwitch />
+          <FaPinterest className="text-2xl text-[#347338]" />
+          <FaReddit className="text-2xl text-[#347338]" />
+          <FaTwitch className="text-2xl text-[#347338]" />
         </div>
         <button className="bg-[#347338] py-4 px-6 lg:px-3 text-[#fff] rounded-md ">
           Become a member

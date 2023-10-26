@@ -6,12 +6,10 @@ import { Login } from "./pages/index";
 const App = () => {
   return (
     <>
-      <Header />
       <Routes>
         <Route path="/" element={<Content />} />
         <Route path="/login" element={<Login />} />
       </Routes>
-      <Footer />
     </>
   );
 };
