@@ -2,12 +2,17 @@ import React, { useState } from "react";
 import { FaArrowRight, FaEye, FaLock } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { logo } from "../assets";
-import { AnimatedInput } from "../components";
+import { AnimatedInput, LoginFooter } from "../components";
 
 const Login = () => {
   const [error, setError] = useState(false);
   const [toggled, setToggled] = useState(false);
   const [active, setActive] = useState(false);
+
+  const [form, setForm] = useState({
+    user: "",
+    pass: "",
+  });
 
   function animateInput(e) {
     e.target = setActive((prev) => !prev);
@@ -17,12 +22,25 @@ const Login = () => {
     setToggled((prev) => !prev);
   }
 
+  function handleInputChange(e) {
+    const { name, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+
   const myType = !toggled ? "password" : "text";
 
+  function handleUserLogin(e) {
+    e.preventDefault();
+    console.log(form);
+  }
+
   return (
-    <section className=" w-full min-h-screen p-6 text-[#333] bg-[#F2F2F2] ">
+    <section className=" w-full min-h-screen p-6 text-[#333] bg-[#F2F2F2] flex flex-col justify-between  ">
       <div className="w-full md:max-w-[600px] mx-auto flex flex-col gap-10 items-center">
-        <article className="flex items-center gap-2 mt-10">
+        <article className="flex items-center gap-2 mt-10 md:mt-24">
           <img src={logo} alt="log-image" width={40} />
           <h3 className="text-2xl font-bold">
             Green<span>Oak</span>
@@ -35,25 +53,44 @@ const Login = () => {
         <article className={!error ? "hidden" : ""}></article>
 
         {/* form */}
-        <form action="" className="w-full flex flex-col gap-6 font-light">
+        <form
+          onSubmit={handleUserLogin}
+          className="w-full flex flex-col gap-6 font-light"
+        >
           <div>
-            <label htmlFor="" className="flex justify-between items-center">
-              Username{" "}
+            <label
+              htmlFor=""
+              className="flex justify-between items-center mb-1"
+            >
+              Username
               <Link to="" className="text-[#347338] ">
                 Forgot Username
               </Link>
             </label>
-            <AnimatedInput type="text" />
+            <AnimatedInput
+              type="text"
+              value={form.username}
+              onChange={handleInputChange}
+              name="user"
+            />
           </div>
           <div className="relative">
-            <label htmlFor="" className="flex justify-between items-center">
+            <label
+              htmlFor=""
+              className="flex justify-between items-center mb-1"
+            >
               Password
               <Link to="" className="text-[#347338] ">
                 Forgot Password
               </Link>
             </label>
-            <AnimatedInput type={myType} />
-            <FaEye className="absolute right-2 top-9" onClick={handleToggle} />
+            <AnimatedInput
+              type={myType}
+              value={form.password}
+              onChange={handleInputChange}
+              name="pass"
+            />
+            <FaEye className="absolute right-3 top-11" onClick={handleToggle} />
           </div>
           <button className="bg-[#347338] p-3 text-[#fff] rounded-lg">
             Log In
@@ -69,6 +106,7 @@ const Login = () => {
           </Link>
         </div>
       </div>
+      <LoginFooter />
     </section>
   );
 };

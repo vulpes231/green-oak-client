@@ -5,5 +5,15 @@ import Loader from "./Loader";
 import Button from "./Button";
 import Slider from "./Slider";
 import AnimatedInput from "./Input";
+import LoginFooter from "./LoginFooter";
 
-export { Header, Content, Footer, Loader, Button, Slider, AnimatedInput };
+export {
+  Header,
+  Content,
+  Footer,
+  Loader,
+  Button,
+  Slider,
+  AnimatedInput,
+  LoginFooter,
+};
