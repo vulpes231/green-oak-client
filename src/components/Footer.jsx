@@ -8,6 +8,7 @@ import {
   FaReddit,
   FaPinterest,
 } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
   const links = navLinks.map((lnk) => {
@@ -17,6 +18,7 @@ const Footer = () => {
       </li>
     );
   });
+
   const about = footerAbout.map((lnk) => {
     return (
       <li className="text-[#347338] underline" key={lnk.id}>
@@ -24,6 +26,7 @@ const Footer = () => {
       </li>
     );
   });
+
   const help = footerHelp.map((lnk) => {
     return (
       <li className="text-[#347338] underline" key={lnk.id}>
@@ -31,6 +34,13 @@ const Footer = () => {
       </li>
     );
   });
+
+  const navigate = useNavigate();
+
+  function goToSignUp() {
+    navigate("/signup");
+  }
+
   return (
     <footer className=" flex flex-col gap-8 p-6 lg:flex-row lg:items-start lg:max-w-[1200px] mx-auto text-[#333] ">
       {/* info */}
@@ -77,7 +87,10 @@ const Footer = () => {
           <FaReddit className="text-2xl text-[#347338]" />
           <FaTwitch className="text-2xl text-[#347338]" />
         </div>
-        <button className="bg-[#347338] py-4 px-6 lg:px-3 text-[#fff] rounded-md ">
+        <button
+          onClick={goToSignUp}
+          className="bg-[#347338] py-4 px-6 lg:px-3 text-[#fff] rounded-md "
+        >
           Become a member
         </button>
       </article>

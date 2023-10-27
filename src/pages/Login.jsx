@@ -3,6 +3,7 @@ import { FaArrowRight, FaEye, FaLock } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { logo } from "../assets";
 import { AnimatedInput, LoginFooter } from "../components";
+import WithStyles from "../hoc/WithStyles";
 
 const Login = () => {
   const [error, setError] = useState(false);
@@ -42,9 +43,9 @@ const Login = () => {
       <div className="w-full md:max-w-[600px] mx-auto flex flex-col gap-10 items-center">
         <article className="flex items-center gap-2 mt-10 md:mt-24">
           <img src={logo} alt="log-image" width={40} />
-          <h3 className="text-2xl font-bold">
+          <Link to="/" className="text-2xl font-bold">
             Green<span>Oak</span>
-          </h3>
+          </Link>
         </article>
         <span className="flex items-center gap-2 font-light">
           <FaLock /> Secure Log In
@@ -55,7 +56,7 @@ const Login = () => {
         {/* form */}
         <form
           onSubmit={handleUserLogin}
-          className="w-full flex flex-col gap-6 font-light"
+          className="w-full flex flex-col gap-8 font-light"
         >
           <div>
             <label
@@ -111,4 +112,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default WithStyles(Login);

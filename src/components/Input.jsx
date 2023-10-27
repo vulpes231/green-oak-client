@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function AnimatedInput({ type, value, onChange, name }) {
+function AnimatedInput({ type, value, onChange, name, placeholder }) {
   const [active, setActive] = useState(false);
 
   function animateInput() {
@@ -11,15 +11,12 @@ function AnimatedInput({ type, value, onChange, name }) {
     <input
       type={type}
       autoComplete="off"
-      className={
-        !active
-          ? "border outline-none w-full  p-3 text-lg"
-          : "border border-[#347338] outline-none w-full  p-3 text-lg md:pylg"
-      }
+      className="border border-[#347338] outline-none w-full  py-2 text-lg px-2 md:py-3"
       onFocus={animateInput}
       value={value}
       onChange={onChange}
       name={name}
+      placeholder={placeholder}
     />
   );
 }
