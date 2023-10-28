@@ -6,6 +6,9 @@ import Button from "./Button";
 import Slider from "./Slider";
 import AnimatedInput from "./Input";
 import LoginFooter from "./LoginFooter";
+import FormLoader from "./FormLoader";
+import Error from "./Error";
+import ActionBtn from "./ActionBtn";
 
 export {
   Header,
@@ -16,4 +19,7 @@ export {
   Slider,
   AnimatedInput,
   LoginFooter,
+  FormLoader,
+  Error,
+  ActionBtn,
 };

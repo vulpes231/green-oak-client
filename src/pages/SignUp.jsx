@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { logo } from "../assets";
-import { AnimatedInput, LoginFooter } from "../components";
+import { AnimatedInput, Error, FormLoader, LoginFooter } from "../components";
 import { FaArrowRight } from "react-icons/fa";
 import {
   HiOutlineDocumentText,
@@ -28,6 +28,8 @@ const SignUp = () => {
   };
 
   const [form, setForm] = useState(initialState);
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   function handleInputChange(e) {
     const { name, value } = e.target;
@@ -36,8 +38,37 @@ const SignUp = () => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(form);
-    resetForm();
+    setIsLoading(true); // Set isLoading to true when submitting
+
+    const newErrors = {};
+
+    // Check each field for errors
+    if (!form.email) {
+      newErrors.email = "Email is required!";
+    }
+
+    if (!form.username) {
+      newErrors.username = "Username is required!";
+    }
+
+    if (!form.password) {
+      newErrors.password = "Password is required!";
+    }
+
+    if (!form.account_type) {
+      newErrors.account_type = "Account information is required!";
+    }
+
+    // Update the errors state with the newErrors object
+    setError(newErrors);
+
+    // If there are no errors, submit the form
+    if (Object.keys(newErrors).length === 0) {
+      console.log(form);
+      resetForm();
+    }
+
+    setIsLoading(false); // Set isLoading back to false after submission
   }
 
   function resetForm() {
@@ -62,6 +93,9 @@ const SignUp = () => {
           </p>
         </article>
 
+        {/* error && success */}
+        <div>{isLoading && <FormLoader />}</div>
+
         {/* signup form */}
         <form
           onSubmit={handleSubmit}
@@ -74,7 +108,9 @@ const SignUp = () => {
           <div className="flex flex-col md:flex-row md:justify-between gap-4 ">
             {/* fullname */}
             <span className="flex flex-col w-full">
-              <label htmlFor="fullname">Full Name</label>
+              <label className="font-light text-xs" htmlFor=" fullname">
+                Full Name
+              </label>
               <div className="flex items-center">
                 <HiOutlineUserCircle className="bg-[#347388] text-5xl p-3 text-white md:h-14" />
                 <AnimatedInput
@@ -89,7 +125,9 @@ const SignUp = () => {
           <div className="flex flex-col md:flex-row md:justify-between gap-4">
             {/* username */}
             <span className="flex flex-col w-full">
-              <label htmlFor="username">Username</label>
+              <label className="font-light text-xs" htmlFor=" username">
+                Username
+              </label>
               <div className="flex items-center">
                 <HiOutlineUser className="bg-[#347388] text-5xl p-3 text-white md:h-14" />
                 <AnimatedInput
@@ -102,7 +140,9 @@ const SignUp = () => {
             </span>
             {/* password */}
             <span className="flex flex-col w-full">
-              <label htmlFor="password">Password</label>
+              <label className="font-light text-xs" htmlFor=" password">
+                Password
+              </label>
               <div className="flex items-center">
                 <HiOutlineKey className="bg-[#347388] text-5xl p-3 text-white md:h-14" />
                 <AnimatedInput
@@ -117,7 +157,9 @@ const SignUp = () => {
           <div className="flex flex-col md:flex-row md:justify-between gap-4">
             {/* gender */}
             <span className="flex flex-col w-full">
-              <label htmlFor="gender">Gender</label>
+              <label className="font-light text-xs" htmlFor=" gender">
+                Gender
+              </label>
               <select
                 name="gender"
                 value={form.gender}
@@ -134,7 +176,9 @@ const SignUp = () => {
             </span>
             {/* date of birth */}
             <span className="flex flex-col w-full">
-              <label htmlFor="dob">DOB</label>
+              <label className="font-light text-xs" htmlFor=" dob">
+                DOB
+              </label>
               <div className="flex items-center">
                 <HiOutlineDocumentText className="bg-[#347388] text-5xl p-3 text-white md:h-14" />
                 <AnimatedInput
@@ -153,7 +197,9 @@ const SignUp = () => {
             Account Information
           </h4>
           <span className="flex flex-col w-full">
-            <label htmlFor="account_type">Account Type</label>
+            <label className="font-light text-xs" htmlFor=" account_type">
+              Account Type
+            </label>
             <select
               name="account_type"
               value={form.account_type}
@@ -175,7 +221,9 @@ const SignUp = () => {
           </h4>
 
           <span className="flex flex-col w-full">
-            <label htmlFor="address">Address</label>
+            <label className="font-light text-xs" htmlFor=" address">
+              Address
+            </label>
 
             <div className="flex items-center">
               <HiOutlineLocationMarker className="bg-[#347388] text-5xl p-3 text-white md:h-14" />
@@ -189,7 +237,9 @@ const SignUp = () => {
           </span>
           <div className="flex flex-col md:flex-row md:justify-between gap-4">
             <span className="flex flex-col w-full">
-              <label htmlFor="phone">Phone</label>
+              <label className="font-light text-xs" htmlFor=" phone">
+                Phone
+              </label>
               <div className="flex items-center">
                 <HiOutlinePhone className="bg-[#347388] text-5xl p-3 text-white md:h-14" />
                 <AnimatedInput
@@ -202,7 +252,9 @@ const SignUp = () => {
             </span>
             {/* email address */}
             <span className="flex flex-col w-full">
-              <label htmlFor="email">Email Address</label>
+              <label className="font-light text-xs" htmlFor=" email">
+                Email Address
+              </label>
               <div className="flex items-center">
                 <HiOutlineMail className="bg-[#347388] text-5xl p-3 text-white md:h-14" />
                 <AnimatedInput
@@ -215,9 +267,18 @@ const SignUp = () => {
             </span>
           </div>
 
+          {/* error && success */}
+          <div className="text-red-500">
+            {error.email && <Error error={error.email} />}
+            {error.username && <Error error={error.username} />}
+            {error.password && <Error error={error.password} />}
+            {error.account_type && <Error error={error.account_type} />}
+          </div>
+
           <button className="bg-[#347338] p-3 text-[#fff] mt-10 w-full md:w-[350px] md:py-4 mx-auto rounded-md md:font-semibold mb-10">
             Create Account
           </button>
+
           {/* foot area */}
           <article className="font-light flex flex-col items-center">
             <p>Already have an account?</p>

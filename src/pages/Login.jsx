@@ -1,26 +1,35 @@
 import React, { useState } from "react";
 import { FaArrowRight, FaEye, FaLock } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logo } from "../assets";
-import { AnimatedInput, LoginFooter } from "../components";
+import { AnimatedInput, Error, LoginFooter } from "../components";
 import WithStyles from "../hoc/WithStyles";
 
 const Login = () => {
-  const [error, setError] = useState(false);
-  const [toggled, setToggled] = useState(false);
-  const [active, setActive] = useState(false);
-
-  const [form, setForm] = useState({
+  const initialState = {
     user: "",
     pass: "",
-  });
+  };
+  const [error, setError] = useState("");
+  const [toggled, setToggled] = useState(false);
 
-  function animateInput(e) {
-    e.target = setActive((prev) => !prev);
-  }
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [form, setForm] = useState(initialState);
+
+  const navigate = useNavigate();
 
   function handleToggle() {
     setToggled((prev) => !prev);
+  }
+
+  function resetInput() {
+    console.log("resetting input");
+    setForm(initialState);
+  }
+
+  function goToDash() {
+    navigate("/dashboard");
   }
 
   function handleInputChange(e) {
@@ -35,28 +44,47 @@ const Login = () => {
 
   function handleUserLogin(e) {
     e.preventDefault();
-    console.log(form);
+    setIsLoading(true);
+    const newErrors = {};
+
+    if (!form.user) {
+      newErrors.user = "Username is required!";
+    }
+
+    if (!form.pass) {
+      newErrors.pass = "Password is required!";
+    }
+
+    setError(newErrors);
+
+    // If there are no errors, submit the form
+    if (Object.keys(newErrors).length === 0) {
+      console.log(form);
+      resetInput();
+      goToDash();
+      // setIsLoading(false);
+    } else {
+      setIsLoading(false); // Set isLoading to false when there are validation errors
+    }
   }
 
   return (
     <section className=" w-full min-h-screen p-6 text-[#333] bg-[#F2F2F2] flex flex-col justify-between  ">
-      <div className="w-full md:max-w-[600px] mx-auto flex flex-col gap-10 items-center">
+      <div className="w-full md:max-w-[500px] mx-auto flex flex-col gap-10 items-center">
         <article className="flex items-center gap-2 mt-10 md:mt-24">
           <img src={logo} alt="log-image" width={40} />
           <Link to="/" className="text-2xl font-bold">
-            Green<span>Oak</span>
+            Green<span className="text-[#347338]">Oak</span>
           </Link>
         </article>
         <span className="flex items-center gap-2 font-light">
           <FaLock /> Secure Log In
         </span>
-        {/* error */}
-        <article className={!error ? "hidden" : ""}></article>
 
         {/* form */}
         <form
           onSubmit={handleUserLogin}
-          className="w-full flex flex-col gap-8 font-light"
+          className="w-full flex flex-col gap-6 font-light md:bg-[#fff] md:p-10 md:rounded-md md:shadow-md"
         >
           <div>
             <label
@@ -74,6 +102,9 @@ const Login = () => {
               onChange={handleInputChange}
               name="user"
             />
+          </div>
+          <div className={!error ? "hidden " : "text-red-500 leading-3"}>
+            {error.user && <Error error={error.user} />}
           </div>
           <div className="relative">
             <label
@@ -93,7 +124,11 @@ const Login = () => {
             />
             <FaEye className="absolute right-3 top-11" onClick={handleToggle} />
           </div>
-          <button className="bg-[#347338] p-3 text-[#fff] rounded-lg">
+          <div className={!error ? "hidden " : "text-red-500 leading-3"}>
+            {error.pass && <Error error={error.pass} />}
+          </div>
+
+          <button className="bg-[#347338] p-3 text-[#fff] rounded-sm font-semibold">
             Log In
           </button>
         </form>

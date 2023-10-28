@@ -1,8 +1,8 @@
 import React from "react";
-import { Header, Footer, Content } from "./components";
+import { Content } from "./components";
 import { Route, Routes } from "react-router-dom";
 
-import { Login, SignUp } from "./pages/index";
+import { Dashboard, Login, SignUp } from "./pages/index";
 const App = () => {
   return (
     <>
@@ -10,6 +10,7 @@ const App = () => {
         <Route path="/" element={<Content />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </>
   );
