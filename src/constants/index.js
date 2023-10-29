@@ -50,4 +50,32 @@ const footerHelp = [
   },
 ];
 
-export { navLinks, footerAbout, footerHelp };
+const dashLinks = [
+  {
+    id: "account",
+    title: "Account",
+    path: "/account",
+  },
+  {
+    id: "payment",
+    title: "Payment",
+    path: "/payment",
+  },
+  {
+    id: "transfer",
+    title: "Transfer",
+    path: "/transfer",
+  },
+  {
+    id: "profile",
+    title: "Profile",
+    path: "/profile",
+  },
+  {
+    id: "logout",
+    title: "logout",
+    path: "/logout",
+  },
+];
+
+export { navLinks, footerAbout, footerHelp, dashLinks };

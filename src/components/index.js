@@ -9,6 +9,8 @@ import LoginFooter from "./LoginFooter";
 import FormLoader from "./FormLoader";
 import Error from "./Error";
 import ActionBtn from "./ActionBtn";
+import Transaction from "./Transaction";
+import Account from "./Account";
 
 export {
   Header,
@@ -22,4 +24,6 @@ export {
   FormLoader,
   Error,
   ActionBtn,
+  Transaction,
+  Account,
 };
