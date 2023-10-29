@@ -12,6 +12,9 @@ import ActionBtn from "./ActionBtn";
 import Transaction from "./Transaction";
 import Account from "./Account";
 import Dash from "./Dash";
+import EditUserContact from "./EditUserContact";
+import EditPassword from "./EditPassword";
+import HomeButton from "./HomeButton";
 
 export {
   Header,
@@ -28,4 +31,7 @@ export {
   Transaction,
   Account,
   Dash,
+  EditUserContact,
+  EditPassword,
+  HomeButton,
 };

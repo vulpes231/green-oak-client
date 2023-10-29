@@ -1,9 +1,14 @@
 import React from "react";
+import { HomeButton } from "../components";
 
 const Transfer = () => {
   return (
-    <section>
-      User does not any have eligible account to use this feature.
+    <section className="p-6 lg:p-0 flex flex-col gap-4">
+      <HomeButton />
+      <h3 className="text-2xl">Transfer to accounts</h3>
+      <p className="text-red-500 ">
+        User does not any have eligible account to use this feature.
+      </p>
     </section>
   );
 };

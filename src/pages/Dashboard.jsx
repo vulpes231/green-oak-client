@@ -2,18 +2,18 @@ import React, { useState } from "react";
 import {
   HiArrowLeft,
   HiArrowRight,
-  HiMail,
-  HiMenu,
   HiOutlineUserCircle,
   HiSearch,
+  HiUser,
 } from "react-icons/hi";
 import {
   FaDollarSign,
   FaEllipsisH,
   FaExchangeAlt,
+  FaHome,
   FaMoneyBill,
 } from "react-icons/fa";
-import { Account, ActionBtn, Dash, Transaction } from "../components";
+import { ActionBtn, Dash, Transaction } from "../components";
 import { dashLinks } from "../constants";
 import { Link } from "react-router-dom";
 import { logo } from "../assets";
@@ -57,7 +57,7 @@ const Dashboard = () => {
             showDashboard();
           } else if (dsh.id.includes("payment")) {
             showPayment();
-          } else if (dsh.id.includes("payment")) {
+          } else if (dsh.id.includes("transfer")) {
             showTransfer();
           } else if (dsh.id.includes("profile")) {
             showProfile();
@@ -74,7 +74,10 @@ const Dashboard = () => {
       <div className="lg:hidden">
         {/* header */}
         <article className="flex flex-col gap-6 mb-10">
-          <HiMenu className="" />
+          <Link to="/dashboard">
+            <FaHome className="text-xl cursor-pointer" />
+          </Link>
+
           <div>
             <h3 className="text-2xl">Hi, User</h3>
             <p className="font-extralight">Last login 12:30pm 12/12/2023</p>
@@ -103,10 +106,14 @@ const Dashboard = () => {
         </article>
         {/* action keys */}
         <article className="grid grid-cols-4 mt-10 gap-2">
-          <ActionBtn icon={<FaExchangeAlt />} title="Transfer" />
-          <ActionBtn icon={<FaMoneyBill />} title="Deposit" />
-          <ActionBtn icon={<FaDollarSign />} title="Pay" />
-          <ActionBtn icon={<HiMail />} title="Message" />
+          <ActionBtn
+            icon={<FaExchangeAlt />}
+            title="Transfer"
+            path="/transfer"
+          />
+          <ActionBtn icon={<FaMoneyBill />} title="Deposit" path="/deposit" />
+          <ActionBtn icon={<FaDollarSign />} title="Pay" path="/payment" />
+          <ActionBtn icon={<HiUser />} title="Profile" path="/profile" />
         </article>
         {/* transactions */}
         <article className="flex flex-col gap-6 mt-10">
