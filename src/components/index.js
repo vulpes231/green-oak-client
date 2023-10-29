@@ -11,6 +11,7 @@ import Error from "./Error";
 import ActionBtn from "./ActionBtn";
 import Transaction from "./Transaction";
 import Account from "./Account";
+import Dash from "./Dash";
 
 export {
   Header,
@@ -26,4 +27,5 @@ export {
   ActionBtn,
   Transaction,
   Account,
+  Dash,
 };

@@ -13,13 +13,32 @@ import {
   FaExchangeAlt,
   FaMoneyBill,
 } from "react-icons/fa";
-import { Account, ActionBtn, Transaction } from "../components";
+import { Account, ActionBtn, Dash, Transaction } from "../components";
 import { dashLinks } from "../constants";
 import { Link } from "react-router-dom";
 import { logo } from "../assets";
+import Payment from "./Payment";
+import Transfer from "./Transfer";
+import Profile from "./Profile";
 
 const Dashboard = () => {
   const [activeLink, setActiveLink] = useState(dashLinks[0].id);
+  const [displayComponent, setDisplayComponent] = useState("dashboard");
+
+  const showDashboard = () => {
+    setDisplayComponent("dashboard");
+  };
+
+  const showPayment = () => {
+    setDisplayComponent("payment");
+  };
+  const showTransfer = () => {
+    setDisplayComponent("transfer");
+  };
+  const showProfile = () => {
+    setDisplayComponent("profile");
+  };
+
   const dLinks = dashLinks.map((dsh) => {
     const isActive = activeLink === dsh.id;
 
@@ -31,13 +50,21 @@ const Dashboard = () => {
             : "text-lg uppercase border-r-4 border-r-[#347338]"
         }
         key={dsh.id}
+        onClick={() => {
+          setActiveLink(dsh.id);
+
+          if (dsh.id.includes("account")) {
+            showDashboard();
+          } else if (dsh.id.includes("payment")) {
+            showPayment();
+          } else if (dsh.id.includes("payment")) {
+            showTransfer();
+          } else if (dsh.id.includes("profile")) {
+            showProfile();
+          }
+        }}
       >
-        <span
-          //   to={dsh.path}
-          onClick={() => setActiveLink(dsh.id)} // Set the active link
-        >
-          {dsh.title}
-        </span>
+        <span>{dsh.title}</span>
       </li>
     );
   });
@@ -117,10 +144,10 @@ const Dashboard = () => {
             {dLinks}
           </ul>
         </article>
-        <article className="grid grid-cols-3">
+        <article className="grid grid-cols-3 ">
           {/* sidebar */}
           <aside className="col-span-1 p-4 font-extralight">
-            <div className="flex flex-col items-center gap-3 bg-[#f2f2f2]">
+            <div className="flex flex-col items-center gap-3 bg-[#f2f2f2] py-6 rounded-md">
               <h3 className="font-semibold text-2xl">Hello User</h3>
               <span>
                 <HiOutlineUserCircle className="text-6xl font-extralight" />
@@ -129,35 +156,11 @@ const Dashboard = () => {
               <p>07/07/2023 3:24pm EDT</p>
             </div>
           </aside>
-          <div className="col-span-2 text-left">
-            <h3 className="text-2xl mb-5">Account Summary</h3>
-            <p className="font-semibold">Deposit Accounts</p>
-            <div className="grid grid-cols-4 bg-[#f2f2f2] px-4 py-2">
-              <h3>Account</h3>
-              <h3>Number</h3>
-              <h3>Balance</h3>
-              <h3>Effective Date</h3>
-            </div>
-            <div className="px-4 pt-4">
-              <Account
-                title="Checking"
-                number="XXXXXX1234"
-                balance="244.56"
-                date="07/27/2023"
-              />
-              <Account
-                title="Savings"
-                number="XXXXXX5678"
-                balance="400.56"
-                date="07/27/2023"
-              />
-              <Account
-                title="Mortgage & Loans"
-                number="XXXXXX9012"
-                balance="14,600.41"
-                date="03/12/2023"
-              />
-            </div>
+          <div className="col-span-2 text-left py-4">
+            {displayComponent === "dashboard" && <Dash />}
+            {displayComponent === "payment" && <Payment />}
+            {displayComponent === "transfer" && <Transfer />}
+            {displayComponent === "profile" && <Profile />}
           </div>
         </article>
       </div>
