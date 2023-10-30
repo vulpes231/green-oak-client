@@ -10,11 +10,10 @@ const Login = () => {
     user: "",
     pass: "",
   };
+
   const [error, setError] = useState("");
   const [toggled, setToggled] = useState(false);
-
   const [isLoading, setIsLoading] = useState(false);
-
   const [form, setForm] = useState(initialState);
 
   const navigate = useNavigate();
@@ -28,10 +27,6 @@ const Login = () => {
     setForm(initialState);
   }
 
-  function goToDash() {
-    navigate("/dashboard");
-  }
-
   function handleInputChange(e) {
     const { name, value } = e.target;
     setForm((prev) => ({
@@ -42,7 +37,7 @@ const Login = () => {
 
   const myType = !toggled ? "password" : "text";
 
-  function handleUserLogin(e) {
+  async function handleUserLogin(e) {
     e.preventDefault();
     setIsLoading(true);
     const newErrors = {};
@@ -51,20 +46,46 @@ const Login = () => {
       newErrors.user = "Username is required!";
     }
 
+    if (form.user.length < 4) {
+      newErrors.user = "Username must be greater than 6 characters!";
+    }
+
     if (!form.pass) {
       newErrors.pass = "Password is required!";
     }
 
     setError(newErrors);
 
-    // If there are no errors, submit the form
     if (Object.keys(newErrors).length === 0) {
-      console.log(form);
-      resetInput();
-      goToDash();
-      // setIsLoading(false);
+      try {
+        const reqBody = {
+          username: form.user,
+          password: form.pass,
+        };
+        const reqOptions = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(reqBody),
+          credentials: "include",
+        };
+
+        const url = "http://localhost:3500/auth";
+        const response = await fetch(url, reqOptions);
+
+        if (response.ok) {
+          const data = await response.json();
+          const accessToken = data.accessToken;
+          // localStorage.setItem("accessToken", accessToken);
+        } else {
+          console.log(error);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     } else {
-      setIsLoading(false); // Set isLoading to false when there are validation errors
+      setIsLoading(false);
     }
   }
 

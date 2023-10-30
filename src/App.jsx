@@ -3,6 +3,7 @@ import { Content } from "./components";
 import { Route, Routes } from "react-router-dom";
 
 import { Dashboard, Login, Payment, Profile, SignUp, Transfer } from "./pages";
+
 const App = () => {
   return (
     <>

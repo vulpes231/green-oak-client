@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { EditUserContact, EditPassword, HomeButton } from "../components";
+import WithAuth from "../hoc/WithAuth";
 
 const Profile = () => {
   return (
@@ -12,4 +13,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default WithAuth(Profile);

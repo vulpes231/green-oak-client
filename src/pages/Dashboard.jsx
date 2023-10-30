@@ -16,10 +16,11 @@ import {
 import { ActionBtn, Dash, Transaction } from "../components";
 import { dashLinks } from "../constants";
 import { Link } from "react-router-dom";
-import { logo } from "../assets";
+import { logo, user } from "../assets";
 import Payment from "./Payment";
 import Transfer from "./Transfer";
 import Profile from "./Profile";
+import WithAuth from "../hoc/WithAuth";
 
 const Dashboard = () => {
   const [activeLink, setActiveLink] = useState(dashLinks[0].id);
@@ -46,8 +47,8 @@ const Dashboard = () => {
       <li
         className={
           isActive
-            ? "bg-[#fff] text-[#347338] text-lg uppercase rounded-md"
-            : "text-lg uppercase border-r-4 border-r-[#347338]"
+            ? "bg-[#fff] text-[#347338] text-lg uppercase rounded-sm py-3"
+            : "text-lg uppercase border-r-4 border-r-[#347338] py-3"
         }
         key={dsh.id}
         onClick={() => {
@@ -142,7 +143,7 @@ const Dashboard = () => {
       <div className="hidden lg:grid gap-6">
         {/* header */}
         {/* bg-[#347338] */}
-        <article className=" text-[#fff] bg-[#347338] w-full px-0  py-4 flex flex-col gap-6 ">
+        <article className=" text-[#fff] bg-[#347338] w-full px-0  flex flex-col gap-6 ">
           <span className="flex items-center gap-3">
             <img src={logo} alt="log-iumae" width={50} />
             <h3 className="text-3xl ">GreenOak Bank</h3>
@@ -151,13 +152,13 @@ const Dashboard = () => {
             {dLinks}
           </ul>
         </article>
-        <article className="grid grid-cols-3 ">
+        <article className="grid grid-cols-3 text-[#333] ">
           {/* sidebar */}
           <aside className="col-span-1 p-4 font-extralight">
             <div className="flex flex-col items-center gap-3 bg-[#f2f2f2] py-6 rounded-md">
               <h3 className="font-semibold text-2xl">Hello User</h3>
               <span>
-                <HiOutlineUserCircle className="text-6xl font-extralight" />
+                <img src={user} alt="user-profile-pic" width={50} />
               </span>
               <p>Your last sign on: </p>
               <p>07/07/2023 3:24pm EDT</p>
@@ -175,4 +176,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default WithAuth(Dashboard);
