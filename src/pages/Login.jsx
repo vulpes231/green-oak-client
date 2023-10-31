@@ -18,6 +18,8 @@ const Login = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const isLoading = useSelector((state) => state.auth.isLoading);
   const accessToken = useSelector((state) => state.auth.accessToken);
+  const userId = useSelector((state) => state.auth.userId);
+
   const error = useSelector((state) => state.auth.error);
   const dispatch = useDispatch();
 
@@ -50,10 +52,11 @@ const Login = () => {
     e.preventDefault();
     dispatch(loginUser(reqBody));
     if (isLoggedIn && accessToken) {
+      console.log(form);
+      // console.log(accessToken);
+      // console.log(userId);
       navigate("/dashboard");
-      console.log(accessToken);
     }
-    console.log(form);
     resetInput();
   }
 

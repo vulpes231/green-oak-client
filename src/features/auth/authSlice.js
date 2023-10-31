@@ -5,6 +5,7 @@ const initialState = {
   isLoading: false,
   isLoggedIn: false,
   accessToken: null,
+  userId: "",
   error: "",
 };
 
@@ -12,7 +13,9 @@ export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (userData) => {
     const response = await axios.post("http://localhost:3500/auth", userData);
-    return response.data.accessToken;
+    const accessToken = response.data.accessToken;
+    const userId = response.data.userId;
+    return { accessToken, userId };
   }
 );
 
@@ -31,7 +34,8 @@ const authSlice = createSlice({
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.accessToken = action.payload;
+      state.accessToken = action.payload.accessToken; // Set accessToken separately
+      state.userId = action.payload.userId; // Set userId separately
       state.isLoggedIn = true;
       state.error = "";
     });

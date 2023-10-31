@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HiArrowLeft, HiArrowRight, HiSearch, HiUser } from "react-icons/hi";
 import {
   FaDollarSign,
@@ -14,10 +14,19 @@ import { logo, user } from "../assets";
 import Payment from "./Payment";
 import Transfer from "./Transfer";
 import Profile from "./Profile";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserData } from "../features/user/userSlice";
 
 const Dashboard = () => {
   const [activeLink, setActiveLink] = useState(dashLinks[0].id);
   const [displayComponent, setDisplayComponent] = useState("dashboard");
+  const dispatch = useDispatch();
+
+  const userId = useSelector((state) => state.auth.userId);
+  console.log(userId);
+  const accessToken = useSelector((state) => state.auth.accessToken);
+
+  console.log(accessToken);
 
   const showDashboard = () => {
     setDisplayComponent("dashboard");
@@ -62,6 +71,11 @@ const Dashboard = () => {
       </li>
     );
   });
+
+  useEffect(() => {
+    dispatch(fetchUserData(userId, accessToken));
+  }, [dispatch, userId, accessToken]);
+
   return (
     <section className="p-4 lg:p-0 text-[#333] min-h-screen   ">
       {/* mobile screen */}
