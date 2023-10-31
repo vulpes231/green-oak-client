@@ -1,6 +1,5 @@
 import React from "react";
 import { HomeButton } from "../components";
-import WithAuth from "../hoc/WithAuth";
 
 const Transfer = () => {
   return (
@@ -14,4 +13,4 @@ const Transfer = () => {
   );
 };
 
-export default WithAuth(Transfer);
+export default Transfer;

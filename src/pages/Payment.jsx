@@ -1,6 +1,5 @@
 import React from "react";
 import { HomeButton } from "../components";
-import WithAuth from "../hoc/WithAuth";
 
 const Payment = () => {
   return (
@@ -14,4 +13,4 @@ const Payment = () => {
   );
 };
 
-export default WithAuth(Payment);
+export default Payment;

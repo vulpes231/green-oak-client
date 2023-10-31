@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { logo } from "../assets";
 import { AnimatedInput, Error, LoginFooter } from "../components";
 import WithStyles from "../hoc/WithStyles";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../features/auth/authSlice";
 
 const Login = () => {
   const initialState = {
@@ -11,10 +13,13 @@ const Login = () => {
     pass: "",
   };
 
-  const [error, setError] = useState("");
   const [toggled, setToggled] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [form, setForm] = useState(initialState);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const isLoading = useSelector((state) => state.auth.isLoading);
+  const accessToken = useSelector((state) => state.auth.accessToken);
+  const error = useSelector((state) => state.auth.error);
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -23,7 +28,6 @@ const Login = () => {
   }
 
   function resetInput() {
-    console.log("resetting input");
     setForm(initialState);
   }
 
@@ -37,56 +41,20 @@ const Login = () => {
 
   const myType = !toggled ? "password" : "text";
 
+  const reqBody = {
+    username: form.user,
+    password: form.pass,
+  };
+
   async function handleUserLogin(e) {
     e.preventDefault();
-    setIsLoading(true);
-    const newErrors = {};
-
-    if (!form.user) {
-      newErrors.user = "Username is required!";
+    dispatch(loginUser(reqBody));
+    if (isLoggedIn && accessToken) {
+      navigate("/dashboard");
+      console.log(accessToken);
     }
-
-    if (form.user.length < 4) {
-      newErrors.user = "Username must be greater than 6 characters!";
-    }
-
-    if (!form.pass) {
-      newErrors.pass = "Password is required!";
-    }
-
-    setError(newErrors);
-
-    if (Object.keys(newErrors).length === 0) {
-      try {
-        const reqBody = {
-          username: form.user,
-          password: form.pass,
-        };
-        const reqOptions = {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(reqBody),
-          credentials: "include",
-        };
-
-        const url = "http://localhost:3500/auth";
-        const response = await fetch(url, reqOptions);
-
-        if (response.ok) {
-          const data = await response.json();
-          const accessToken = data.accessToken;
-          // localStorage.setItem("accessToken", accessToken);
-        } else {
-          console.log(error);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      setIsLoading(false);
-    }
+    console.log(form);
+    resetInput();
   }
 
   return (
@@ -124,9 +92,7 @@ const Login = () => {
               name="user"
             />
           </div>
-          <div className={!error ? "hidden " : "text-red-500 leading-3"}>
-            {error.user && <Error error={error.user} />}
-          </div>
+
           <div className="relative">
             <label
               htmlFor=""
@@ -146,11 +112,11 @@ const Login = () => {
             <FaEye className="absolute right-3 top-11" onClick={handleToggle} />
           </div>
           <div className={!error ? "hidden " : "text-red-500 leading-3"}>
-            {error.pass && <Error error={error.pass} />}
+            {error && <Error error={error} />}
           </div>
 
           <button className="bg-[#347338] p-3 text-[#fff] rounded-sm font-semibold">
-            Log In
+            {isLoading ? "Logging In..." : "Log In"}
           </button>
         </form>
         <div className="flex flex-col items-center font-light">

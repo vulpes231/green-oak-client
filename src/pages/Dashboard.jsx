@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  HiArrowLeft,
-  HiArrowRight,
-  HiOutlineUserCircle,
-  HiSearch,
-  HiUser,
-} from "react-icons/hi";
+import { HiArrowLeft, HiArrowRight, HiSearch, HiUser } from "react-icons/hi";
 import {
   FaDollarSign,
   FaEllipsisH,
@@ -20,7 +14,6 @@ import { logo, user } from "../assets";
 import Payment from "./Payment";
 import Transfer from "./Transfer";
 import Profile from "./Profile";
-import WithAuth from "../hoc/WithAuth";
 
 const Dashboard = () => {
   const [activeLink, setActiveLink] = useState(dashLinks[0].id);
@@ -176,4 +169,4 @@ const Dashboard = () => {
   );
 };
 
-export default WithAuth(Dashboard);
+export default Dashboard;

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { EditUserContact, EditPassword, HomeButton } from "../components";
-import WithAuth from "../hoc/WithAuth";
-
 const Profile = () => {
   return (
     <section className="p-6 lg:p-0 flex flex-col gap-4">
@@ -13,4 +11,4 @@ const Profile = () => {
   );
 };
 
-export default WithAuth(Profile);
+export default Profile;
