@@ -1,7 +1,15 @@
 import React from "react";
 import { Content } from "./components";
 import { Route, Routes } from "react-router-dom";
-import { Dashboard, Login, Payment, Profile, SignUp, Transfer } from "./pages";
+import {
+  Dashboard,
+  Deposit,
+  Login,
+  Payment,
+  Profile,
+  SignUp,
+  Transfer,
+} from "./pages";
 import { useSelector } from "react-redux";
 
 const App = () => {
@@ -21,6 +29,7 @@ const App = () => {
       <Route path="/payment" element={isLoggedIn ? <Payment /> : <Login />} />
       <Route path="/transfer" element={isLoggedIn ? <Transfer /> : <Login />} />
       <Route path="/profile" element={isLoggedIn ? <Profile /> : <Login />} />
+      <Route path="/deposit" element={isLoggedIn ? <Deposit /> : <Login />} />
     </Routes>
   );
 };

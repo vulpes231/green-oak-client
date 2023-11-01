@@ -15,6 +15,7 @@ import Dash from "./Dash";
 import EditUserContact from "./EditUserContact";
 import EditPassword from "./EditPassword";
 import HomeButton from "./HomeButton";
+import Check from "./Check";
 
 export {
   Header,
@@ -34,4 +35,5 @@ export {
   EditUserContact,
   EditPassword,
   HomeButton,
+  Check,
 };

@@ -3,25 +3,28 @@ import axios from "axios";
 
 const initialState = {
   loading: false,
-  username: "",
-  id: "",
-  account_bal: "",
-  account_type: "",
+  accounts: [],
+  error: "",
 };
 
 export const fetchUserData = createAsyncThunk(
   "user/fetchUserData",
-  async (userId, accessToken) => {
-    axios
-      .get(`http://localhost:3500/user/${userId}`, {
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-      });
+  async ({ userId, token }) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3500/account/${userId}`,
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const accounts = response.data; // Store the array of accounts
+      return accounts;
+    } catch (error) {
+      console.log(error);
+    }
   }
 );
 
@@ -36,12 +39,13 @@ const userSlice = createSlice({
       })
       .addCase(fetchUserData.fulfilled, (state, action) => {
         state.loading = false;
-        // state.account_bal = action.payload;
-        // state.userData = action.payload;
+        state.accounts = action.payload;
+        state.error = "";
       })
       .addCase(fetchUserData.rejected, (state, action) => {
         state.loading = false;
-        // Handle rejected action
+        state.accounts = [];
+        state.error = action.payload;
       });
   },
 });

@@ -16,6 +16,7 @@ import Transfer from "./Transfer";
 import Profile from "./Profile";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserData } from "../features/user/userSlice";
+import { format } from "date-fns";
 
 const Dashboard = () => {
   const [activeLink, setActiveLink] = useState(dashLinks[0].id);
@@ -23,10 +24,31 @@ const Dashboard = () => {
   const dispatch = useDispatch();
 
   const userId = useSelector((state) => state.auth.userId);
-  console.log(userId);
-  const accessToken = useSelector((state) => state.auth.accessToken);
+  const token = useSelector((state) => state.auth.accessToken);
+  const username = useSelector((state) => state.auth.username);
 
-  console.log(accessToken);
+  const accounts = useSelector((state) => state.user.accounts);
+  console.log(accounts);
+
+  const curDate = format(new Date(), "HH:mm:ss yyyy:MM:dd");
+
+  const accts = accounts.map((acct) => {
+    return (
+      <div
+        key={acct._id}
+        className="flex justify-between items-center bg-[#347338] p-4 rounded-md text-[#fff]"
+      >
+        <span>
+          <h3 className="font-semibold">{acct.account_type}</h3>
+          <p className="font-extralight">{acct.account_num}</p>
+        </span>
+        <span>
+          <h3 className="font-semibold">{`$ ${acct.available_bal}`}</h3>
+          <p className="font-extralight">Available</p>
+        </span>
+      </div>
+    );
+  });
 
   const showDashboard = () => {
     setDisplayComponent("dashboard");
@@ -73,8 +95,8 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
-    dispatch(fetchUserData(userId, accessToken));
-  }, [dispatch, userId, accessToken]);
+    dispatch(fetchUserData({ userId, token }));
+  }, [dispatch, userId, token]);
 
   return (
     <section className="p-4 lg:p-0 text-[#333] min-h-screen   ">
@@ -87,8 +109,8 @@ const Dashboard = () => {
           </Link>
 
           <div>
-            <h3 className="text-2xl">Hi, User</h3>
-            <p className="font-extralight">Last login 12:30pm 12/12/2023</p>
+            <h3 className="text-2xl capitalize">Hi, {username}</h3>
+            <p className="font-extralight">Last login {curDate}</p>
           </div>
         </article>
         {/* accoutns */}
@@ -97,16 +119,7 @@ const Dashboard = () => {
             <p>Accounts</p>
             <FaEllipsisH />
           </div>
-          <div className="flex justify-between items-center bg-[#347338] p-4 rounded-md text-[#fff]">
-            <span>
-              <h3 className="font-semibold">Checking</h3>
-              <p className="font-extralight">x1567</p>
-            </span>
-            <span>
-              <h3 className="font-semibold">$1,380.12</h3>
-              <p className="font-extralight">Available</p>
-            </span>
-          </div>
+          <div>{accts}</div>
           <div className="flex items-center justify-center">
             <HiArrowLeft />
             <HiArrowRight />
@@ -163,12 +176,14 @@ const Dashboard = () => {
           {/* sidebar */}
           <aside className="col-span-1 p-4 font-extralight">
             <div className="flex flex-col items-center gap-3 bg-[#f2f2f2] py-6 rounded-md">
-              <h3 className="font-semibold text-2xl">Hello User</h3>
+              <h3 className="font-semibold text-2xl capitalize">
+                Hello {username}
+              </h3>
               <span>
                 <img src={user} alt="user-profile-pic" width={50} />
               </span>
               <p>Your last sign on: </p>
-              <p>07/07/2023 3:24pm EDT</p>
+              <p>{curDate}</p>
             </div>
           </aside>
           <div className="col-span-2 text-left py-4">
