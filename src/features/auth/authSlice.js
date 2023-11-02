@@ -13,11 +13,22 @@ const initialState = {
 export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (userData) => {
-    const response = await axios.post("http://localhost:3500/auth", userData);
-    const accessToken = response.data.accessToken;
-    const userId = response.data.userId;
-    const username = response.data.username;
-    return { accessToken, userId, username };
+    try {
+      const response = await axios.post("http://localhost:3500/auth", userData);
+      const accessToken = response.data.accessToken;
+      const userId = response.data.userId;
+      const username = response.data.username;
+      return { accessToken, userId, username };
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.data.message);
+        const errorMessage = error.response.data.message; //
+        throw new Error(errorMessage);
+      } else {
+        // Handle other types of errors (e.g., network issues)
+        throw error;
+      }
+    }
   }
 );
 

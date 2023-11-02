@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Content } from "./components";
 import { Route, Routes } from "react-router-dom";
 import {
@@ -13,6 +13,8 @@ import {
 import { useSelector } from "react-redux";
 
 const App = () => {
+  const accessToken = useSelector((state) => state.auth.accessToken);
+
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   return (
@@ -24,12 +26,24 @@ const App = () => {
       {/* Protected Routes */}
       <Route
         path="/dashboard"
-        element={isLoggedIn ? <Dashboard /> : <Login />}
+        element={isLoggedIn && accessToken ? <Dashboard /> : <Login />}
       />
-      <Route path="/payment" element={isLoggedIn ? <Payment /> : <Login />} />
-      <Route path="/transfer" element={isLoggedIn ? <Transfer /> : <Login />} />
-      <Route path="/profile" element={isLoggedIn ? <Profile /> : <Login />} />
-      <Route path="/deposit" element={isLoggedIn ? <Deposit /> : <Login />} />
+      <Route
+        path="/payment"
+        element={isLoggedIn && accessToken ? <Payment /> : <Login />}
+      />
+      <Route
+        path="/transfer"
+        element={isLoggedIn && accessToken ? <Transfer /> : <Login />}
+      />
+      <Route
+        path="/profile"
+        element={isLoggedIn && accessToken ? <Profile /> : <Login />}
+      />
+      <Route
+        path="/deposit"
+        element={isLoggedIn && accessToken ? <Deposit /> : <Login />}
+      />
     </Routes>
   );
 };

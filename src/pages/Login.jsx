@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaArrowRight, FaEye, FaLock } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { logo } from "../assets";
@@ -15,14 +15,13 @@ const Login = () => {
 
   const [toggled, setToggled] = useState(false);
   const [form, setForm] = useState(initialState);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
   const isLoading = useSelector((state) => state.auth.isLoading);
   const accessToken = useSelector((state) => state.auth.accessToken);
-  const userId = useSelector((state) => state.auth.userId);
-
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const error = useSelector((state) => state.auth.error);
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   function handleToggle() {
@@ -51,14 +50,17 @@ const Login = () => {
   async function handleUserLogin(e) {
     e.preventDefault();
     dispatch(loginUser(reqBody));
-    if (isLoggedIn && accessToken) {
-      console.log(form);
-      // console.log(accessToken);
-      // console.log(userId);
-      navigate("/dashboard");
-    }
     resetInput();
   }
+
+  useEffect(() => {
+    if (isLoggedIn && accessToken) {
+      console.log("User is logged in.");
+      navigate("/dashboard");
+    } else {
+      navigate("/login");
+    }
+  }, [isLoggedIn, accessToken]);
 
   return (
     <section className=" w-full min-h-screen p-6 text-[#333] bg-[#F2F2F2] flex flex-col justify-between  ">

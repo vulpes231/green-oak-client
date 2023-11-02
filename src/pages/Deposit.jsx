@@ -48,12 +48,8 @@ const Deposit = () => {
 
   return (
     <section className="p-6 text-[#333]">
-      <div className="flex gap-4 items-start">
-        <HomeButton />
-        <h3 className="text-2xl text-center mb-10 leading-5">
-          Deposit a check
-        </h3>
-      </div>
+      <HomeButton />
+      <h3 className="text-2xl text-center mb-10 leading-5">Deposit a check</h3>
       <form action="" className="flex flex-col gap-4 font-extralight">
         <div className="flex flex-col ">
           <label htmlFor="">Deposit To:</label>

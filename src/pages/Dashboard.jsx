@@ -7,7 +7,7 @@ import {
   FaHome,
   FaMoneyBill,
 } from "react-icons/fa";
-import { ActionBtn, Dash, Transaction } from "../components";
+import { ActionBtn, Dash, HomeButton, Transaction } from "../components";
 import { dashLinks } from "../constants";
 import { Link } from "react-router-dom";
 import { logo, user } from "../assets";
@@ -15,7 +15,10 @@ import Payment from "./Payment";
 import Transfer from "./Transfer";
 import Profile from "./Profile";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserData } from "../features/user/userSlice";
+import {
+  fetchUserData,
+  fetchUserTransactions,
+} from "../features/user/userSlice";
 import { format } from "date-fns";
 
 const Dashboard = () => {
@@ -25,12 +28,28 @@ const Dashboard = () => {
 
   const userId = useSelector((state) => state.auth.userId);
   const token = useSelector((state) => state.auth.accessToken);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const username = useSelector((state) => state.auth.username);
-
   const accounts = useSelector((state) => state.user.accounts);
   console.log(accounts);
 
+  const transactions = useSelector((state) => state.user.transactions);
+  console.log(transactions);
+
   const curDate = format(new Date(), "HH:mm:ss yyyy:MM:dd");
+
+  const trans = transactions ? (
+    transactions.map((tx) => (
+      <Transaction
+        key={tx._id}
+        title={tx.desc}
+        date={tx.date}
+        amount={`$ ${tx.amount}`}
+      />
+    ))
+  ) : (
+    <p>No transactions to show.</p>
+  );
 
   const accts = accounts.map((acct) => {
     return (
@@ -96,6 +115,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(fetchUserData({ userId, token }));
+    dispatch(fetchUserTransactions({ userId, token }));
   }, [dispatch, userId, token]);
 
   return (
@@ -104,9 +124,7 @@ const Dashboard = () => {
       <div className="lg:hidden">
         {/* header */}
         <article className="flex flex-col gap-6 mb-10">
-          <Link to="/dashboard">
-            <FaHome className="text-xl cursor-pointer" />
-          </Link>
+          <HomeButton />
 
           <div>
             <h3 className="text-2xl capitalize">Hi, {username}</h3>
@@ -146,16 +164,11 @@ const Dashboard = () => {
             </span>
           </div>
           <div className="flex flex-col gap-4">
-            <Transaction
-              title="local cofee shop"
-              date="Jan 25, Checking"
-              amount="$3.65"
-            />
-            <Transaction
-              title="Apple store"
-              date="Jan 28, Checking"
-              amount="$10.65"
-            />
+            {transactions.length ? (
+              <div>{trans}</div>
+            ) : (
+              <p>There are no transactions</p>
+            )}
           </div>
         </article>
       </div>
