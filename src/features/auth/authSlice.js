@@ -5,7 +5,7 @@ const initialState = {
   isLoading: false,
   isLoggedIn: false,
   accessToken: null,
-  userId: "",
+  userId: null,
   username: "",
   error: "",
 };
@@ -14,10 +14,7 @@ export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (userData) => {
     try {
-      const response = await axios.post(
-        "https://greenoak.onrender.com/auth",
-        userData
-      );
+      const response = await axios.post("http://localhost:3500/auth", userData);
       const accessToken = response.data.accessToken;
       const userId = response.data.userId;
       const username = response.data.username;
@@ -36,7 +33,7 @@ export const loginUser = createAsyncThunk(
 );
 
 export const logoutUser = createAsyncThunk("user/logoutUser", async (token) => {
-  const response = await axios.get("https://greenoak.onrender.com/logout", {
+  const response = await axios.get("http://localhost:3500/logout", {
     withCredentials: true,
     headers: {
       Authorization: `Bearer ${token}`,

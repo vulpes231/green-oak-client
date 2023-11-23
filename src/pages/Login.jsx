@@ -6,6 +6,7 @@ import { AnimatedInput, Error, LoginFooter } from "../components";
 import WithStyles from "../hoc/WithStyles";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../features/auth/authSlice";
+import { fetchUserAccount } from "../features/user/userSlice";
 
 const Login = () => {
   const initialState = {
@@ -16,10 +17,9 @@ const Login = () => {
   const [toggled, setToggled] = useState(false);
   const [form, setForm] = useState(initialState);
 
-  const isLoading = useSelector((state) => state.auth.isLoading);
-  const accessToken = useSelector((state) => state.auth.accessToken);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const error = useSelector((state) => state.auth.error);
+  const { isLoading, accessToken, error, userId } = useSelector(
+    (state) => state.auth
+  );
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -56,13 +56,10 @@ const Login = () => {
   }
 
   useEffect(() => {
-    if (isLoggedIn && accessToken) {
-      console.log("User is logged in.");
+    if (accessToken !== null && userId !== null) {
       navigate("/dashboard");
-    } else {
-      navigate("/login");
     }
-  }, [isLoggedIn, accessToken]);
+  }, [accessToken, userId]);
 
   return (
     <section className=" w-full min-h-screen p-6 text-[#333] bg-[#F2F2F2] flex flex-col justify-between  ">

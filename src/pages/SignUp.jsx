@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { logo } from "../assets";
 import { AnimatedInput, Error, FormLoader, LoginFooter } from "../components";
 import { FaArrowRight } from "react-icons/fa";
@@ -13,23 +13,30 @@ import {
   HiOutlineUserCircle,
 } from "react-icons/hi";
 import WithStyles from "../hoc/WithStyles";
+import { useDispatch, useSelector } from "react-redux";
+import { createNewAccount } from "../features/auth/enrollSlice";
+
+const initialState = {
+  fullname: "",
+  gender: "",
+  dob: "",
+  username: "",
+  password: "",
+  email: "",
+  address: "",
+  phone: "",
+  account_type: "",
+};
 
 const SignUp = () => {
-  const initialState = {
-    fullname: "",
-    gender: "",
-    dob: "",
-    username: "",
-    password: "",
-    email: "",
-    address: "",
-    phone: "",
-    account_type: "",
-  };
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [form, setForm] = useState(initialState);
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { isLoading, isError, isCreated } = useSelector(
+    (state) => state.enrolluser
+  );
 
   function handleInputChange(e) {
     const { name, value } = e.target;
@@ -38,44 +45,15 @@ const SignUp = () => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    setIsLoading(true); // Set isLoading to true when submitting
-
-    const newErrors = {};
-
-    // Check each field for errors
-    if (!form.email) {
-      newErrors.email = "Email is required!";
-    }
-
-    if (!form.username) {
-      newErrors.username = "Username is required!";
-    }
-
-    if (!form.password) {
-      newErrors.password = "Password is required!";
-    }
-
-    if (!form.account_type) {
-      newErrors.account_type = "Account information is required!";
-    }
-
-    // Update the errors state with the newErrors object
-    setError(newErrors);
-
-    // If there are no errors, submit the form
-    if (Object.keys(newErrors).length === 0) {
-      console.log(form);
-      resetForm();
-    }
-
-    setIsLoading(false); // Set isLoading back to false after submission
+    console.log(form);
+    dispatch(createNewAccount(form));
   }
 
-  function resetForm() {
-    setForm(initialState);
-  }
-
-  //   const myType = !toggled ? "password" : "text";
+  useEffect(() => {
+    if (isCreated) {
+      navigate("/login");
+    }
+  }, [isCreated]);
 
   return (
     <section className="w-full min-h-screen p-6 text-[#333] bg-[#F2F2F2]   ">
@@ -269,14 +247,11 @@ const SignUp = () => {
 
           {/* error && success */}
           <div className="text-red-500">
-            {error.email && <Error error={error.email} />}
-            {error.username && <Error error={error.username} />}
-            {error.password && <Error error={error.password} />}
-            {error.account_type && <Error error={error.account_type} />}
+            {isError && <Error error={isError} />}
           </div>
 
           <button className="bg-[#347338] p-3 text-[#fff] mt-10 w-full md:w-[350px] md:py-4 mx-auto rounded-md md:font-semibold mb-10">
-            Create Account
+            {isLoading ? "Creating account..." : "Create account"}
           </button>
 
           {/* foot area */}

@@ -9,14 +9,14 @@ import {
 } from "react-icons/fa";
 import { ActionBtn, Dash, HomeButton, Transaction } from "../components";
 import { dashLinks } from "../constants";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logo, user } from "../assets";
 import Payment from "./Payment";
 import Transfer from "./Transfer";
 import Profile from "./Profile";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchUserData,
+  fetchUserAccount,
   fetchUserTransactions,
 } from "../features/user/userSlice";
 import { format } from "date-fns";
@@ -25,16 +25,31 @@ const Dashboard = () => {
   const [activeLink, setActiveLink] = useState(dashLinks[0].id);
   const [displayComponent, setDisplayComponent] = useState("dashboard");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const userId = useSelector((state) => state.auth.userId);
-  const token = useSelector((state) => state.auth.accessToken);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const username = useSelector((state) => state.auth.username);
-  const accounts = useSelector((state) => state.user.accounts);
-  console.log(accounts);
+  const { username, accessToken, userId } = useSelector((state) => state.auth);
 
-  const transactions = useSelector((state) => state.user.transactions);
-  console.log(transactions);
+  const { accounts, transactions } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (!accessToken || accessToken === null) {
+      navigate("/login");
+    }
+  }, [accessToken]);
+
+  // get user data
+  useEffect(() => {
+    if (userId && accessToken) {
+      dispatch(fetchUserAccount(userId, accessToken));
+    }
+  }, []);
+
+  // get user transaction
+  useEffect(() => {
+    if (userId && accessToken && accounts.length) {
+      dispatch(fetchUserTransactions(userId, accessToken));
+    }
+  }, [accounts]);
 
   const curDate = format(new Date(), "HH:mm:ss yyyy:MM:dd");
 
@@ -113,11 +128,6 @@ const Dashboard = () => {
     );
   });
 
-  useEffect(() => {
-    dispatch(fetchUserData({ userId, token }));
-    dispatch(fetchUserTransactions({ userId, token }));
-  }, [dispatch, userId, token]);
-
   return (
     <section className="p-4 lg:p-0 text-[#333] min-h-screen   ">
       {/* mobile screen */}
@@ -163,13 +173,7 @@ const Dashboard = () => {
               <FaEllipsisH />
             </span>
           </div>
-          <div className="flex flex-col gap-4">
-            {transactions.length ? (
-              <div>{trans}</div>
-            ) : (
-              <p>There are no transactions</p>
-            )}
-          </div>
+          <div className="flex flex-col gap-4">{trans}</div>
         </article>
       </div>
       {/* desktop screen */}

@@ -7,18 +7,19 @@ const initialState = {
   isCreated: false,
 };
 
-const createNewAccount = createAsyncThunk(
+export const createNewAccount = createAsyncThunk(
   "enrolluser/createNewAccount",
   async (formData) => {
-    const url = "https://greenoak.onrender.com/register";
+    console.log(formData);
+    const url = "http://localhost:3500/register";
     try {
-      const response = axios.post(url, formData, {
+      const response = await axios.post(url, formData, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
       });
-      console.log(response.data.message);
+      console.log(response.data);
     } catch (error) {
       if (error.response) {
         const errorMessage = error.response.data.message;
@@ -31,7 +32,7 @@ const createNewAccount = createAsyncThunk(
 );
 
 const enrollUserSlice = createSlice({
-  name: enrolluser,
+  name: "enrolluser",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
