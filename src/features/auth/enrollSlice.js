@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const devurl = "http://localhost:3500";
+const liveurl = "https://greenoak.onrender.com";
+
 const initialState = {
   isLoading: false,
   isError: false,
@@ -11,7 +14,7 @@ export const createNewAccount = createAsyncThunk(
   "enrolluser/createNewAccount",
   async (formData) => {
     console.log(formData);
-    const url = "http://localhost:3500/register";
+    const url = `${devurl}/register`;
     try {
       const response = await axios.post(url, formData, {
         method: "POST",

@@ -17,15 +17,12 @@ export const fetchUserAccount = createAsyncThunk(
     try {
       const { accessToken } = getState().auth;
 
-      const response = await axios.get(
-        `http://localhost:3500/account/${userId}`,
-        {
-          withCredentials: true,
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await axios.get(`${devurl}/account/${userId}`, {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
 
       console.log(response.data);
 

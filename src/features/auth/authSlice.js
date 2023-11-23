@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const devurl = "http://localhost:3500";
+const liveurl = "https://greenoak.onrender.com";
+
 const initialState = {
   isLoading: false,
   isLoggedIn: false,
@@ -14,7 +17,7 @@ export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (userData) => {
     try {
-      const response = await axios.post("http://localhost:3500/auth", userData);
+      const response = await axios.post(`${devurl}/auth`, userData);
       const accessToken = response.data.accessToken;
       const userId = response.data.userId;
       const username = response.data.username;
@@ -33,7 +36,7 @@ export const loginUser = createAsyncThunk(
 );
 
 export const logoutUser = createAsyncThunk("user/logoutUser", async (token) => {
-  const response = await axios.get("http://localhost:3500/logout", {
+  const response = await axios.get(`${devurl}/logout`, {
     withCredentials: true,
     headers: {
       Authorization: `Bearer ${token}`,
