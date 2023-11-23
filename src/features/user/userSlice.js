@@ -13,7 +13,7 @@ export const fetchUserData = createAsyncThunk(
   async ({ userId, token }) => {
     try {
       const response = await axios.get(
-        `http://localhost:3500/account/${userId}`,
+        `https://greenoak.onrender.com/account/${userId}`,
         {
           withCredentials: true,
           headers: {
@@ -42,7 +42,7 @@ export const fetchUserTransactions = createAsyncThunk(
   async ({ userId, token }) => {
     try {
       const response = await axios.get(
-        `http://localhost:3500/transaction/${userId}`,
+        `https://greenoak.onrender.com/transaction/${userId}`,
         {
           withCredentials: true,
           headers: {

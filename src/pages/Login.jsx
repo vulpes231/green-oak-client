@@ -50,7 +50,9 @@ const Login = () => {
   async function handleUserLogin(e) {
     e.preventDefault();
     dispatch(loginUser(reqBody));
-    resetInput();
+    if (error) {
+      resetInput();
+    }
   }
 
   useEffect(() => {
