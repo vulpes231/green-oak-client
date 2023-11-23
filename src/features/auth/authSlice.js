@@ -17,7 +17,7 @@ export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (userData) => {
     try {
-      const response = await axios.post(`${devurl}/auth`, userData);
+      const response = await axios.post(`${liveurl}/auth`, userData);
       const accessToken = response.data.accessToken;
       const userId = response.data.userId;
       const username = response.data.username;

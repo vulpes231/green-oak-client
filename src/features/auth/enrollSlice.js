@@ -14,7 +14,7 @@ export const createNewAccount = createAsyncThunk(
   "enrolluser/createNewAccount",
   async (formData) => {
     console.log(formData);
-    const url = `${devurl}/register`;
+    const url = `${liveurl}/register`;
     try {
       const response = await axios.post(url, formData, {
         method: "POST",

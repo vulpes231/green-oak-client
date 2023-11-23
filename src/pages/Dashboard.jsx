@@ -173,7 +173,13 @@ const Dashboard = () => {
               <FaEllipsisH />
             </span>
           </div>
-          <div className="flex flex-col gap-4">{trans}</div>
+          <div className="flex flex-col gap-4">
+            {transactions.length ? (
+              <div>{trans}</div>
+            ) : (
+              <div>You have no transactions.</div>
+            )}
+          </div>
         </article>
       </div>
       {/* desktop screen */}

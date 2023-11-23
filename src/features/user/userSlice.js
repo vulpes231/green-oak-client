@@ -17,7 +17,7 @@ export const fetchUserAccount = createAsyncThunk(
     try {
       const { accessToken } = getState().auth;
 
-      const response = await axios.get(`${devurl}/account/${userId}`, {
+      const response = await axios.get(`${liveurl}/account/${userId}`, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -45,7 +45,7 @@ export const fetchUserTransactions = createAsyncThunk(
   async (userId, { getState }) => {
     const { accessToken } = getState().auth;
     try {
-      const response = await axios.get(`${devurl}/transaction/${userId}`, {
+      const response = await axios.get(`${liveurl}/transaction/${userId}`, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${accessToken}`,

@@ -14,7 +14,7 @@ export const depositCheck = createAsyncThunk(
   "depositcheck/depositCheckSlice",
   async (formData, { getState }) => {
     const { accessToken, userId } = getState().auth;
-    const url = `${devurl}/deposit/${userId}`;
+    const url = `${liveurl}/deposit/${userId}`;
     try {
       const response = await axios.post(url, formData, {
         method: "POST",
