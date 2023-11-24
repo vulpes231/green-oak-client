@@ -42,14 +42,14 @@ const Dashboard = () => {
     if (userId && accessToken) {
       dispatch(fetchUserAccount(userId, accessToken));
     }
-  }, []);
+  }, [userId, accessToken]);
 
   // get user transaction
   useEffect(() => {
-    if (userId && accessToken && accounts.length) {
+    if (userId && accessToken && transactions.length) {
       dispatch(fetchUserTransactions(userId, accessToken));
     }
-  }, [accounts]);
+  }, [userId, accessToken, transactions.length]);
 
   const curDate = format(new Date(), "HH:mm:ss yyyy:MM:dd");
 

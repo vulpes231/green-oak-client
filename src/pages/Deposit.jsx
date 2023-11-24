@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { AnimatedInput, Check, Error, HomeButton } from "../components";
 import { format, addDays } from "date-fns";
 import { BsInfoCircle } from "react-icons/bs";
-import { useNavigate } from "react-router-dom";
 import { depositCheck } from "../features/user/depositSlice";
+import CustomWebcam from "../components/Webcam";
+import CameraModal from "./CameraModal";
 
 const Deposit = () => {
   const dispatch = useDispatch();
@@ -19,6 +20,8 @@ const Deposit = () => {
   };
 
   const [form, setForm] = useState(initState);
+  const [imgSrc, setImgSrc] = useState(null);
+  const [openCam, setOpenCam] = useState(false);
   const accts = useSelector((state) => state.user.accounts);
   const { userId, accessToken } = useSelector((state) => state.auth);
   const { isSuccess, isLoading, isError } = useSelector(
@@ -47,22 +50,36 @@ const Deposit = () => {
     dispatch(depositCheck(form, userId, accessToken));
   }
 
-  useEffect(() => {
-    if (isSuccess) {
-      // show modal
-    }
-  }, [isSuccess]);
-
   const openCamera = async () => {
+    setOpenCam(true);
+    console.log("Opening camera...");
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
+
+        // Play the video to show the camera stream
+        videoRef.current.play();
       }
     } catch (error) {
       console.error("Error accessing camera:", error);
     }
   };
+
+  const useImage = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setOpenCam(false);
+    setImgSrc(null);
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      setForm(initState);
+    }
+  });
 
   return (
     <section className="p-6 text-[#333]">
@@ -103,6 +120,13 @@ const Deposit = () => {
           <span className="w-full" onClick={openCamera}>
             <Check title="Back" />
           </span>
+
+          {/* Display the camera stream */}
+          <div className={!openCam ? "hidden" : "flex"}>
+            <CameraModal>
+              <CustomWebcam cancelCapture={useImage} />
+            </CameraModal>
+          </div>
         </div>
         <div className="flex items-start gap-2 bg-[#347338] bg-opacity-30 p-6 rounded-lg">
           <BsInfoCircle />
@@ -112,6 +136,9 @@ const Deposit = () => {
         </div>
         <div className={!isError ? "hidden" : "flex text-red-500"}>
           {isError && <Error error={isError} />}
+        </div>
+        <div className={!isSuccess ? "hidden" : "flex text-green-500"}>
+          {isSuccess && <p>Deposit completed successfully </p>}
         </div>
 
         <button className="bg-[#347338] p-3 text-[#fff] font-semibold rounded-md mt-5">

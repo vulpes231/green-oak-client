@@ -8,6 +8,7 @@ const initialState = {
   isLoading: false,
   isError: false,
   isSuccess: false,
+  showModal: false,
 };
 
 export const depositCheck = createAsyncThunk(
@@ -50,11 +51,13 @@ const depositCheckSlice = createSlice({
       .addCase(depositCheck.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.showModal = true;
         state.isError = "";
       })
       .addCase(depositCheck.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess = false;
+        state.showModal = false;
         state.isError = action.error.message;
       });
   },
