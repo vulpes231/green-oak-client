@@ -20,6 +20,7 @@ import {
   fetchUserTransactions,
 } from "../features/user/userSlice";
 import { format } from "date-fns";
+import { logoutUser } from "../features/auth/authSlice";
 
 const Dashboard = () => {
   const [activeLink, setActiveLink] = useState(dashLinks[0].id);
@@ -68,18 +69,23 @@ const Dashboard = () => {
 
   const accts = accounts.map((acct) => {
     return (
-      <div
-        key={acct._id}
-        className="flex justify-between items-center bg-[#347338] p-4 rounded-md text-[#fff]"
-      >
-        <span>
-          <h3 className="font-semibold">{acct.account_type}</h3>
-          <p className="font-extralight">{acct.account_num}</p>
-        </span>
-        <span>
-          <h3 className="font-semibold">{`$ ${acct.available_bal}`}</h3>
-          <p className="font-extralight">Available</p>
-        </span>
+      <div key={acct._id}>
+        <div className="flex justify-between items-center bg-[#347338] p-4 rounded-md text-[#fff] md:hidden">
+          <span className="">
+            <h3 className="font-semibold">{acct.account_type}</h3>
+            <p className="font-extralight">{acct.account_num}</p>
+          </span>
+          <span className="">
+            <h3 className="font-semibold">{`$ ${acct.available_bal}`}</h3>
+            <p className="font-extralight">Available</p>
+          </span>
+        </div>
+
+        <div className="hidden lg:grid grid-cols-3 bg-[#f2f2f2] px-4 py-2">
+          <h3>{acct.account_type}</h3>
+          <h3>{acct.account_num}</h3>
+          <h3>{`$ ${acct.available_bal}`}</h3>
+        </div>
       </div>
     );
   });
@@ -96,6 +102,10 @@ const Dashboard = () => {
   };
   const showProfile = () => {
     setDisplayComponent("profile");
+  };
+
+  const logoutCurrentUser = () => {
+    dispatch(logoutUser());
   };
 
   const dLinks = dashLinks.map((dsh) => {
@@ -120,6 +130,8 @@ const Dashboard = () => {
             showTransfer();
           } else if (dsh.id.includes("profile")) {
             showProfile();
+          } else if (dsh.id.includes("logout")) {
+            logoutCurrentUser();
           }
         }}
       >
@@ -210,7 +222,7 @@ const Dashboard = () => {
             </div>
           </aside>
           <div className="col-span-2 text-left py-4">
-            {displayComponent === "dashboard" && <Dash />}
+            {displayComponent === "dashboard" && <Dash accts={accts} />}
             {displayComponent === "payment" && <Payment />}
             {displayComponent === "transfer" && <Transfer />}
             {displayComponent === "profile" && <Profile />}
