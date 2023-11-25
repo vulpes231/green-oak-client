@@ -1,27 +1,26 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const devurl = "http://localhost:3500";
+// const devurl = "http://localhost:3500";
 const liveurl = "https://greenoak.onrender.com";
 
 const initialState = {
   isLoading: false,
-  isError: false,
-  isSuccess: false,
-  showModal: false,
+  isChanged: false,
+  isError: "",
 };
 
-export const depositCheck = createAsyncThunk(
-  "depositcheck/depositCheckSlice",
+export const changePassword = createAsyncThunk(
+  "changepassword/changePassword",
   async (formData, { getState }) => {
-    const { accessToken, userId } = getState().auth;
-    const url = `${liveurl}/deposit/${userId}`;
     try {
-      const response = await axios.post(url, formData, {
-        method: "POST",
+      const { accessToken, userId } = getState().auth;
+      const url = `${liveurl}/change-password/${userId}`;
+      const response = await axios.put(url, formData, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         withCredentials: true,
       });
@@ -38,29 +37,26 @@ export const depositCheck = createAsyncThunk(
   }
 );
 
-const depositCheckSlice = createSlice({
-  name: "depositcheck",
+const changePassSlice = createSlice({
+  name: "changepassword",
   initialState,
-  reducers: {},
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(depositCheck.pending, (state, action) => {
+      .addCase(changePassword.pending, (state, action) => {
         state.isLoading = true;
       })
-      .addCase(depositCheck.fulfilled, (state, action) => {
+      .addCase(changePassword.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = true;
-        state.showModal = true;
+        state.isChanged = true;
         state.isError = "";
       })
-      .addCase(depositCheck.rejected, (state, action) => {
+      .addCase(changePassword.rejected, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = false;
-        state.showModal = false;
+        state.isChanged = false;
         state.isError = action.error.message;
       });
   },
 });
 
-export default depositCheckSlice.reducer;
+export default changePassSlice.reducer;

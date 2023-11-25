@@ -28,7 +28,7 @@ const Deposit = () => {
     (state) => state.depositcheck
   );
   const videoRef = useRef();
-
+  // get user accounts
   const userAccounts = accts.map((acct) => {
     return (
       <option key={acct._id} value={acct.account_num}>
@@ -44,12 +44,13 @@ const Deposit = () => {
       [name]: value,
     }));
   }
-
+  // handle deposit submissions
   function handleSubmit(e) {
     e.preventDefault();
     dispatch(depositCheck(form, userId, accessToken));
   }
 
+  // open camera to capture
   const openCamera = async () => {
     setOpenCam(true);
     console.log("Opening camera...");
@@ -68,13 +69,14 @@ const Deposit = () => {
     }
   };
 
+  // use image
   const useImage = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setOpenCam(false);
     setImgSrc(null);
   };
-
+  // clear form data
   useEffect(() => {
     if (isSuccess) {
       setForm(initState);

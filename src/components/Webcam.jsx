@@ -9,9 +9,10 @@ const CustomWebcam = ({ cancelCapture }) => {
   const [imgSrc, setImgSrc] = useState(null);
 
   const [facingMode, setFacingMode] = useState(FACING_MODE_USER);
+  const [webcamKey, setWebcamKey] = useState(0);
 
   let videoConstraints = {
-    facingMode: facingMode,
+    facingMode: FACING_MODE_USER,
     width: 475,
     height: 500,
   };
@@ -24,6 +25,8 @@ const CustomWebcam = ({ cancelCapture }) => {
         ? FACING_MODE_ENVIRONMENT
         : FACING_MODE_USER
     );
+
+    setWebcamKey((prevKey) => prevKey + 1);
   }, []);
 
   // create a capture function
@@ -56,8 +59,9 @@ const CustomWebcam = ({ cancelCapture }) => {
           ref={webcamRef}
           audio={false}
           screenshotFormat="image/jpeg"
-          videoConstraints={videoConstraints}
+          videoConstraints={{ ...videoConstraints, facingMode }}
           screenshotQuality={1}
+          key={webcamKey}
         />
       )}
       <div className="btn-container">
