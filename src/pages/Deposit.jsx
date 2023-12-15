@@ -114,7 +114,7 @@ const Deposit = () => {
             name="amount"
           />
         </div>
-        <p>Your current limit is $2,000</p>
+        <p>Your current limit is $999,999,999</p>
         <div className="flex gap-4 ">
           <span className="w-full" onClick={openCamera}>
             <Check title="Front" />

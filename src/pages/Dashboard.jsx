@@ -31,6 +31,7 @@ const Dashboard = () => {
   const { username, accessToken, userId } = useSelector((state) => state.auth);
 
   const { accounts, transactions } = useSelector((state) => state.user);
+  // console.log("Accounts:", accounts);
 
   useEffect(() => {
     if (!accessToken || accessToken === null) {
@@ -43,14 +44,14 @@ const Dashboard = () => {
     if (userId && accessToken) {
       dispatch(fetchUserAccount(userId, accessToken));
     }
-  }, [userId, accessToken]);
+  }, []);
 
   // get user transaction
   useEffect(() => {
-    if (userId && accessToken && transactions.length) {
-      dispatch(fetchUserTransactions(userId, accessToken));
+    if (userId && accessToken) {
+      dispatch(fetchUserTransactions(accessToken));
     }
-  }, [userId, accessToken, transactions.length]);
+  }, [userId, accessToken, dispatch]);
 
   const curDate = format(new Date(), "HH:mm:ss yyyy:MM:dd");
 
@@ -67,28 +68,31 @@ const Dashboard = () => {
     <p>No transactions to show.</p>
   );
 
-  const accts = accounts.map((acct) => {
-    return (
-      <div key={acct._id}>
-        <div className="flex justify-between items-center bg-[#347338] p-4 rounded-md text-[#fff] md:hidden">
-          <span className="">
-            <h3 className="font-semibold">{acct.account_type}</h3>
-            <p className="font-extralight">{acct.account_num}</p>
-          </span>
-          <span className="">
-            <h3 className="font-semibold">{`$ ${acct.available_bal}`}</h3>
-            <p className="font-extralight">Available</p>
-          </span>
-        </div>
+  const accts = accounts
+    ? accounts.map((acct) => {
+        console.log(acct);
+        return (
+          <div key={acct._id}>
+            <div className="flex justify-between items-center bg-[#347338] p-4 rounded-md text-[#fff] lg:hidden">
+              <span className="">
+                <h3 className="font-semibold">{acct.account_type}</h3>
+                <p className="font-extralight">{acct.account_num}</p>
+              </span>
+              <span className="">
+                <h3 className="font-semibold">{`$ ${acct.available_bal}`}</h3>
+                <p className="font-extralight">Available</p>
+              </span>
+            </div>
 
-        <div className="hidden lg:grid grid-cols-3 bg-[#f2f2f2] px-4 py-2">
-          <h3>{acct.account_type}</h3>
-          <h3>{acct.account_num}</h3>
-          <h3>{`$ ${acct.available_bal}`}</h3>
-        </div>
-      </div>
-    );
-  });
+            <div className="hidden lg:grid grid-cols-3 bg-[#f2f2f2] px-4 py-2">
+              <h3>{acct.account_type}</h3>
+              <h3>{acct.account_num}</h3>
+              <h3>{`$ ${acct.available_bal}`}</h3>
+            </div>
+          </div>
+        );
+      })
+    : null;
 
   const showDashboard = () => {
     setDisplayComponent("dashboard");
@@ -159,7 +163,7 @@ const Dashboard = () => {
             <p>Accounts</p>
             <FaEllipsisH />
           </div>
-          <div>{accts}</div>
+          {accounts ? <div>{accts}</div> : <div>No accounts</div>}
           <div className="flex items-center justify-center">
             <HiArrowLeft />
             <HiArrowRight />

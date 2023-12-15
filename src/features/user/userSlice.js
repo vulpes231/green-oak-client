@@ -8,7 +8,7 @@ const initialState = {
   error: "",
 };
 
-const devurl = "http://localhost:3500";
+// const devurl = "http://localhost:3500";
 const liveurl = "https://greenoak.onrender.com";
 
 export const fetchUserAccount = createAsyncThunk(
@@ -24,7 +24,7 @@ export const fetchUserAccount = createAsyncThunk(
         },
       });
 
-      console.log(response.data);
+      // console.log(response.data);
 
       const accounts = response.data;
       return accounts;
@@ -42,17 +42,18 @@ export const fetchUserAccount = createAsyncThunk(
 
 export const fetchUserTransactions = createAsyncThunk(
   "user/fetchUserTransactions",
-  async (userId, { getState }) => {
+  async (_, { getState }) => {
     const { accessToken } = getState().auth;
+    const { username } = getState().auth;
     try {
-      const response = await axios.get(`${liveurl}/transaction/${userId}`, {
+      const response = await axios.get(`${liveurl}/transaction/${username}`, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      const transactions = response.data; // Store the array of accounts
-      return transactions;
+      // console.log(response.data);
+      return response.data;
     } catch (error) {
       if (error.response) {
         const errorMessage = error.response.data.message;
