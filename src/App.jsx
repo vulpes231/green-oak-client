@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Content } from "./components";
 import { Route, Routes } from "react-router-dom";
 import {
@@ -11,6 +11,7 @@ import {
   Transfer,
 } from "./pages";
 import { useSelector } from "react-redux";
+import External from "./pages/External";
 
 const App = () => {
   const accessToken = useSelector((state) => state.auth.accessToken);
@@ -35,6 +36,10 @@ const App = () => {
       <Route
         path="/transfer"
         element={isLoggedIn && accessToken ? <Transfer /> : <Login />}
+      />
+      <Route
+        path="/external"
+        element={isLoggedIn && accessToken ? <External /> : <Login />}
       />
       <Route
         path="/profile"
