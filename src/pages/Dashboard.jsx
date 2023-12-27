@@ -70,7 +70,7 @@ const Dashboard = () => {
 
   const accts = accounts
     ? accounts.map((acct) => {
-        console.log(acct);
+        // console.log(acct);
         return (
           <div key={acct._id}>
             <div className="flex justify-between items-center bg-[#347338] p-4 rounded-md text-[#fff] lg:hidden">

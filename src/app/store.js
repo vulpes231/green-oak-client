@@ -7,6 +7,7 @@ import changePassReducer from "../features/user/changePassSlice";
 import editProfileReducer from "../features/user/editProfileSlice";
 import getUserReducer from "../features/user/getUserSlice";
 import externalAcctReducer from "../features/user/externalAcctSlice";
+import TransferReducer from "../features/user/TransferSlice";
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     editprofile: editProfileReducer,
     getuser: getUserReducer,
     external: externalAcctReducer,
+    transfer: TransferReducer,
   },
 });
 

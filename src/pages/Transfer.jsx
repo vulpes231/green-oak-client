@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AnimatedInput, HomeButton } from "../components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaBookReader, FaPlusCircle } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
+import { getExternalAccounts, reset } from "../features/user/externalAcctSlice";
 
 const initState = {
   from: "",
@@ -16,13 +18,19 @@ const initState = {
 
 const Transfer = () => {
   const [form, setForm] = useState(initState);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  const { accessToken, username } = useSelector((state) => state.auth);
   const { accounts } = useSelector((state) => state.user);
+  const { external } = useSelector((state) => state.external);
+
+  // console.log(external);
 
   const fromAccounts = accounts.length
     ? accounts.map((acct) => {
         return (
-          <option key={acct.account_num}>
+          <option key={acct._id} value={acct.account_num}>
             {acct.account_type.toUpperCase()}-{acct.account_num} - $
             {acct.available_bal}
           </option>
@@ -30,16 +38,46 @@ const Transfer = () => {
       })
     : null;
 
+  const toAccounts =
+    external.externalAccounts !== undefined
+      ? external.externalAccounts.map((acct) => {
+          return (
+            <option key={acct._id} value={acct.account}>
+              {acct.nick} - {acct.account}
+            </option>
+          );
+        })
+      : null;
+
   const handleDateChange = (date) => {
     setEditedData((prevData) => ({
       ...prevData,
       date,
     }));
   };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
+
+  const resetInput = () => {
+    setForm(initState);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(form);
+    resetInput();
+  };
+
+  useEffect(() => {
+    if (accessToken && username) {
+      dispatch(getExternalAccounts());
+    } else {
+      navigate("/login");
+    }
+  }, []);
 
   return (
     <section className="p-6 lg:p-0 flex flex-col gap-4">
@@ -68,6 +106,7 @@ const Transfer = () => {
               onChange={handleInputChange}
             >
               <option value="">Select or Add External Account </option>
+              {toAccounts}
             </select>
           </label>
           <label htmlFor="">
@@ -101,7 +140,8 @@ const Transfer = () => {
             className={
               "bg-[#347338] text-[#fff] w-full py-3 font-semibold mt-5 rounded-lg "
             }
-            disabled={form.from === form.to}
+            // disabled={form.from === form.to}
+            onClick={handleSubmit}
           >
             Send
           </button>
