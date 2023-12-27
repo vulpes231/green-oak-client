@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-// import { useNavigate } from "react-router-dom";
+
+// const devurl = "http://localhost:3500";
+const liveurl = "https://greenoak.onrender.com";
 
 const initialState = {
   trfLoad: false,
@@ -12,7 +14,7 @@ export const sendMoney = createAsyncThunk(
   "transfer/sendMoney",
   async (formData, { getState }) => {
     const { accessToken } = getState().auth;
-    const url = ``;
+    const url = `${liveurl}/transfer`;
 
     try {
       const response = await axios.post(url, formData, {
@@ -25,6 +27,8 @@ export const sendMoney = createAsyncThunk(
       if (response.request.status === 403) {
         console.log("Token expired");
       }
+
+      console.log(response.data);
 
       return response.data;
     } catch (error) {

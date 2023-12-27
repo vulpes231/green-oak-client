@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { AnimatedInput, HomeButton } from "../components";
+import { AnimatedInput, Error, HomeButton } from "../components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Link, useNavigate } from "react-router-dom";
-import { FaBookReader, FaPlusCircle } from "react-icons/fa";
+import { FaBookReader, FaCheckCircle, FaPlusCircle } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 
 import { getExternalAccounts, reset } from "../features/user/externalAcctSlice";
-
+import { sendMoney } from "../features/user/TransferSlice";
+import Modal from "../components/Modal";
 const initState = {
   from: "",
   to: "",
@@ -25,7 +26,9 @@ const Transfer = () => {
   const { accounts } = useSelector((state) => state.user);
   const { external } = useSelector((state) => state.external);
 
-  // console.log(external);
+  const { trfLoad, trfError, success } = useSelector((state) => state.transfer);
+
+  console.log(trfError);
 
   const fromAccounts = accounts.length
     ? accounts.map((acct) => {
@@ -68,14 +71,13 @@ const Transfer = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(form);
+    dispatch(sendMoney(form));
     resetInput();
   };
 
   useEffect(() => {
     if (accessToken && username) {
       dispatch(getExternalAccounts());
-    } else {
-      navigate("/login");
     }
   }, []);
 
@@ -136,6 +138,8 @@ const Transfer = () => {
               name="date"
             />
           </label>
+          {trfError && <span className="text-red-500">{trfError}</span>}
+
           <button
             className={
               "bg-[#347338] text-[#fff] w-full py-3 font-semibold mt-5 rounded-lg "
@@ -143,7 +147,7 @@ const Transfer = () => {
             // disabled={form.from === form.to}
             onClick={handleSubmit}
           >
-            Send
+            {trfLoad ? "Initiating Transfer..." : "Send"}
           </button>
         </form>
         <article className="flex flex-col gap-4">
