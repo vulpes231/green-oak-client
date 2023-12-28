@@ -28,7 +28,7 @@ const Transfer = () => {
 
   const { trfLoad, trfError, success } = useSelector((state) => state.transfer);
 
-  console.log(trfError);
+  // console.log(trfError);
 
   const fromAccounts = accounts.length
     ? accounts.map((acct) => {

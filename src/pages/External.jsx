@@ -2,22 +2,29 @@ import React, { useEffect, useState } from "react";
 import { AnimatedInput, HomeButton } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import { addAccount, reset } from "../features/user/externalAcctSlice";
+import { FaCheckCircle } from "react-icons/fa";
 
 const initState = {
   account: "",
   routing: "",
   nick: "",
+  type: "",
 };
 
 const External = () => {
   const [form, setForm] = useState(initState);
-  const [showModal, SetShowModal] = useState(false);
 
   const dispatch = useDispatch();
 
   const { added, addError, addLoading } = useSelector(
     (state) => state.external
   );
+
+  // console.log(addError);
+
+  const resetInput = () => {
+    setForm(initState);
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -26,18 +33,20 @@ const External = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(form);
+    // console.log(form);
     dispatch(addAccount(form));
   };
 
   useEffect(() => {
     if (added) {
-      SetShowModal(true);
+      console.log("Added");
+      resetInput();
       setTimeout(() => {
         dispatch(reset());
       }, 3000);
     }
   }, [added, dispatch]);
+
   return (
     <section className="p-6 lg:p-0 flex flex-col gap-4">
       <HomeButton />
@@ -71,8 +80,24 @@ const External = () => {
               name="nick"
             />
           </label>
+          <label htmlFor="">
+            Account Type
+            <AnimatedInput
+              placeholder="Checking or Savings"
+              value={form.type}
+              onChange={handleInputChange}
+              name="type"
+            />
+          </label>
           {/* error */}
           {addError && <p className="text-red-500">{addError}</p>}
+
+          {/* success */}
+          {added && (
+            <p className="text-green-500 pt-3">
+              External Account added successfully.
+            </p>
+          )}
           <button
             className="bg-[#347338] text-[#fff] w-full py-3 font-semibold mt-5 rounded-lg"
             onClick={handleSubmit}

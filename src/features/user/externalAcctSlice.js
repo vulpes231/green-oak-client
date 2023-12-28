@@ -19,17 +19,21 @@ export const addAccount = createAsyncThunk(
     const url = `${liveurl}/external`;
     const { accessToken } = getState().auth;
     try {
+      // console.log("1");
       const response = await axios.post(url, formData, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
       });
+      // console.log("2");
       console.log(response.data);
       return response.data;
     } catch (error) {
       if (error.response) {
-        const errorMessage = error.response.data.message;
+        console.error("Error response:", error.response);
+        const errorMessage = error.response.data.message || error.response.data;
+        // console.log(errorMessage);
         throw new Error(errorMessage);
       } else {
         throw error;
@@ -50,13 +54,6 @@ export const getExternalAccounts = createAsyncThunk(
           Authorization: `Bearer ${accessToken}`,
         },
       });
-
-      if (response.status === 403) {
-        // Redirect or handle the 403 Forbidden status here
-        // For example, you might want to dispatch another action
-        // dispatch(someAction());
-        console.error("403 Forbidden:", response.data);
-      }
 
       return response.data;
     } catch (error) {
@@ -88,7 +85,7 @@ const externalAccountSlice = createSlice({
       .addCase(addAccount.pending, (state) => {
         state.addLoading = true;
       })
-      .addCase(addAccount.fulfilled, (state) => {
+      .addCase(addAccount.fulfilled, (state, action) => {
         state.addLoading = false;
         state.addError = false;
         state.added = true;
