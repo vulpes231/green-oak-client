@@ -55,18 +55,25 @@ const Dashboard = () => {
 
   const curDate = format(new Date(), "HH:mm:ss yyyy:MM:dd");
 
-  const trans = transactions ? (
-    transactions.map((tx) => (
-      <Transaction
-        key={tx._id}
-        title={tx.desc}
-        date={tx.date}
-        amount={`$ ${tx.amount}`}
-      />
-    ))
-  ) : (
-    <p>No transactions to show.</p>
-  );
+  const sortedTransactions = transactions
+    ? [...transactions].sort((a, b) => new Date(b.date) - new Date(a.date))
+    : [];
+
+  const latestTransactions = sortedTransactions.slice(0, 4);
+
+  const trans =
+    latestTransactions.length > 0 ? (
+      latestTransactions.map((tx) => (
+        <Transaction
+          key={tx._id}
+          title={tx.desc}
+          date={tx.date}
+          amount={`$ ${tx.amount}`}
+        />
+      ))
+    ) : (
+      <p>No transactions to show.</p>
+    );
 
   const accts = accounts
     ? accounts.map((acct) => {

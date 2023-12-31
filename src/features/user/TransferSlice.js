@@ -33,7 +33,7 @@ export const sendMoney = createAsyncThunk(
       return response.data;
     } catch (error) {
       if (error.response) {
-        const errorMessage = error.response.data.message;
+        const errorMessage = error.response.data.message || error.response.data;
         throw new Error(errorMessage);
       } else {
         throw error;

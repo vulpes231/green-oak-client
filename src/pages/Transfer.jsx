@@ -6,9 +6,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaBookReader, FaCheckCircle, FaPlusCircle } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getExternalAccounts, reset } from "../features/user/externalAcctSlice";
-import { sendMoney } from "../features/user/TransferSlice";
+// import { getExternalAccounts, reset } from "../features/user/externalAcctSlice";
+
+import { sendMoney, reset } from "../features/user/TransferSlice";
 import Modal from "../components/Modal";
+import { generateRandomHash } from "../utils/gen";
+
 const initState = {
   from: "",
   to: "",
@@ -22,9 +25,9 @@ const Transfer = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { accessToken, username } = useSelector((state) => state.auth);
+  // const { accessToken, username } = useSelector((state) => state.auth);
   const { accounts } = useSelector((state) => state.user);
-  const { external } = useSelector((state) => state.external);
+  // const { external } = useSelector((state) => state.external);
 
   const { trfLoad, trfError, success } = useSelector((state) => state.transfer);
 
@@ -41,16 +44,16 @@ const Transfer = () => {
       })
     : null;
 
-  const toAccounts =
-    external.externalAccounts !== undefined
-      ? external.externalAccounts.map((acct) => {
-          return (
-            <option key={acct._id} value={acct.account}>
-              {acct.nick} - {acct.account}
-            </option>
-          );
-        })
-      : null;
+  // const toAccounts =
+  //   external.externalAccounts !== undefined
+  //     ? external.externalAccounts.map((acct) => {
+  //         return (
+  //           <option key={acct._id} value={acct.account}>
+  //             {acct.nick} - {acct.account}
+  //           </option>
+  //         );
+  //       })
+  //     : null;
 
   const handleDateChange = (date) => {
     setEditedData((prevData) => ({
@@ -72,14 +75,22 @@ const Transfer = () => {
     e.preventDefault();
     console.log(form);
     dispatch(sendMoney(form));
-    resetInput();
   };
 
+  // useEffect(() => {
+  //   if (accessToken && username) {
+  //     dispatch(getExternalAccounts());
+  //   }
+  // }, []);
+
   useEffect(() => {
-    if (accessToken && username) {
-      dispatch(getExternalAccounts());
+    if (success) {
+      resetInput();
+      setTimeout(() => {
+        dispatch(reset());
+      }, 3000);
     }
-  }, []);
+  });
 
   return (
     <section className="p-6 lg:p-0 flex flex-col gap-4">
@@ -101,7 +112,7 @@ const Transfer = () => {
           </label>
           <label htmlFor="">
             To
-            <select
+            {/* <select
               name="to"
               className={`w-full border border-[#347338]  py-2 text-lg px-2 md:py-3 outline-none`}
               value={form.to}
@@ -109,7 +120,13 @@ const Transfer = () => {
             >
               <option value="">Select or Add External Account </option>
               {toAccounts}
-            </select>
+            </select> */}
+            <AnimatedInput
+              placeholder="External Account Number"
+              value={form.to}
+              onChange={handleInputChange}
+              name="to"
+            />
           </label>
           <label htmlFor="">
             Amount
@@ -139,6 +156,13 @@ const Transfer = () => {
             />
           </label>
           {trfError && <span className="text-red-500">{trfError}</span>}
+
+          {success && (
+            <Modal
+              icon={<FaCheckCircle />}
+              text={`Transfer initiated successfully Reference No:${generateRandomHash()}.`}
+            />
+          )}
 
           <button
             className={
