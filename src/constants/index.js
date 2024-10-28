@@ -58,4 +58,27 @@ const footerLinks = [
   },
 ];
 
-export { navLinks, dashLinks, footerLinks };
+const contentLinks = [
+  {
+    id: 1,
+    name: "manage alerts",
+  },
+  {
+    id: 2,
+    name: "change password",
+  },
+  {
+    id: 3,
+    name: "learn about digital wallet",
+  },
+  {
+    id: 4,
+    name: "settings",
+  },
+  {
+    id: 5,
+    name: "help",
+  },
+];
+
+export { navLinks, dashLinks, footerLinks, contentLinks };

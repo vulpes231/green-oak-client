@@ -56,14 +56,18 @@ const Login = () => {
   }
 
   useEffect(() => {
+    document.title = "GreenOakTrust - Sign In";
+  }, []);
+
+  useEffect(() => {
     if (accessToken !== null && userId !== null) {
       navigate("/dashboard");
     }
   }, [accessToken, userId]);
 
   return (
-    <section className=" w-full min-h-screen p-6 text-[#333] flex flex-col justify-between bg-slate-50">
-      <div className="w-full md:max-w-[400px] mx-auto flex flex-col gap-10 items-center">
+    <section className=" w-full min-h-screen  text-[#333] flex flex-col justify-between bg-slate-50">
+      <div className="w-full md:max-w-[450px] mx-auto flex flex-col gap-10 items-center p-6">
         <article className="flex items-center gap-1 mt-10 md:mt-24">
           <img src={logo} alt="log-image" width={40} />
           <Link to="/" className="text-2xl font-bold text-[#347338]">

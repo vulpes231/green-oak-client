@@ -93,16 +93,16 @@ const Transfer = () => {
   });
 
   return (
-    <section className="p-6 lg:p-0 flex flex-col gap-4">
+    <section className="flex flex-col gap-4 bg-white">
       <HomeButton />
-      <h3 className="text-2xl">External Transfer</h3>
-      <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-10 p-10">
+        <h3 className="text-2xl">External Transfer</h3>
         <form className="font-extralight text-[#333] flex flex-col gap-4">
           <label htmlFor="">
             From
             <select
               name="from"
-              className={`w-full border border-[#347338]  py-2 text-lg px-2 md:py-3 outline-none`}
+              className={`border-2 border-slate-500 focus:outline-[#347338] outline-none w-full p-1.5 focus:border-none rounded-sm bg-opacity-25 bg-slate-100`}
               value={form.from}
               onChange={handleInputChange}
             >
@@ -151,7 +151,7 @@ const Transfer = () => {
             <DatePicker
               selected={form.date}
               onChange={handleDateChange}
-              className="border border-[#347338] outline-none w-full md:w-[50%]  py-2 text-lg px-2 md:py-3"
+              className="border-2 border-slate-500 focus:outline-[#347338] outline-none w-full lg:w-[50%] p-1.5 focus:border-none rounded-sm bg-opacity-25 bg-slate-100"
               name="date"
             />
           </label>

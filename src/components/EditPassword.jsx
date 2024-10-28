@@ -39,8 +39,11 @@ const EditPassword = () => {
   }, [isChanged]);
 
   return (
-    <form action="" className="lg:mr-10 mt-10 font-extralight">
-      <h3 className="text-xl mb-3">Update contact info</h3>
+    <form
+      action=""
+      className="bg-white p-10 rounded-md shadow-md flex flex-col gap-4"
+    >
+      <h3 className="text-xl font-medium">Update password</h3>
       <div className="flex flex-col lg:flex-row gap-2">
         <div className="w-full">
           <label htmlFor="">Current Password</label>
@@ -69,7 +72,7 @@ const EditPassword = () => {
       </div>
       <button
         onClick={handlePassChange}
-        className="bg-[#347388] mt-5 w-full py-3 text-[#fff]"
+        className="bg-green-700 mt-5 w-full py-2.5 rounded-3xl text-[#fff]"
       >
         Update Password
       </button>

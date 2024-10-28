@@ -12,8 +12,8 @@ const HomeButton = () => {
   }
 
   return (
-    <div className="flex items-center justify-between">
-      <Link to="/dashboard" className="text-xl pb-5 lg:hidden">
+    <div className="flex items-center justify-between lg:hidden">
+      <Link to="/dashboard" className="text-xl pb-5 ">
         <FaHome className="text-xl cursor-pointer" />
       </Link>
       <Link to="" className="text-xl pb-5 lg:hidden" onClick={handleLogout}>

@@ -6,5 +6,6 @@ import trc from "./trc.jpg";
 import user from "./usr.png";
 import eql from "./eql.png";
 import prof from "./prof.png";
+import fdcic from "./fdcic.png";
 
-export { logo, bg, hero, save, trc, eql, user, prof };
+export { logo, bg, hero, save, trc, eql, user, prof, fdcic };

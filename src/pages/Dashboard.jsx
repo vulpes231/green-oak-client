@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { HiArrowLeft, HiArrowRight, HiSearch, HiUser } from "react-icons/hi";
+import {
+  HiArrowLeft,
+  HiArrowRight,
+  HiSearch,
+  HiUser,
+  HiDotsVertical,
+} from "react-icons/hi";
 import {
   FaDollarSign,
   FaEllipsisH,
@@ -7,8 +13,9 @@ import {
   FaHome,
   FaMoneyBill,
 } from "react-icons/fa";
+import { IoIosArrowForward } from "react-icons/io";
 import { ActionBtn, Dash, HomeButton, Transaction } from "../components";
-import { dashLinks } from "../constants";
+import { contentLinks, dashLinks } from "../constants";
 import { Link, useNavigate } from "react-router-dom";
 import { logo, user } from "../assets";
 import Payment from "./Payment";
@@ -21,6 +28,7 @@ import {
 } from "../features/user/userSlice";
 import { format } from "date-fns";
 import { logoutUser } from "../features/auth/authSlice";
+import { MdArrowForward } from "react-icons/md";
 
 const Dashboard = () => {
   const [activeLink, setActiveLink] = useState(dashLinks[0].id);
@@ -53,7 +61,16 @@ const Dashboard = () => {
     }
   }, [userId, accessToken, dispatch]);
 
-  const curDate = format(new Date(), "HH:mm:ss yyyy:MM:dd");
+  useEffect(() => {
+    const curDate = format(new Date(), "dd:MM:yyyy");
+    const curTime = format(new Date(), "HH:mm a");
+
+    sessionStorage.setItem("loginDate", curDate);
+    sessionStorage.setItem("loginTime", curTime);
+  }, []);
+
+  const curDate = sessionStorage.getItem("loginDate");
+  const curTime = sessionStorage.getItem("loginTime");
 
   const sortedTransactions = transactions
     ? [...transactions].sort((a, b) => new Date(b.date) - new Date(a.date))
@@ -79,7 +96,7 @@ const Dashboard = () => {
     ? accounts.map((acct) => {
         // console.log(acct);
         return (
-          <div key={acct._id}>
+          <div key={acct._id} className="flex flex-col md:flex-row">
             <div className="flex justify-between items-center bg-[#347338] p-4 rounded-md text-[#fff] lg:hidden">
               <span className="">
                 <h3 className="font-semibold">{acct.account_type}</h3>
@@ -91,10 +108,20 @@ const Dashboard = () => {
               </span>
             </div>
 
-            <div className="hidden lg:grid grid-cols-3 bg-[#f2f2f2] px-4 py-2">
-              <h3>{acct.account_type}</h3>
-              <h3>{acct.account_num}</h3>
-              <h3>{`$ ${acct.available_bal}`}</h3>
+            <div className="bg-white hidden lg:flex w-full border-l-4 border-green-700">
+              <div className="border border-slate-300 flex flex-col gap-2 p-2 w-[50%] ">
+                <span className="flex justify-between items-center">
+                  <span className="flex items-center gap-2 font-light">
+                    <h3 className="uppercase">{acct.account_type}</h3>
+                    <h3>{`XXXX${acct.account_num.slice(5, -1)}`}</h3>
+                  </span>
+                  <HiDotsVertical />
+                </span>
+                <span className="flex justify-between items-center capitalize  text-sm font-medium">
+                  <p>current balance</p>
+                  <h3>{`$${acct.available_bal}`}</h3>
+                </span>
+              </div>
             </div>
           </div>
         );
@@ -123,11 +150,11 @@ const Dashboard = () => {
     const isActive = activeLink === dsh.id;
 
     return (
-      <li
+      <span
         className={
           isActive
-            ? "bg-[#fff] text-[#347338] text-lg uppercase rounded-sm py-3"
-            : "text-lg uppercase border-r-4 border-r-[#347338] py-3"
+            ? "bg-slate-100 text-md capitalize rounded-sm py-3 px-6 font-medium text-green-500 cursor-pointer"
+            : "text-md capitalize py-3 px-6 font-light cursor-pointer"
         }
         key={dsh.id}
         onClick={() => {
@@ -147,18 +174,21 @@ const Dashboard = () => {
         }}
       >
         <span>{dsh.title}</span>
-      </li>
+      </span>
     );
   });
 
+  useEffect(() => {
+    document.title = "GreenOakTrust - Dashboard";
+  }, []);
+
   return (
-    <section className="p-4 lg:p-0 text-[#333] min-h-screen   ">
+    <section className="p-4 lg:p-0 text-[#333] min-h-screen font-[Roboto] bg-slate-50">
       {/* mobile screen */}
       <div className="lg:hidden">
         {/* header */}
         <article className="flex flex-col gap-6 mb-10">
           <HomeButton />
-
           <div>
             <h3 className="text-2xl capitalize">Hi, {username}</h3>
             <p className="font-extralight">Last login {curDate}</p>
@@ -206,39 +236,51 @@ const Dashboard = () => {
         </article>
       </div>
       {/* desktop screen */}
-      <div className="hidden lg:grid gap-6">
+      <div className="hidden lg:flex flex-col gap-6">
         {/* header */}
-        {/* bg-[#347338] */}
-        <article className=" text-[#fff] bg-[#347338] w-full px-0  flex flex-col gap-6 ">
-          <span className="flex items-center gap-3">
-            <img src={logo} alt="log-iumae" width={50} />
-            <h3 className="text-3xl ">GreenOak Bank</h3>
-          </span>
-          <ul className="grid grid-cols-5 font-medium text-center ">
+        <header className="w-full flex flex-col border-b border-slate-300 bg-white">
+          <nav className="text-[#fff] bg-[#347338] py-4 px-8 flex justify-between items-center">
+            <span className="flex items-center gap-1">
+              <img src={logo} alt="log-iumae" width={50} />
+              <h3 className="text-3xl font-bold">GreenOakTrust</h3>
+            </span>
+            <span className="">
+              <p className="font-medium capitalize">welcome, {username}</p>
+              <p className="font-light text-xs">
+                Last Login: {curDate} at {curTime}
+              </p>
+            </span>
+          </nav>
+
+          <div className="flex items-center gap-5 font-medium text-center ">
             {dLinks}
-          </ul>
-        </article>
-        <article className="grid grid-cols-3 text-[#333] ">
-          {/* sidebar */}
-          <aside className="col-span-1 p-4 font-extralight">
-            <div className="flex flex-col items-center gap-3 bg-[#f2f2f2] py-6 rounded-md">
-              <h3 className="font-semibold text-2xl capitalize">
-                Hello {username}
-              </h3>
-              <span>
-                <img src={user} alt="user-profile-pic" width={50} />
-              </span>
-              <p>Your last sign on: </p>
-              <p>{curDate}</p>
-            </div>
-          </aside>
-          <div className="col-span-2 text-left py-4">
+          </div>
+        </header>
+        <div className="grid grid-cols-3 gap-6 text-[#333] lg:max-w-[1200px] lg:mx-auto w-full">
+          <div className="col-span-2 text-left pb-10">
             {displayComponent === "dashboard" && <Dash accts={accts} />}
             {displayComponent === "payment" && <Payment />}
             {displayComponent === "transfer" && <Transfer />}
             {displayComponent === "profile" && <Profile />}
           </div>
-        </article>
+
+          {/* sidebar */}
+          <aside className="col-span-1">
+            <div className="flex flex-col ">
+              {contentLinks.map((cont) => {
+                return (
+                  <div
+                    className="flex justify-between bg-green-700 text-white py-2.5 border-b border-slate-300 px-4 capitalize font-normal text-sm cursor-pointer items-center"
+                    key={cont.id}
+                  >
+                    <span>{cont.name}</span>
+                    <IoIosArrowForward />
+                  </div>
+                );
+              })}
+            </div>
+          </aside>
+        </div>
       </div>
     </section>
   );

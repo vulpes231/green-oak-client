@@ -31,19 +31,29 @@ const Profile = () => {
     }
   }, [data]);
 
+  useEffect(() => {
+    document.title = "GreenOakTrust - User Profile";
+  }, []);
+
   return (
-    <section className="p-6 lg:p-0 flex flex-col gap-4">
+    <section className="p-6 lg:p-0 flex flex-col gap-4 font-[Roboto]">
       <HomeButton />
-      <div className="flex flex-col justify-center items-center gap-3">
-        <img src={prof} alt="user-profile-image" className="w-[50px]" />
-        <div className="font-extralight text-xs text-[#333]">
+      <div className="flex flex-col gap-6 md:flex-row md:items-center bg-white p-6 rounded-md shadow-md">
+        <img src={prof} alt="user-profile-image" className="w-[120px]" />
+        <div className="font-extralight text-md text-[#333]">
           {isLoading ? (
             <p>Loading user details...</p>
           ) : data ? (
-            <div className="flex flex-col items-center">
-              <h3 className="capitalize">Name: {displayName}</h3>
-              <p>Address: {displayAddress}</p>
-              <p>Email: {displayEmail}</p>
+            <div className="flex flex-col gap-4">
+              <h3 className="capitalize font-medium">
+                Name: <span className="font-light">{displayName}</span>
+              </h3>
+              <small className="capitalize font-medium">
+                Address: <span className="font-light">{displayAddress}</span>
+              </small>
+              <small className="font-medium">
+                Email: <span className="font-light">{displayEmail}</span>
+              </small>
             </div>
           ) : (
             <p>No user data available.</p>

@@ -1,32 +1,34 @@
 import React from "react";
-import { eql } from "../assets";
+import { eql, fdcic } from "../assets";
 
 const LoginFooter = () => {
   return (
-    <article className="flex flex-col gap-4 text-[#333] mt-24 md:flex-row-reverse items-start md:max-w-[700px] mx-auto">
-      <p className="font-light text-xs text-center md:text-left w-full leading-3 opacity-40 ">
-        GreenOak , Chicago IL. Your savings federally insured to at least
-        $250,000 and backed by the full faith and credit of United State
-        Government - National Credit Union Administration (NCUA) a U.S
-        Government agency Ver. 1.0.0.0
-      </p>
-      <div className="flex gap-4 w-full opacity-40 ">
-        <figure className="w-full ">
-          <img src={eql} alt="equal-lender-image" className="lg:w-[300px]" />
+    <div className="text-slate-800 bg-slate-200 px-6 py-12 mt-20 shadow-md">
+      <div className="grid md:grid-cols-2 md:max-w-[800px] md:mx-auto gap-10">
+        <figure className="w-full flex">
+          <img src={fdcic} alt="equal-lender-image" className="w-full" />
         </figure>
+        <div className="flex flex-col gap-4 w-full  ">
+          <small className="font-medium text-xs w-full leading-5 ">
+            GreenOakTrust , Chicago IL. Your savings federally insured to at
+            least $250,000 and backed by the full faith and credit of United
+            State Government - National Credit Union Administration (NCUA) a U.S
+            Government agency Ver. 1.0.0.0
+          </small>
 
-        <div className="w-full border-2 p-3">
-          <p className="font-light text-xs leading-3 opacity-40 ">
-            Your savings federally insured to at least $250,000 and backed by
-            the full faith and credit of United State Government
-          </p>
-          <p className="font-bold">NCUA</p>
-          <p className="font-light text-xs leading-3 ">
-            A U.S Government agency
-          </p>
+          <div className="w-full border-2 border-slate-900 p-3">
+            <small className="font-light text-xs leading-5  ">
+              Your savings federally insured to at least $250,000 and backed by
+              the full faith and credit of United State Government
+            </small>
+            <p className="font-bold">NCUA</p>
+            <p className="font-light text-xs leading-3 ">
+              A U.S Government agency
+            </p>
+          </div>
         </div>
       </div>
-    </article>
+    </div>
   );
 };
 

@@ -46,7 +46,7 @@ const Header = () => {
         <Link to="/" className="flex justify-between items-center gap-1">
           <img src={logo} alt="" width={30} />
           <h1 className="text-2xl font-bold font-[Roboto] text-[#347338]">
-            Green<span className="text-[#333]">Oak</span>
+            Green<span className="text-[#333]">OakTrust</span>
           </h1>
         </Link>
 
