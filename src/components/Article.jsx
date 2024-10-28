@@ -2,10 +2,12 @@ import React from "react";
 
 const Article = ({ icon, title, paragraph }) => {
   return (
-    <article className="flex flex-col items-center gap-1 text-center">
-      {icon}
-      <h3 className="text-[#347338] text-lg font-semibold">{title}</h3>
-      <p className="leading-5 text-[#333]">{paragraph}</p>
+    <article className="flex flex-col gap-4 bg-slate-700 p-6 rounded-xl hover:border-2 hover:border-slate-300 cursor-pointer">
+      <span>{icon}</span>
+      <h3 className=" text-xl md:text-2xl font-bold capitalize font-[Roboto]">
+        {title}
+      </h3>
+      <small className="leading-5 text-slate-300">{paragraph}</small>
     </article>
   );
 };

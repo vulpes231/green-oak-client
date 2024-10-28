@@ -1,20 +1,28 @@
 import React from "react";
 import Button from "./Button";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
-    <section className="hero relative p-6 flex flex-col justify-center gap-6 md:gap-6 items-center text-center ">
-      <div className="absolute bg-[#347338] w-full h-full left-0 opacity-30 -z-0"></div>
-      <h4 className="text-2xl sm:text-3xl font-bold capitalize tracking-tight leading-7 text-white z-40 md:text-3xl lg:text-5xl ">
-        Sit back and relax and earn a higher rate
-      </h4>
-      <h3 className="text-xl sm:text-3xl  text-[#333] tracking-tight leading-5 z-40 p-2 rounded-md ">
-        Lock in 5.30% APY with a 12-month jumbo certificate.
-      </h3>
-      <Button
-        title="Learn more"
-        className="bg-[#347338] px-8 py-3 md:py-5 text-[#fff] rounded-md mb-6 w-[150px] md:w-[250px] whitespace-nowrap z-40 lg:text-lg"
-      />
+    <section className="relative p-6 lg:p-16 font-[Roboto] text-[#333] leading-10 bg-slate-50">
+      <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:max-w-[1100px] lg:mx-auto">
+        <div className="flex flex-col gap-6 md:gap-8 p-8 w-full ">
+          <h3 className="text-3xl sm:text-4xl font-bold tracking-tight z-40 md:text-3xl lg:text-5xl ">
+            Sit Back, Relax &amp; Earn a Higher Rate
+          </h3>
+          <p className="font-bold text-lg">
+            Lock in 5.30% APY with a 12-Month Jumbo Certificate.
+          </p>
+          <span>
+            <Link className="bg-[#347338] px-8 py-3 font-[Inter] text-[#fff] font-medium text-sm rounded-3xl">
+              Get Started
+            </Link>
+          </span>
+        </div>
+        <div className="hidden lg:flex w-full">
+          <img src="" alt="myimg" />
+        </div>
+      </div>
     </section>
   );
 };

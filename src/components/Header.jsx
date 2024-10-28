@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { logo } from "../assets/";
-import { HiMenu, HiMenuAlt1 } from "react-icons/hi";
+import { HiMenu } from "react-icons/hi";
+import { MdClose } from "react-icons/md";
 import { navLinks } from "../constants";
 
 import { motion } from "framer-motion";
@@ -14,7 +15,11 @@ const Header = () => {
 
   const links = navLinks.map((lnk) => {
     return (
-      <li onClick={closeMenu} key={lnk.id}>
+      <li
+        className="font-light cursor-pointer hover:text-[#347338]"
+        onClick={closeMenu}
+        key={lnk.id}
+      >
         {lnk.title}
       </li>
     );
@@ -34,14 +39,14 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 w-full h-[80px] p-4 bg-[#F2F2F2] grid content-center z-50 text-[#333]`}
+      className={`fixed top-0 w-full h-[80px] p-4 bg-white grid content-center z-50 text-[#333] shadow-sm`}
     >
-      <nav className="flex justify-between items-center">
+      <nav className="flex justify-between items-center lg:max-w-[1100px] lg:mx-auto w-full">
         {/* logo */}
-        <Link to="/" className="flex justify-between items-center gap-2">
+        <Link to="/" className="flex justify-between items-center gap-1">
           <img src={logo} alt="" width={30} />
-          <h1 className="text-2xl font-bold">
-            Green<span className="text-[#347338]">Oak</span>
+          <h1 className="text-2xl font-bold font-[Roboto] text-[#347338]">
+            Green<span className="text-[#333]">Oak</span>
           </h1>
         </Link>
 
@@ -49,29 +54,39 @@ const Header = () => {
         <motion.ul
           className={
             toggle
-              ? "flex flex-col justify-center bg-[#F2F2F2] absolute top-[80px] left-0 w-full min-h-screen items-center gap-4 pb-24 font-semibold hover:text-[#347338]"
+              ? "flex flex-col bg-[#fff] absolute top-[80px] right-0 w-[250px] gap-6 py-10 px-7 font-semibold hover:text-[#347338] sm:hidden rounded-bl-lg border border-slate-200"
               : "hidden"
           }
         >
           {links}
+          <li>
+            <Link
+              className="bg-[#347338] text-white font-light px-5 py-2 rounded-md shadow-sm"
+              to={"/signin"}
+            >
+              Sign In
+            </Link>
+          </li>
         </motion.ul>
 
         {/* desktop links */}
-        <motion.ul className="hidden md:flex gap-4">{links}</motion.ul>
+        <motion.ul className="hidden md:flex gap-6">{links}</motion.ul>
 
-        {/* join button */}
-        {!toggle && (
-          <Button
-            title="Log In"
-            className="bg-[#347338] px-8 py-2 text-[#fff] rounded-md"
-            onClick={goToLogin}
-          />
-        )}
+        <div className="flex items-center gap-1">
+          {/* join button */}
+          {!toggle && (
+            <Button
+              title="Sign In"
+              className="bg-[#347338] px-5 py-1.5 rounded-sm text-[#fff] font-light text-sm"
+              onClick={goToLogin}
+            />
+          )}
 
-        {/* menu button */}
-        <span onClick={handleToggle} className="sm:hidden text-2xl font-bold">
-          {!toggle ? <HiMenu /> : <HiMenuAlt1 />}
-        </span>
+          {/* menu button */}
+          <span onClick={handleToggle} className="sm:hidden text-2xl font-bold">
+            {!toggle ? <HiMenu /> : <MdClose />}
+          </span>
+        </div>
       </nav>
     </header>
   );
