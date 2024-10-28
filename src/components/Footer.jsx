@@ -1,6 +1,10 @@
 import React from "react";
-
-import { footerAbout, footerHelp, navLinks } from "../constants/index";
+import {
+  footerAbout,
+  footerHelp,
+  navLinks,
+  footerLinks,
+} from "../constants/index";
 import { logo } from "../assets/index";
 import {
   FaTwitch,
@@ -11,27 +15,16 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
-  const links = navLinks.map((lnk) => {
+  const footNavLinks = footerLinks.map((lnk) => {
     return (
-      <li className="text-[#347338] underline" key={lnk.id}>
-        {lnk.title}
-      </li>
-    );
-  });
-
-  const about = footerAbout.map((lnk) => {
-    return (
-      <li className="text-[#347338] underline" key={lnk.id}>
-        {lnk.title}
-      </li>
-    );
-  });
-
-  const help = footerHelp.map((lnk) => {
-    return (
-      <li className="text-[#347338] underline" key={lnk.id}>
-        {lnk.title}
-      </li>
+      <div className="flex flex-col gap-2 w-full" key={lnk.id}>
+        <h3 className="font-bold uppercase">{lnk.name}</h3>
+        <ul className="list-disc capitalize pl-6 font-light whitespace-nowrap text-sm text-slate-400 lg:text-md flex flex-col gap-1">
+          {lnk.sublinks.map((lk, index) => {
+            return <li key={index}>{lk}</li>;
+          })}
+        </ul>
+      </div>
     );
   });
 
@@ -42,58 +35,47 @@ const Footer = () => {
   }
 
   return (
-    <footer className=" flex flex-col gap-8 p-6 lg:flex-row lg:items-start lg:max-w-[1200px] mx-auto text-[#333] ">
-      {/* info */}
-      <article className="flex flex-col items-center lg:w-[35%] lg:items-start">
-        <figure className="flex items-center gap-6">
-          <img src={logo} alt="logo-image" width={50} />
-          <h1 className="text-3xl font-semibold">
-            Green<span className="text-[#347338]">Oak</span>
-          </h1>
-        </figure>
-        <h4 className="font-semibold capitalize">
-          Customer service line:{" "}
-          <span className="font-normal">800-321-9807</span>
-        </h4>
-        <address className="flex flex-col items-center lg:items-start text-center lg:text-left">
-          <span className="font-semibold capitalize">Corporate offices:</span>
-          <p>
-            (Not open to the public. No branches or ATMs) 11545 W. Touhy Ave,
-            Chicago, IL 60666
-          </p>
-        </address>
-      </article>
+    <footer className="font-[Roboto] bg-slate-800 text-white">
+      <div className="w-full lg:max-w-[1200px] lg:mx-auto grid lg:grid-cols-2 gap-6 px-6 py-12">
+        <div className="flex flex-col gap-3">
+          <figure className="flex items-center gap-1">
+            <img src={logo} alt="logo-image" width={50} />
+            <h1 className="text-3xl font-semibold">
+              Green<span className="text-[#347338]">Oak</span>
+            </h1>
+          </figure>
+          <h4 className="font-semibold capitalize">
+            Customer service line:{" "}
+            <small className="font-light">800-321-9807</small>
+          </h4>
+          <address className=" ">
+            Corporate offices:
+            <small className="font-light">
+              (Not open to the public. No branches or ATMs) <br />
+              11545 W. Touhy Ave, Chicago, IL 60666
+            </small>
+          </address>
+        </div>
 
-      {/* links */}
-      <article className="hidden md:flex justify-between items-start gap-4 lg:w-[46%] px-10 lg:px-0">
-        <div>
-          <h3 className="text-xl font-semibold">Accounts</h3>
-          <ul className="flex flex-col items-center lg:items-start">{links}</ul>
-        </div>
-        <div>
-          <h3 className="text-xl font-semibold">About </h3>
-          <ul className="flex flex-col items-center lg:items-start">{about}</ul>
-        </div>
-        <div>
-          <h3 className="text-xl font-semibold">Help &amp; Support</h3>
-          <ul className="flex flex-col items-center lg:items-start">{help}</ul>
-        </div>
-      </article>
-
-      {/* social */}
-      <article className="flex flex-col gap-4 items-center  lg:w-[20%]">
+        {/* links */}
+        <div className="grid lg:grid-cols-3 gap-10 w-full ">{footNavLinks}</div>
+      </div>
+      <div className="flex flex-col lg:items-center lg:justify-center gap-3 bg-slate-950 px-6 py-12">
         <div className="flex gap-4">
-          <FaPinterest className="text-2xl text-[#347338]" />
-          <FaReddit className="text-2xl text-[#347338]" />
-          <FaTwitch className="text-2xl text-[#347338]" />
+          <FaPinterest className="text-2xl text-pink-500" />
+          <FaReddit className="text-2xl text-red-500" />
+          <FaTwitch className="text-2xl text-cyan-500" />
         </div>
         <button
           onClick={goToSignUp}
-          className="bg-[#347338] py-4 px-6 lg:px-3 text-[#fff] rounded-md "
+          className="bg-[#347338] py-2.5 px-6 rounded-3xl font-medium"
         >
-          Become a member
+          Become a member today
         </button>
-      </article>
+        <small className="text-slate-400">
+          Copyright &copy; 2024 GreenOakTrust Bank. All Rights Reserved.
+        </small>
+      </div>
     </footer>
   );
 };

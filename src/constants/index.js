@@ -73,4 +73,22 @@ const dashLinks = [
   },
 ];
 
-export { navLinks, footerAbout, footerHelp, dashLinks };
+const footerLinks = [
+  {
+    id: 1,
+    name: "navigation",
+    sublinks: ["bank", "borrow", "invest"],
+  },
+  {
+    id: 2,
+    name: "information",
+    sublinks: ["fraud prevention", "remote deposit system", "lockbox service"],
+  },
+  {
+    id: 3,
+    name: "helpful links",
+    sublinks: ["faq", "contact", "forms"],
+  },
+];
+
+export { navLinks, footerAbout, footerHelp, dashLinks, footerLinks };
