@@ -11,7 +11,7 @@ function AnimatedInput({ type, value, onChange, name, placeholder }) {
     <input
       type={type}
       autoComplete="off"
-      className="border border-[#347338] outline-none w-full  py-2 text-lg px-2 md:py-3"
+      className="border-2 border-slate-500 focus:outline-[#347338] outline-none w-full p-1.5 focus:border-none rounded-sm bg-opacity-25 bg-slate-100"
       onFocus={animateInput}
       value={value}
       onChange={onChange}

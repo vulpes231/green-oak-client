@@ -8,7 +8,7 @@ const Loader = () => {
         initial={{ rotate: 0 }} // Initial rotation
         animate={{ rotate: 360 }} // Target rotation (e.g., 360 degrees for a full spin)
         transition={{ duration: 2, repeat: Infinity }} // Animation
-        className="w-[100px] h-[100px] rounded-full border-4 border-t-[#347338] border-b-[#347338] border-r-orange-500 border-l-yellow-500 "
+        className="w-[50px] h-[50px] rounded-full border-4 border-t-[#347338] border-b-[#347338] border-r-orange-500 border-l-yellow-500 "
       ></motion.div>
     </div>
   );

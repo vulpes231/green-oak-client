@@ -20,7 +20,7 @@ const Hero = () => {
           </span>
         </div>
         <div className="hidden lg:flex w-full">
-          <img src="" alt="myimg" />
+          <img src="" alt="finance-cashier" />
         </div>
       </div>
     </section>

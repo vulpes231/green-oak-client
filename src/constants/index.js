@@ -17,39 +17,6 @@ const navLinks = [
   },
 ];
 
-const footerAbout = [
-  {
-    id: "atm",
-    title: "ATMs",
-  },
-  {
-    id: "about",
-    title: "About",
-  },
-  {
-    id: "career",
-    title: "Career",
-  },
-  {
-    id: "finance",
-    title: "Finance",
-  },
-];
-const footerHelp = [
-  {
-    id: "Faq",
-    title: "FAQs",
-  },
-  {
-    id: "contact",
-    title: "Contact",
-  },
-  {
-    id: "forms",
-    title: "Forms",
-  },
-];
-
 const dashLinks = [
   {
     id: "account",
@@ -91,4 +58,4 @@ const footerLinks = [
   },
 ];
 
-export { navLinks, footerAbout, footerHelp, dashLinks, footerLinks };
+export { navLinks, dashLinks, footerLinks };

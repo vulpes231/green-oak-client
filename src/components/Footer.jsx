@@ -1,17 +1,7 @@
 import React from "react";
-import {
-  footerAbout,
-  footerHelp,
-  navLinks,
-  footerLinks,
-} from "../constants/index";
+import { footerLinks } from "../constants/index";
 import { logo } from "../assets/index";
-import {
-  FaTwitch,
-  FaTwitterSquare,
-  FaReddit,
-  FaPinterest,
-} from "react-icons/fa";
+import { FaTwitch, FaReddit, FaPinterest } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
