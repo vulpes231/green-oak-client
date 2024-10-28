@@ -1,18 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  HiArrowLeft,
-  HiArrowRight,
-  HiSearch,
-  HiUser,
-  HiDotsVertical,
-} from "react-icons/hi";
-import {
-  FaDollarSign,
-  FaEllipsisH,
-  FaExchangeAlt,
-  FaHome,
-  FaMoneyBill,
-} from "react-icons/fa";
+import { HiUser, HiDotsVertical } from "react-icons/hi";
+import { FaDollarSign, FaExchangeAlt, FaMoneyBill } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 import { ActionBtn, Dash, HomeButton, Transaction } from "../components";
 import { contentLinks, dashLinks } from "../constants";
@@ -28,7 +16,8 @@ import {
 } from "../features/user/userSlice";
 import { format } from "date-fns";
 import { logoutUser } from "../features/auth/authSlice";
-import { MdArrowForward } from "react-icons/md";
+import numeral from "numeral";
+import { MdMenu } from "react-icons/md";
 
 const Dashboard = () => {
   const [activeLink, setActiveLink] = useState(dashLinks[0].id);
@@ -94,7 +83,7 @@ const Dashboard = () => {
               </span>
               <span className="flex items-center justify-between font-medium capitalize text-sm">
                 <p className="">current balance</p>
-                <h3>{`$ ${acct.available_bal}`}</h3>
+                <h3>{`$ ${numeral(acct.available_bal).format("$0,0.00")}`}</h3>
               </span>
             </div>
             {/* desktop */}
@@ -109,7 +98,7 @@ const Dashboard = () => {
                 </span>
                 <span className="flex justify-between items-center capitalize  text-sm font-medium">
                   <p>current balance</p>
-                  <h3>{`$${acct.available_bal}`}</h3>
+                  <h3>{`$${numeral(acct.available_bal).format("$0,0.00")}`}</h3>
                 </span>
               </div>
             </div>
@@ -173,13 +162,15 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <section className="p-4 lg:p-0 text-[#333] h-[100vh] font-[Roboto] bg-slate-50">
+    <section className=" text-[#333] h-[100vh] font-[Roboto] bg-slate-50">
+      <div className="flex p-4 bg-white lg:hidden justify-between items-center">
+        <HomeButton />
+        <MdMenu className="text-xl cursor-pointer" />
+      </div>
       {/* mobile screen */}
-      <div className="lg:hidden relative">
+      <div className="lg:hidden relative p-6">
         {/* header */}
-        <article className="flex flex-col gap-6 mb-10">
-          <HomeButton />
-        </article>
+
         {/* accoutns */}
         <article className="flex flex-col gap-4">
           <div className="flex justify-between">

@@ -5,19 +5,10 @@ import { useDispatch } from "react-redux";
 import { logoutUser } from "../features/auth/authSlice";
 
 const HomeButton = () => {
-  const dispatch = useDispatch();
-
-  function handleLogout() {
-    dispatch(logoutUser());
-  }
-
   return (
     <div className="flex items-center justify-between lg:hidden">
-      <Link to="/dashboard" className="text-xl pb-5 ">
+      <Link to="/dashboard" className="text-xl">
         <FaHome className="text-xl cursor-pointer" />
-      </Link>
-      <Link to="" className="text-xl pb-5 lg:hidden" onClick={handleLogout}>
-        Logout
       </Link>
     </div>
   );

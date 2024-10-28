@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { sendMoney, reset } from "../features/user/TransferSlice";
 import Modal from "../components/Modal";
 import { generateRandomHash } from "../utils/gen";
+import { MdMenu } from "react-icons/md";
 
 const initState = {
   from: "",
@@ -94,8 +95,11 @@ const Transfer = () => {
 
   return (
     <section className="flex flex-col gap-4 bg-white">
-      <HomeButton />
-      <div className="flex flex-col gap-10 p-10">
+      <div className="flex p-4 bg-white lg:hidden justify-between items-center">
+        <HomeButton />
+        <MdMenu className="text-xl cursor-pointer" />
+      </div>
+      <div className="flex flex-col gap-10 p-6 lg:p-10 bg-slate-50">
         <h3 className="text-2xl">External Transfer</h3>
         <form className="font-extralight text-[#333] flex flex-col gap-4">
           <label htmlFor="">

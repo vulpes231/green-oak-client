@@ -36,9 +36,12 @@ const EditUserContact = () => {
   }, [isChanged]);
 
   return (
-    <form action="" className="bg-white p-10 rounded-md shadow-md">
+    <form
+      action=""
+      className="bg-white p-6 rounded-md shadow-md border border-slate-300 flex flex-col gap-4"
+    >
       <h3 className="text-xl font-medium">Update contact</h3>
-      <div className="flex flex-col lg:flex-row gap-2">
+      <div className="flex flex-col lg:flex-row gap-2 text-sm font-medium">
         <div className="w-full">
           <label htmlFor="">Email Address</label>
           <AnimatedInput
@@ -66,7 +69,7 @@ const EditUserContact = () => {
       </div>
       <button
         onClick={handleProfileUpdate}
-        className="bg-green-700 mt-5 w-full py-2.5 rounded-3xl text-[#fff]"
+        className="bg-green-700 mt-5 w-full py-2.5 rounded-3xl text-[#fff] text-sm font-medium"
       >
         Update Contact
       </button>

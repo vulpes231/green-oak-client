@@ -6,6 +6,7 @@ import { BsInfoCircle } from "react-icons/bs";
 import { depositCheck } from "../features/user/depositSlice";
 import CustomWebcam from "../components/Webcam";
 import CameraModal from "./CameraModal";
+import { MdMenu } from "react-icons/md";
 
 const Deposit = () => {
   const dispatch = useDispatch();
@@ -84,69 +85,77 @@ const Deposit = () => {
   });
 
   return (
-    <section className="p-6 text-[#333]">
-      <HomeButton />
-      <h3 className="text-2xl text-center mb-10 leading-5">Deposit a check</h3>
-      <form
-        onSubmit={handleSubmit}
-        action=""
-        className="flex flex-col gap-4 font-extralight"
-      >
-        <div className="flex flex-col ">
-          <label htmlFor="">Deposit To:</label>
-          <select
-            name="deposit_to"
-            className="border border-[#347338] outline-none w-full  py-3 text-lg px-2"
-            value={form.deposit_to}
-            onChange={handleInputChange}
-          >
-            <option value="">Select Account</option>
-            {userAccounts}
-          </select>
-        </div>
-        <div>
-          <label htmlFor="">Amount</label>
-          <AnimatedInput
-            type="text"
-            value={form.amount}
-            onChange={handleInputChange}
-            placeholder="$  0.00"
-            name="amount"
-          />
-        </div>
-        <p>Your current limit is $999,999,999</p>
-        <div className="flex gap-4 ">
-          <span className="w-full" onClick={openCamera}>
-            <Check title="Front" />
-          </span>
-          <span className="w-full" onClick={openCamera}>
-            <Check title="Back" />
-          </span>
+    <section className=" text-[#333] bg-slate-50">
+      <div className="flex p-4 bg-white lg:hidden justify-between items-center">
+        <HomeButton />
+        <MdMenu className="text-xl cursor-pointer" />
+      </div>
 
-          {/* Display the camera stream */}
-          <div className={!openCam ? "hidden" : "flex"}>
-            <CameraModal>
-              <CustomWebcam cancelCapture={useImage} />
-            </CameraModal>
+      <div className="p-6">
+        <h3 className="text-2xl text-center mb-10 leading-5">
+          Deposit a check
+        </h3>
+        <form
+          onSubmit={handleSubmit}
+          action=""
+          className="flex flex-col gap-4 font-extralight"
+        >
+          <div className="flex flex-col ">
+            <label htmlFor="">Deposit To:</label>
+            <select
+              name="deposit_to"
+              className="border border-[#347338] outline-none w-full  py-3 text-lg px-2"
+              value={form.deposit_to}
+              onChange={handleInputChange}
+            >
+              <option value="">Select Account</option>
+              {userAccounts}
+            </select>
           </div>
-        </div>
-        <div className="flex items-start gap-2 bg-[#347338] bg-opacity-30 p-6 rounded-lg">
-          <BsInfoCircle />
-          <p className="font-extralight leading-4">
-            Your deposit will be available on {formattedDate}
-          </p>
-        </div>
-        <div className={!isError ? "hidden" : "flex text-red-500"}>
-          {isError && <Error error={isError} />}
-        </div>
-        <div className={!isSuccess ? "hidden" : "flex text-green-500"}>
-          {isSuccess && <p>Deposit completed successfully </p>}
-        </div>
+          <div>
+            <label htmlFor="">Amount</label>
+            <AnimatedInput
+              type="text"
+              value={form.amount}
+              onChange={handleInputChange}
+              placeholder="$  0.00"
+              name="amount"
+            />
+          </div>
+          <p>Your current limit is $999,999,999</p>
+          <div className="flex gap-4 ">
+            <span className="w-full" onClick={openCamera}>
+              <Check title="Front" />
+            </span>
+            <span className="w-full" onClick={openCamera}>
+              <Check title="Back" />
+            </span>
 
-        <button className="bg-[#347338] p-3 text-[#fff] font-semibold rounded-md mt-5">
-          {isLoading ? "Submitting..." : " Submit Deposit"}
-        </button>
-      </form>
+            {/* Display the camera stream */}
+            <div className={!openCam ? "hidden" : "flex"}>
+              <CameraModal>
+                <CustomWebcam cancelCapture={useImage} />
+              </CameraModal>
+            </div>
+          </div>
+          <div className="flex items-start gap-2 bg-[#347338] bg-opacity-30 p-6 rounded-lg">
+            <BsInfoCircle />
+            <p className="font-extralight leading-4">
+              Your deposit will be available on {formattedDate}
+            </p>
+          </div>
+          <div className={!isError ? "hidden" : "flex text-red-500"}>
+            {isError && <Error error={isError} />}
+          </div>
+          <div className={!isSuccess ? "hidden" : "flex text-green-500"}>
+            {isSuccess && <p>Deposit completed successfully </p>}
+          </div>
+
+          <button className="bg-[#347338] p-3 text-[#fff] font-semibold rounded-md mt-5">
+            {isLoading ? "Submitting..." : " Submit Deposit"}
+          </button>
+        </form>
+      </div>
     </section>
   );
 };

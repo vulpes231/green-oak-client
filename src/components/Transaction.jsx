@@ -13,7 +13,7 @@ const Transaction = ({ data }) => {
             <th className="px-4 py-2.5 font-medium text-left">Amount</th>
           </tr>
         </thead>
-        <tbody className="text-sm font-light ">
+        <tbody className="text-xs font-light ">
           {data?.map((trnx, index) => {
             return (
               <tr
