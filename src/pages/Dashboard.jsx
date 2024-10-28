@@ -98,7 +98,7 @@ const Dashboard = () => {
                 </span>
                 <span className="flex justify-between items-center capitalize  text-sm font-medium">
                   <p>current balance</p>
-                  <h3>{`$${numeral(acct.available_bal).format("$0,0.00")}`}</h3>
+                  <h3>{`${numeral(acct.available_bal).format("$0,0.00")}`}</h3>
                 </span>
               </div>
             </div>
