@@ -5,10 +5,10 @@ const ActionBtn = ({ icon, title, path }) => {
   return (
     <Link
       to={path}
-      className="flex flex-col items-center bg-[#347338] text-[#fff] p-2 rounded-md"
+      className="flex flex-col items-center texts-[#347338] px-3 py-3 rounded-md w-20"
     >
       {icon}
-      <p className="font-extralight">{title}</p>
+      <small className="font-light text-xs">{title}</small>
     </Link>
   );
 };

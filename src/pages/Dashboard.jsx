@@ -76,38 +76,28 @@ const Dashboard = () => {
     ? [...transactions].sort((a, b) => new Date(b.date) - new Date(a.date))
     : [];
 
-  const latestTransactions = sortedTransactions.slice(0, 4);
-
-  const trans =
-    latestTransactions.length > 0 ? (
-      latestTransactions.map((tx) => (
-        <Transaction
-          key={tx._id}
-          title={tx.desc}
-          date={tx.date}
-          amount={`$ ${tx.amount}`}
-        />
-      ))
-    ) : (
-      <p>No transactions to show.</p>
-    );
+  const latestTransactions = sortedTransactions.slice(0, 6);
 
   const accts = accounts
     ? accounts.map((acct) => {
         // console.log(acct);
         return (
-          <div key={acct._id} className="flex flex-col md:flex-row">
-            <div className="flex justify-between items-center bg-[#347338] p-4 rounded-md text-[#fff] lg:hidden">
-              <span className="">
-                <h3 className="font-semibold">{acct.account_type}</h3>
-                <p className="font-extralight">{acct.account_num}</p>
+          <div
+            key={acct._id}
+            className="flex flex-col md:flex-row font-[Roboto]"
+          >
+            {/* mobile */}
+            <div className="flex flex-col gap-4 w-full bg-white p-6 shadow-md lg:hidden rounded-sm border-l-4 border-green-700">
+              <span className="flex items-center uppercase gap-1">
+                <h3 className="">{acct.account_type}</h3>
+                <p className="">{`XXXX${acct.account_num.slice(5, -1)}`}</p>
               </span>
-              <span className="">
-                <h3 className="font-semibold">{`$ ${acct.available_bal}`}</h3>
-                <p className="font-extralight">Available</p>
+              <span className="flex items-center justify-between font-medium capitalize text-sm">
+                <p className="">current balance</p>
+                <h3>{`$ ${acct.available_bal}`}</h3>
               </span>
             </div>
-
+            {/* desktop */}
             <div className="bg-white hidden lg:flex w-full border-l-4 border-green-700">
               <div className="border border-slate-300 flex flex-col gap-2 p-2 w-[50%] ">
                 <span className="flex justify-between items-center">
@@ -183,31 +173,36 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <section className="p-4 lg:p-0 text-[#333] min-h-screen font-[Roboto] bg-slate-50">
+    <section className="p-4 lg:p-0 text-[#333] h-[100vh] font-[Roboto] bg-slate-50">
       {/* mobile screen */}
-      <div className="lg:hidden">
+      <div className="lg:hidden relative">
         {/* header */}
         <article className="flex flex-col gap-6 mb-10">
           <HomeButton />
-          <div>
-            <h3 className="text-2xl capitalize">Hi, {username}</h3>
-            <p className="font-extralight">Last login {curDate}</p>
-          </div>
         </article>
         {/* accoutns */}
         <article className="flex flex-col gap-4">
           <div className="flex justify-between">
-            <p>Accounts</p>
-            <FaEllipsisH />
+            <h3 className="font-medium text-lg md:text-xl">My Accounts</h3>
           </div>
           {accounts ? <div>{accts}</div> : <div>No accounts</div>}
-          <div className="flex items-center justify-center">
-            <HiArrowLeft />
-            <HiArrowRight />
-          </div>
         </article>
+
+        {/* transactions */}
+        <h3 className="font-medium text-lg md:text-xl mt-5 my-3">
+          Recent Activities
+        </h3>
+        <div className="flex flex-col gap-6 bg-white rounded-md shadow-md border">
+          <div className="flex flex-col gap-4">
+            {transactions.length ? (
+              <Transaction data={latestTransactions} />
+            ) : (
+              <div className="p-6">You have no transactions.</div>
+            )}
+          </div>
+        </div>
         {/* action keys */}
-        <article className="grid grid-cols-4 mt-10 gap-2">
+        <div className="w-full flex justify-evenly fixed bottom-0 bg-white p-3 left-0 shadow-md border-t border-slate-300">
           <ActionBtn
             icon={<FaExchangeAlt />}
             title="Transfer"
@@ -216,24 +211,7 @@ const Dashboard = () => {
           <ActionBtn icon={<FaMoneyBill />} title="Deposit" path="/deposit" />
           <ActionBtn icon={<FaDollarSign />} title="Pay" path="/payment" />
           <ActionBtn icon={<HiUser />} title="Profile" path="/profile" />
-        </article>
-        {/* transactions */}
-        <article className="flex flex-col gap-6 mt-10">
-          <div className="flex justify-between items-center">
-            <h3>Transactions</h3>
-            <span className="flex items-center gap-4">
-              <HiSearch />
-              <FaEllipsisH />
-            </span>
-          </div>
-          <div className="flex flex-col gap-4">
-            {transactions.length ? (
-              <div>{trans}</div>
-            ) : (
-              <div>You have no transactions.</div>
-            )}
-          </div>
-        </article>
+        </div>
       </div>
       {/* desktop screen */}
       <div className="hidden lg:flex flex-col gap-6">

@@ -1,15 +1,47 @@
 import React from "react";
+import numeral from "numeral";
 
-const Transaction = ({ title, date, amount }) => {
+const Transaction = ({ data }) => {
+  // console.log(data);
   return (
-    <div className="flex justify-between border-b py-4">
-      <span className="w-[70%]">
-        <h3 className="uppercase font-light text-xs md:text-sm">{title}</h3>
-        <p className="font-extralight">{date}</p>
-      </span>
-      <span className=" whitespace-nowrap text-xs md:text-sm w-[30%]flex justify-end font-light">
-        {amount}
-      </span>
+    <div className="overflow-auto font-[Roboto]">
+      <table className="divide-slate-300 min-w-full ">
+        <thead className="text-left text-sm bg-green-700 text-white">
+          <tr>
+            <th className="px-4 py-2.5 font-medium text-left">Date</th>
+            <th className="px-4 py-2.5 font-medium text-left">Description</th>
+            <th className="px-4 py-2.5 font-medium text-left">Amount</th>
+          </tr>
+        </thead>
+        <tbody className="text-sm font-light ">
+          {data?.map((trnx, index) => {
+            return (
+              <tr
+                key={trnx._id}
+                className={index % 2 !== 0 ? "bg-slate-100" : "bg-white"}
+              >
+                <td className="px-4 py-3.5 whitespace-nowrap text-left">
+                  {trnx.date}
+                </td>
+                <td className="px-4 py-3.5 whitespace-nowrap text-left">
+                  {trnx.desc}
+                </td>
+                <td className="px-4 py-3.5 whitespace-nowrap text-left">
+                  <span
+                    className={
+                      trnx.trx_type === "credit"
+                        ? "text-green-500"
+                        : "text-red-500"
+                    }
+                  >
+                    {numeral(trnx.amount).format("$0,0.00")}
+                  </span>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 };

@@ -37,6 +37,10 @@ body {
   background: rgba(52, 115, 56, 0.35); /* Adjust the opacity as needed */
 }
 
+.customBgHeight {
+  height: 100vh;
+}
+
 @media screen and (min-width: 768px) {
   .hero {
     min-height: calc(100vh - 380px);
