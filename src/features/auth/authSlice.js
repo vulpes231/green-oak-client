@@ -1,97 +1,103 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-
-const devurl = "http://localhost:3500";
-const liveurl = "https://greenoak.onrender.com";
+import { devurl, getAccessToken, liveurl, sendError } from "../../constants";
 
 const initialState = {
-  isLoading: false,
-  isLoggedIn: false,
-  accessToken: null,
-  userId: null,
-  username: "",
-  error: "",
+  loginLoading: false,
+  accessToken: false,
+  loginError: false,
+  email: false,
+  username: false,
+  logoutLoading: false,
+  logoutError: false,
+  loggedOut: false,
 };
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (userData) => {
     try {
-      const response = await axios.post(`${liveurl}/auth`, userData);
-      const accessToken = response.data.accessToken;
-      const userId = response.data.userId;
-      const username = response.data.username;
-      return { accessToken, userId, username };
+      const response = await axios.post(`${devurl}/auth`, userData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return response.data;
     } catch (error) {
-      if (error.response) {
-        console.log(error.response.data.message);
-        const errorMessage = error.response.data.message; //
-        throw new Error(errorMessage);
-      } else {
-        // Handle other types of errors (e.g., network issues)
-        throw error;
-      }
+      sendError(error);
     }
   }
 );
 
-export const logoutUser = createAsyncThunk("user/logoutUser", async (token) => {
-  const response = await axios.get(`${devurl}/logout`, {
-    withCredentials: true,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const logoutUser = createAsyncThunk("user/logoutUser", async () => {
+  try {
+    const accessToken = getAccessToken();
+    const response = await axios.get(`${devurl}/logout`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      // withCredentials: true,
+    });
 
-  return response.data;
+    return response.data;
+  } catch (error) {
+    sendError(error);
+  }
 });
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    resetLogin(state) {
+      state.loginLoading = false;
+      state.accessToken = false;
+      state.email = false;
+      state.username = false;
+      state.loginError = false;
+    },
+    resetLogout(state) {
+      state.logoutLoading = false;
+      state.logoutError = false;
+      state.loggedOut = false;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(loginUser.pending, (state) => {
-      state.isLoading = true;
+      state.loginLoading = true;
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
-      state.isLoading = false;
+      state.loginLoading = false;
       state.accessToken = action.payload.accessToken;
-      state.userId = action.payload.userId;
+      state.email = action.payload.email;
       state.username = action.payload.username;
-      state.isLoggedIn = true;
-      state.error = "";
+      state.loginError = false;
     });
     builder.addCase(loginUser.rejected, (state, action) => {
-      state.isLoading = false;
-      state.accessToken = null;
-      state.isLoggedIn = false;
-      state.userId = "";
-      state.username = "";
-      state.error = action.error.message;
+      state.loginLoading = false;
+      state.accessToken = false;
+      state.email = false;
+      state.username = false;
+      state.loginError = action.error.message;
     });
 
     builder
       .addCase(logoutUser.pending, (state) => {
-        state.isLoading = true;
+        state.logoutLoading = true;
       })
       .addCase(logoutUser.fulfilled, (state) => {
-        state.isLoading = false;
-        state.accessToken = null;
-        state.isLoggedIn = false;
-        state.userId = "";
-        state.username = "";
-        state.error = "";
+        state.logoutLoading = false;
+        state.logoutError = false;
+        state.loggedOut = true;
       })
       .addCase(logoutUser.rejected, (state, action) => {
-        state.isLoading = false;
-        state.accessToken = null;
-        state.isLoggedIn = false;
-        state.userId = "";
-        state.username = "";
-        state.error = action.error.message;
+        state.logoutLoading = false;
+        state.logoutError = action.error.message;
+        state.loggedOut = true;
       });
   },
 });
 
+export const { resetLogin, resetLogout } = authSlice.actions;
 export default authSlice.reducer;

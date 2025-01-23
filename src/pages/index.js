@@ -6,6 +6,8 @@ import Payment from "./Payment";
 import Transfer from "./Transfer";
 import Message from "./Message";
 import Profile from "./Profile";
+import External from "./External";
+import Otplogin from "./Otplogin";
 
 export {
   Login,
@@ -16,4 +18,6 @@ export {
   Transfer,
   Message,
   Profile,
+  External,
+  Otplogin,
 };

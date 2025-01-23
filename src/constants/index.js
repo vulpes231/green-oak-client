@@ -81,4 +81,35 @@ const contentLinks = [
   },
 ];
 
-export { navLinks, dashLinks, footerLinks, contentLinks };
+const devurl = "http://localhost:3500";
+const liveurl = "https://greenoak.onrender.com";
+
+const sendError = (error) => {
+  if (error.response) {
+    console.log(error.response.data.message);
+    const errorMessage = error.response.data.message;
+    throw new Error(errorMessage);
+  } else {
+    throw error;
+  }
+};
+
+const getAccessToken = () => {
+  const accessTokenString = sessionStorage.getItem("token");
+  if (accessTokenString) {
+    return accessTokenString;
+  } else {
+    return null;
+  }
+};
+
+export {
+  navLinks,
+  dashLinks,
+  footerLinks,
+  contentLinks,
+  devurl,
+  liveurl,
+  sendError,
+  getAccessToken,
+};

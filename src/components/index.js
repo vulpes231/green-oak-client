@@ -16,6 +16,7 @@ import EditUserContact from "./EditUserContact";
 import EditPassword from "./EditPassword";
 import HomeButton from "./HomeButton";
 import Check from "./Check";
+import Logo from "./Logo";
 
 export {
   Header,
@@ -36,4 +37,5 @@ export {
   EditPassword,
   HomeButton,
   Check,
+  Logo,
 };

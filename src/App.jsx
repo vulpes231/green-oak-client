@@ -9,46 +9,27 @@ import {
   Profile,
   SignUp,
   Transfer,
+  External,
+  Otplogin,
 } from "./pages";
-import { useSelector } from "react-redux";
-import External from "./pages/External";
+
+import { getAccessToken } from "./constants";
 
 const App = () => {
-  const accessToken = useSelector((state) => state.auth.accessToken);
-
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const token = getAccessToken();
 
   return (
     <Routes>
       <Route path="/" element={<Content />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
-
-      {/* Protected Routes */}
-      <Route
-        path="/dashboard"
-        element={isLoggedIn && accessToken ? <Dashboard /> : <Login />}
-      />
-      <Route
-        path="/payment"
-        element={isLoggedIn && accessToken ? <Payment /> : <Login />}
-      />
-      <Route
-        path="/transfer"
-        element={isLoggedIn && accessToken ? <Transfer /> : <Login />}
-      />
-      <Route
-        path="/external"
-        element={isLoggedIn && accessToken ? <External /> : <Login />}
-      />
-      <Route
-        path="/profile"
-        element={isLoggedIn && accessToken ? <Profile /> : <Login />}
-      />
-      <Route
-        path="/deposit"
-        element={isLoggedIn && accessToken ? <Deposit /> : <Login />}
-      />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/payment" element={<Payment />} />
+      <Route path="/transfer" element={<Transfer />} />
+      <Route path="/external" element={<External />} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/deposit" element={<Deposit />} />
+      <Route path="/verifylogin" element={<Otplogin />} />
     </Routes>
   );
 };
