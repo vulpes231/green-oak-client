@@ -19,9 +19,8 @@ const Login = () => {
   const [toggled, setToggled] = useState(false);
   const [error, setError] = useState("");
 
-  const { loginLoading, accessToken, email, username } = useSelector(
-    (state) => state.auth
-  );
+  const { loginLoading, accessToken, email, username, loginError } =
+    useSelector((state) => state.auth);
 
   const myType = !toggled ? "password" : "text";
 
@@ -53,8 +52,8 @@ const Login = () => {
     }
 
     const reqBody = {
-      username: form.user,
-      password: form.pass,
+      username: form.username,
+      password: form.password,
     };
 
     dispatch(loginUser(reqBody));
@@ -63,6 +62,12 @@ const Login = () => {
   useEffect(() => {
     document.title = "GreenOakTrust - Sign In";
   }, []);
+
+  useEffect(() => {
+    if (loginError) {
+      setError(loginError);
+    }
+  }, [loginError]);
 
   useEffect(() => {
     let timeout;
@@ -85,7 +90,7 @@ const Login = () => {
   }, [accessToken, email, username]);
 
   return (
-    <section className=" w-full h-screen  text-[#333] flex flex-col bg-slate-50">
+    <section className=" w-full h-screen  text-[#333] flex flex-col bg-slate-50 font-[Inter]">
       <div className="w-full md:max-w-[450px] mx-auto flex flex-col gap-2 items-center p-6">
         <Logo />
         <span className="flex items-center gap-2 font-light">

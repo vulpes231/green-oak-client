@@ -17,9 +17,11 @@ import EditPassword from "./EditPassword";
 import HomeButton from "./HomeButton";
 import Check from "./Check";
 import Logo from "./Logo";
+import Success from "./Success";
 
 export {
   Header,
+  Success,
   Content,
   Footer,
   Loader,
