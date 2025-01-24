@@ -115,7 +115,7 @@ const Transfer = () => {
             From
             <select
               name="from"
-              className={`border-2 border-slate-500 focus:outline-[#347338] outline-none w-full p-1.5 focus:border-none rounded-sm bg-opacity-25 bg-slate-100`}
+              className={`border border-stone-400 focus:outline-[#347338] outline-none w-full p-1.5 focus:border-none rounded-sm bg-opacity-25 bg-slate-100`}
               value={form.from}
               onChange={handleInputChange}
             >
@@ -164,7 +164,7 @@ const Transfer = () => {
             <DatePicker
               selected={form.date}
               onChange={handleDateChange}
-              className="border-2 border-slate-500 focus:outline-[#347338] outline-none w-full lg:w-[50%] p-1.5 focus:border-none rounded-sm bg-opacity-25 bg-slate-100"
+              className="border border-stone-400 focus:outline-[#347338] outline-none w-full lg:w-[50%] p-1.5 focus:border-none rounded-sm bg-opacity-25 bg-slate-100"
               name="date"
             />
           </label>

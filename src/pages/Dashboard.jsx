@@ -30,6 +30,8 @@ const Dashboard = () => {
   const { userAccounts, userTrnxs, getAccountError } = useSelector(
     (state) => state.account
   );
+
+  console.log(userAccounts);
   console.log(getAccountError);
   useEffect(() => {
     if (!accessToken) {
@@ -59,17 +61,27 @@ const Dashboard = () => {
         return (
           <div
             key={acct._id}
-            className="flex flex-col md:flex-row font-[Roboto]"
+            className="flex flex-col md:flex-row font-[Roboto] "
           >
             {/* mobile */}
-            <div className="flex flex-col gap-4 w-full bg-white py-10 px-7 shadow-md lg:hidden border-l-6 border-green-700 rounded-md">
-              <span className="flex items-center uppercase  font-bold underline">
+            <div className="flex flex-col gap-4 w-full bg-white py-10 px-7 shadow-md lg:hidden border-l-8 border-green-700 rounded-md ">
+              <span className="flex items-center uppercase font-semibold underline gap-1">
                 <h3 className="">{acct.account_type}</h3>
-                <p className="">{`XXX${acct.account_num.slice(5, -1)}...`}</p>
+                <p className="">{`${acct.account_num.slice(0, 4)}XXX`}</p>
               </span>
               <span className="flex items-center justify-between capitalize text-sm font-normal text-slate-500">
                 <p className="">available balance</p>
-                <h3>{`$ ${numeral(acct.available_bal).format("$0,0.00")}`}</h3>
+                <h3>
+                  <span
+                    className={`${
+                      acct.account_type.includes("cashback")
+                        ? "text-red-500"
+                        : "text-slate-500"
+                    } text-2xl`}
+                  >
+                    - {` ${numeral(acct.available_bal).format("$0,0.00")}`}
+                  </span>
+                </h3>
               </span>
             </div>
             {/* desktop */}
@@ -148,7 +160,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <section className=" text-[#333] h-[100vh] font-[Roboto] bg-slate-200">
+    <section className=" text-[#333] h-[100vh] font-[Roboto] bg-slate-200 min-h-screen">
       <div className="flex p-4 bg-white lg:hidden justify-between items-center">
         <HomeButton />
         <MdMenu className="text-xl cursor-pointer" />
@@ -162,7 +174,11 @@ const Dashboard = () => {
           <div className="flex justify-between">
             <h3 className="font-medium text-lg md:text-xl">My Accounts</h3>
           </div>
-          {userAccounts ? <div>{accts}</div> : <div>No accounts</div>}
+          {userAccounts ? (
+            <div className="flex flex-col gap-6">{accts}</div>
+          ) : (
+            <div>No accounts</div>
+          )}
         </article>
 
         {/* transactions */}
@@ -171,7 +187,7 @@ const Dashboard = () => {
         </h3>
         <div className="flex flex-col gap-6 p-6 bg-white rounded-md shadow-md border">
           <div className="flex flex-col gap-4">
-            {userTrnxs.length ? (
+            {userTrnxs && userTrnxs.length ? (
               <Transaction data={latestTransactions} />
             ) : (
               <div className="p-6 text-slate-400 text-sm font-light">

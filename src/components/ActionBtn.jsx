@@ -8,7 +8,7 @@ const ActionBtn = ({ icon, title, path }) => {
       className="flex flex-col items-center texts-[#347338] px-3 py-3 rounded-md w-20"
     >
       {icon}
-      <small className="font-light text-xs">{title}</small>
+      <small className="font-light text-[10px]">{title}</small>
     </Link>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ActionBtn, Content } from "./components";
 import { Route, Routes } from "react-router-dom";
 import {
@@ -20,18 +20,32 @@ import { HiUser } from "react-icons/hi";
 const App = () => {
   const token = getAccessToken();
 
+  const [active, setActive] = useState("dashboard");
+
   return (
     <div>
       {token && (
         <div className="w-full flex justify-evenly fixed bottom-0 bg-white p-3 left-0 shadow-md border-t border-slate-300">
           <ActionBtn
-            icon={<FaExchangeAlt />}
+            icon={<FaExchangeAlt size={20} />}
             title="Transfer"
             path="/transfer"
           />
-          <ActionBtn icon={<FaMoneyBill />} title="Deposit" path="/deposit" />
-          <ActionBtn icon={<FaDollarSign />} title="Pay" path="/payment" />
-          <ActionBtn icon={<HiUser />} title="Profile" path="/profile" />
+          <ActionBtn
+            icon={<FaMoneyBill size={20} />}
+            title="Deposit"
+            path="/deposit"
+          />
+          <ActionBtn
+            icon={<FaDollarSign size={20} />}
+            title="Pay"
+            path="/payment"
+          />
+          <ActionBtn
+            icon={<HiUser size={20} />}
+            title="Profile"
+            path="/profile"
+          />
         </div>
       )}
       <Routes>

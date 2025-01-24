@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { devurl, getAccessToken, sendError } from "../../constants";
+import { liveurl, getAccessToken, sendError, devurl } from "../../constants";
 
 const initialState = {
   getAccountLoading: false,

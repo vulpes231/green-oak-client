@@ -17,7 +17,7 @@ const initialState = {
 export const getUser = createAsyncThunk("getuser/getUser", async () => {
   try {
     const accessToken = getAccessToken();
-    const url = `${devurl}/user`;
+    const url = `${liveurl}/user`;
 
     const response = await axios.get(url, {
       headers: {
@@ -37,7 +37,7 @@ export const updateUser = createAsyncThunk(
   async (formData) => {
     try {
       const accessToken = getAccessToken();
-      const url = `${devurl}/user`;
+      const url = `${liveurl}/user`;
       const response = axios.put(url, formData, {
         headers: {
           "Content-Type": "application/json",
@@ -57,7 +57,7 @@ export const changePassword = createAsyncThunk(
   async (formData) => {
     try {
       const accessToken = getAccessToken();
-      const url = `${devurl}/change-password`;
+      const url = `${liveurl}/change-password`;
       const response = await axios.put(url, formData, {
         headers: {
           "Content-Type": "application/json",

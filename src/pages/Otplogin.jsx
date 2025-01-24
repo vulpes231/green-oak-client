@@ -64,7 +64,7 @@ const Otplogin = () => {
       setOtpSent(true); // Mark OTP as sent to prevent resending
       console.log("otp sent");
     }
-  }, [email, otpSent]);
+  }, []); //email, otpSent
 
   useEffect(() => {
     document.title = "RegentOak - Verify Login";

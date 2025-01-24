@@ -10,7 +10,7 @@ body {
 }
 
 .hero {
-  background-image: url("/src/assets/bg.jpg");
+  background-image: url("/banks.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
