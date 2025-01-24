@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AnimatedInput, Error } from "../components";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { changePassword } from "../features/user/changePassSlice";
+import { changePassword } from "../features/user/userSlice";
 
 const initState = {
   new_pass: "",
@@ -15,8 +14,8 @@ const EditPassword = () => {
 
   const [form, setForm] = useState(initState);
 
-  const { isLoading, isError, isChanged } = useSelector(
-    (state) => state.changepassword
+  const { changePassLoading, changePassError, passChanged } = useSelector(
+    (state) => state.user
   );
 
   function handleInputChange(e) {
@@ -33,10 +32,10 @@ const EditPassword = () => {
   };
 
   useEffect(() => {
-    if (isChanged) {
+    if (passChanged) {
       setForm(initState);
     }
-  }, [isChanged]);
+  }, [passChanged]);
 
   return (
     <form
@@ -64,11 +63,11 @@ const EditPassword = () => {
           />
         </div>
       </div>
-      <div className={!isError ? "hidden" : "flex text-red-500"}>
-        {isError && <Error error={isError} />}
+      <div className={!changePassError ? "hidden" : "flex text-red-500"}>
+        {changePassError && <Error error={changePassError} />}
       </div>
-      <div className={!isChanged ? "hidden" : "flex text-green-500"}>
-        {isChanged && <p>Password changed succesfully.</p>}
+      <div className={!passChanged ? "hidden" : "flex text-green-500"}>
+        {passChanged && <p>Password changed succesfully.</p>}
       </div>
       <button
         onClick={handlePassChange}

@@ -7,6 +7,7 @@ import { depositCheck } from "../features/user/depositSlice";
 import CustomWebcam from "../components/Webcam";
 import CameraModal from "./CameraModal";
 import { MdMenu } from "react-icons/md";
+import { getAccessToken } from "../constants";
 
 const Deposit = () => {
   const dispatch = useDispatch();
@@ -23,20 +24,24 @@ const Deposit = () => {
   const [form, setForm] = useState(initState);
   const [imgSrc, setImgSrc] = useState(null);
   const [openCam, setOpenCam] = useState(false);
-  const accts = useSelector((state) => state.user.accounts);
-  const { userId, accessToken } = useSelector((state) => state.auth);
+  const { userAccounts } = useSelector((state) => state.account);
+  const accessToken = getAccessToken();
+
   const { isSuccess, isLoading, isError } = useSelector(
     (state) => state.depositcheck
   );
+
   const videoRef = useRef();
   // get user accounts
-  const userAccounts = accts.map((acct) => {
-    return (
-      <option key={acct._id} value={acct.account_num}>
-        {`${acct.account_type}: ${acct.account_num}`}
-      </option>
-    );
-  });
+  const accounts =
+    userAccounts &&
+    userAccounts.map((acct) => {
+      return (
+        <option key={acct._id} value={acct.account_num}>
+          {`${acct.account_type}: ${acct.account_num}`}
+        </option>
+      );
+    });
 
   function handleInputChange(e) {
     const { name, value } = e.target;
@@ -48,7 +53,7 @@ const Deposit = () => {
   // handle deposit submissions
   function handleSubmit(e) {
     e.preventDefault();
-    dispatch(depositCheck(form, userId, accessToken));
+    dispatch(depositCheck(form));
   }
 
   // open camera to capture
@@ -84,32 +89,37 @@ const Deposit = () => {
     }
   });
 
+  useEffect(() => {
+    document.title = "RegentOak - Deposit";
+  }, []);
+
   return (
-    <section className=" text-[#333] bg-slate-50">
-      <div className="flex p-4 bg-white lg:hidden justify-between items-center">
+    <section className=" text-[#333] bg-slate-50 min-h-screen flex flex-col md:items-center md:justify-center">
+      <div className="flex p-4 bg-white md:hidden justify-between items-center ">
         <HomeButton />
         <MdMenu className="text-xl cursor-pointer" />
       </div>
-
-      <div className="p-6">
-        <h3 className="text-2xl text-center mb-10 leading-5">
-          Deposit a check
-        </h3>
+      <h3 className="text-2xl text-center font-bold py-8 capitalize">
+        Deposit a check
+      </h3>
+      <div className="p-6 flex flex-col gap-6 md:w-[350px] md:mx-auto md:bg-white md:shadow-md rounded-md ">
         <form
           onSubmit={handleSubmit}
           action=""
           className="flex flex-col gap-4 font-extralight"
         >
           <div className="flex flex-col ">
-            <label htmlFor="">Deposit To:</label>
+            <label htmlFor="" className="text-sm">
+              Deposit To:
+            </label>
             <select
               name="deposit_to"
-              className="border border-[#347338] outline-none w-full  py-3 text-lg px-2"
+              className="border border-stone-400 font-bold outline-none w-full  py-2 text-sm px-2 capitalize bg-transparent"
               value={form.deposit_to}
               onChange={handleInputChange}
             >
               <option value="">Select Account</option>
-              {userAccounts}
+              {accounts}
             </select>
           </div>
           <div>
@@ -118,11 +128,13 @@ const Deposit = () => {
               type="text"
               value={form.amount}
               onChange={handleInputChange}
-              placeholder="$  0.00"
+              placeholder="$ 0.00"
               name="amount"
             />
           </div>
-          <p>Your current limit is $999,999,999</p>
+          <small className="text-slate-500">
+            Your current limit is $999,999,999.00
+          </small>
           <div className="flex gap-4 ">
             <span className="w-full" onClick={openCamera}>
               <Check title="Front" />
@@ -138,9 +150,9 @@ const Deposit = () => {
               </CameraModal>
             </div>
           </div>
-          <div className="flex items-start gap-2 bg-[#347338] bg-opacity-30 p-6 rounded-lg">
+          <div className="flex items-start gap-2 bg-green-300 bg-opacity-30 p-6 rounded-lg">
             <BsInfoCircle />
-            <p className="font-extralight leading-4">
+            <p className="font-light leading-4 text-sm">
               Your deposit will be available on {formattedDate}
             </p>
           </div>

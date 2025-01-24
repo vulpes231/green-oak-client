@@ -1,66 +1,73 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { devurl, getAccessToken, liveurl, sendError } from "../../constants";
 
 const initialState = {
-  loading: false,
-  accounts: [],
-  transactions: [],
-  error: "",
+  getUserLoading: false,
+  user: false,
+  getUserError: false,
+  updateUserLoading: false,
+  updateUserError: false,
+  userUpdated: false,
+  changePassLoading: false,
+  changePassError: false,
+  passChanged: false,
 };
 
-// const devurl = "http://localhost:3500";
-const liveurl = "https://greenoak.onrender.com";
+export const getUser = createAsyncThunk("getuser/getUser", async () => {
+  try {
+    const accessToken = getAccessToken();
+    const url = `${devurl}/user`;
 
-export const fetchUserAccount = createAsyncThunk(
-  "user/fetchUserAccount",
-  async (userId, { getState }) => {
+    const response = await axios.get(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    // console.log(response.data);
+    return response.data;
+  } catch (error) {
+    sendError(error);
+  }
+});
+
+export const updateUser = createAsyncThunk(
+  "user/updateUser",
+  async (formData) => {
     try {
-      const { accessToken } = getState().auth;
-
-      const response = await axios.get(`${liveurl}/account/${userId}`, {
-        withCredentials: true,
+      const accessToken = getAccessToken();
+      const url = `${devurl}/user`;
+      const response = axios.put(url, formData, {
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
+        withCredentials: true,
       });
-
-      // console.log(response.data);
-
-      const accounts = response.data;
-      return accounts;
+      return response.data;
     } catch (error) {
-      if (error.response) {
-        const errorMessage = error.response.data.message;
-        throw new Error(errorMessage);
-      } else {
-        console.log(error);
-        throw error;
-      }
+      sendError(error);
     }
   }
 );
 
-export const fetchUserTransactions = createAsyncThunk(
-  "user/fetchUserTransactions",
-  async (_, { getState }) => {
-    const { accessToken } = getState().auth;
-    const { username } = getState().auth;
+export const changePassword = createAsyncThunk(
+  "user/changePassword",
+  async (formData) => {
     try {
-      const response = await axios.get(`${liveurl}/transaction/${username}`, {
-        withCredentials: true,
+      const accessToken = getAccessToken();
+      const url = `${devurl}/change-password`;
+      const response = await axios.put(url, formData, {
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
+        withCredentials: true,
       });
-      // console.log(response.data);
       return response.data;
     } catch (error) {
-      if (error.response) {
-        const errorMessage = error.response.data.message;
-        throw new Error(errorMessage);
-      } else {
-        throw error;
-      }
+      sendError(error);
     }
   }
 );
@@ -68,38 +75,63 @@ export const fetchUserTransactions = createAsyncThunk(
 const userSlice = createSlice({
   name: "user",
   initialState,
-  //   reducers: {},
+  reducers: {
+    resetChangePass(state) {
+      state.changePassLoading = false;
+      state.passChanged = false;
+      state.changePassError = false;
+    },
+    resetUpdateProfile(state) {
+      state.updateUserLoading = false;
+      state.userUpdated = false;
+      state.updateUserError = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchUserAccount.pending, (state) => {
-        state.loading = true;
+      .addCase(getUser.pending, (state) => {
+        state.getUserLoading = true;
       })
-      .addCase(fetchUserAccount.fulfilled, (state, action) => {
-        state.loading = false;
-        state.accounts = action.payload;
-        state.error = "";
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.getUserLoading = false;
+        state.user = action.payload.user;
+        state.getUserError = false;
       })
-      .addCase(fetchUserAccount.rejected, (state, action) => {
-        state.loading = false;
-        state.accounts = [];
-        state.transactions = [];
-        state.error = action.error.message;
+      .addCase(getUser.rejected, (state, action) => {
+        state.getUserLoading = false;
+        state.user = false;
+        state.getUserError = action.error.message;
       });
     builder
-      .addCase(fetchUserTransactions.pending, (state) => {
-        state.loading = true;
+      .addCase(updateUser.pending, (state) => {
+        state.updateUserLoading = true;
       })
-      .addCase(fetchUserTransactions.fulfilled, (state, action) => {
-        state.loading = false;
-        state.transactions = action.payload;
-        state.error = "";
+      .addCase(updateUser.fulfilled, (state) => {
+        state.updateUserLoading = false;
+        state.userUpdated = true;
+        state.updateUserError = false;
       })
-      .addCase(fetchUserTransactions.rejected, (state, action) => {
-        state.loading = false;
-        state.transactions = [];
-        state.error = action.error.message;
+      .addCase(updateUser.rejected, (state, action) => {
+        state.updateUserLoading = false;
+        state.userUpdated = false;
+        state.updateUserError = action.error.message;
+      });
+    builder
+      .addCase(changePassword.pending, (state) => {
+        state.changePassLoading = true;
+      })
+      .addCase(changePassword.fulfilled, (state) => {
+        state.changePassLoading = false;
+        state.passChanged = true;
+        state.changePassError = false;
+      })
+      .addCase(changePassword.rejected, (state, action) => {
+        state.changePassLoading = false;
+        state.passChanged = false;
+        state.changePassError = action.error.message;
       });
   },
 });
 
+export const { resetChangePass, resetUpdateProfile } = userSlice.actions;
 export default userSlice.reducer;

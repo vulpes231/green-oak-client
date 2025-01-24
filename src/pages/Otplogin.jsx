@@ -101,6 +101,7 @@ const Otplogin = () => {
               maxLength={6}
               required
               placeholder="123456"
+              autoComplete="off"
             />
           </div>
           <button

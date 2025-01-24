@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { AnimatedInput } from "../components";
 import { useDispatch, useSelector } from "react-redux";
-import { editProfile } from "../features/user/editProfileSlice";
+import { updateUser } from "../features/user/userSlice";
 
 const initState = {
   email: "",
@@ -12,8 +12,8 @@ const EditUserContact = () => {
   const dispatch = useDispatch();
   const [form, setForm] = useState(initState);
 
-  const { isChanged, isError, isLoading } = useSelector(
-    (state) => state.editprofile
+  const { updateUserLoading, updateUserError, userUpdated } = useSelector(
+    (state) => state.user
   );
 
   function handleInputChange(e) {
@@ -26,14 +26,14 @@ const EditUserContact = () => {
 
   const handleProfileUpdate = (e) => {
     e.preventDefault();
-    dispatch(editProfile(form));
+    dispatch(updateUser(form));
   };
 
   useEffect(() => {
-    if (isChanged) {
+    if (userUpdated) {
       setForm(initState);
     }
-  }, [isChanged]);
+  }, [userUpdated]);
 
   return (
     <form
@@ -61,11 +61,11 @@ const EditUserContact = () => {
           />
         </div>
       </div>
-      <div className={!isError ? "hidden" : "flex text-red-500"}>
-        {isError && <Error error={isError} />}
+      <div className={!updateUserError ? "hidden" : "flex text-red-500"}>
+        {updateUserError && <Error error={updateUserError} />}
       </div>
-      <div className={!isChanged ? "hidden" : "flex text-green-500"}>
-        {isChanged && <p>User profile updated succesfully.</p>}
+      <div className={!userUpdated ? "hidden" : "flex text-green-500"}>
+        {userUpdated && <p>User profile updated succesfully.</p>}
       </div>
       <button
         onClick={handleProfileUpdate}

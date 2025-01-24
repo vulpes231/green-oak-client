@@ -13,6 +13,10 @@ import Modal from "../components/Modal";
 import { generateRandomHash } from "../utils/gen";
 import { MdMenu } from "react-icons/md";
 
+const styles = {
+  label: "text-sm font-semibold",
+};
+
 const initState = {
   from: "",
   to: "",
@@ -27,23 +31,24 @@ const Transfer = () => {
   const navigate = useNavigate();
 
   // const { accessToken, username } = useSelector((state) => state.auth);
-  const { accounts } = useSelector((state) => state.user);
+  const { userAccounts } = useSelector((state) => state.account);
   // const { external } = useSelector((state) => state.external);
 
   const { trfLoad, trfError, success } = useSelector((state) => state.transfer);
 
   // console.log(trfError);
 
-  const fromAccounts = accounts.length
-    ? accounts.map((acct) => {
-        return (
-          <option key={acct._id} value={acct.account_num}>
-            {acct.account_type.toUpperCase()}-{acct.account_num} - $
-            {acct.available_bal}
-          </option>
-        );
-      })
-    : null;
+  const fromAccounts =
+    userAccounts && userAccounts.length
+      ? userAccounts.map((acct) => {
+          return (
+            <option key={acct._id} value={acct.account_num}>
+              {acct.account_type.toUpperCase()} {acct.account_num} -
+              {acct.available_bal}USD
+            </option>
+          );
+        })
+      : null;
 
   // const toAccounts =
   //   external.externalAccounts !== undefined
@@ -93,16 +98,20 @@ const Transfer = () => {
     }
   });
 
+  useEffect(() => {
+    document.title = "RegentOak - Transfer";
+  }, []);
+
   return (
-    <section className="flex flex-col gap-4 bg-white">
+    <section className="flex flex-col gap-4 bg-slate-50 min-h-screen font-[Roboto]">
       <div className="flex p-4 bg-white lg:hidden justify-between items-center">
         <HomeButton />
         <MdMenu className="text-xl cursor-pointer" />
       </div>
-      <div className="flex flex-col gap-10 p-6 lg:p-10 bg-slate-50">
-        <h3 className="text-2xl">External Transfer</h3>
+      <div className="flex flex-col gap-10 p-6 lg:p-10 md:bg-white">
+        <h3 className="text-2xl">Transfer</h3>
         <form className="font-extralight text-[#333] flex flex-col gap-4">
-          <label htmlFor="">
+          <label className={styles.label} htmlFor="">
             From
             <select
               name="from"
@@ -114,7 +123,7 @@ const Transfer = () => {
               {fromAccounts}
             </select>
           </label>
-          <label htmlFor="">
+          <label className={styles.label} htmlFor="">
             To
             {/* <select
               name="to"
@@ -132,7 +141,7 @@ const Transfer = () => {
               name="to"
             />
           </label>
-          <label htmlFor="">
+          <label className={styles.label} htmlFor="">
             Amount
             <AnimatedInput
               placeholder="$ 0.00"
@@ -141,7 +150,7 @@ const Transfer = () => {
               name="amount"
             />
           </label>
-          <label htmlFor="">
+          <label className={styles.label} htmlFor="">
             Memo
             <AnimatedInput
               placeholder="Memo"
@@ -150,7 +159,7 @@ const Transfer = () => {
               name="memo"
             />
           </label>
-          <label htmlFor="" className="flex flex-col">
+          <label className={`${styles.label} flex flex-col`} htmlFor="">
             Date
             <DatePicker
               selected={form.date}
@@ -170,7 +179,7 @@ const Transfer = () => {
 
           <button
             className={
-              "bg-[#347338] text-[#fff] w-full py-3 font-semibold mt-5 rounded-lg "
+              "bg-[#347338] text-[#fff] w-full py-2 font-normal mt-5 text-md rounded-3xl"
             }
             // disabled={form.from === form.to}
             onClick={handleSubmit}
@@ -178,7 +187,7 @@ const Transfer = () => {
             {trfLoad ? "Initiating Transfer..." : "Send"}
           </button>
         </form>
-        <article className="flex flex-col gap-4">
+        <article className="flex flex-col gap-4 text-xs">
           <span className="flex items-center gap-1">
             <FaPlusCircle className="text-[#347338]" />
             <Link

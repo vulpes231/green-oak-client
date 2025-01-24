@@ -5,6 +5,7 @@ import { AnimatedInput, Error, Loader, Footer, Logo } from "../components";
 import WithStyles from "../hoc/WithStyles";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../features/auth/authSlice";
+import { format } from "date-fns";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -79,18 +80,24 @@ const Login = () => {
     return () => clearTimeout(timeout);
   }, [error]);
 
+  const curDate = format(new Date(), "dd:MM:yyyy");
+  const curTime = format(new Date(), "HH:mm a");
+
   useEffect(() => {
     if (accessToken && email) {
       sessionStorage.setItem("token", accessToken);
       sessionStorage.setItem("email", email);
       sessionStorage.setItem("username", username);
+
+      sessionStorage.setItem("loginDate", curDate);
+      sessionStorage.setItem("loginTime", curTime);
       resetInput();
       navigate("/verifylogin");
     }
   }, [accessToken, email, username]);
 
   return (
-    <section className=" w-full h-screen  text-[#333] flex flex-col bg-slate-50 font-[Inter]">
+    <section className=" w-full h-screen  text-[#333] flex flex-col bg-slate-200 font-[Inter]">
       <div className="w-full md:max-w-[450px] mx-auto flex flex-col gap-2 items-center p-6">
         <Logo />
         <span className="flex items-center gap-2 font-light">
@@ -141,7 +148,7 @@ const Login = () => {
               Forgot Password
             </Link>
           </div>
-          <button className="bg-[#347338] p-3 text-[#fff] rounded-3xl font-medium font-[Roboto]">
+          <button className="bg-[#347338] p-2 text-[#fff] rounded-3xl font-medium font-[Roboto]">
             Sign In
           </button>
           <div className="flex justify-between text-xs font-light">
