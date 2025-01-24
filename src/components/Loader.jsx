@@ -3,7 +3,7 @@ import React from "react";
 
 const Loader = ({ text }) => {
   return (
-    <div className="fixed top-0 left-0 w-full h-screen bg-[rgba(52,115,56,0.07)] bg-opacity-90 flex justify-center text-center items-center">
+    <div className="fixed top-0 left-0 w-full h-screen bg-[rgba(52,115,56,0.07)] bg-opacity-90 flex flex-col justify-center text-center items-center">
       <motion.div
         initial={{ rotate: 0 }}
         animate={{ rotate: 360 }}

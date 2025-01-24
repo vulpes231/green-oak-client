@@ -60,7 +60,7 @@ const Login = () => {
   }
 
   useEffect(() => {
-    document.title = "GreenOakTrust - Sign In";
+    document.title = "RegentOak - Sign In";
   }, []);
 
   useEffect(() => {

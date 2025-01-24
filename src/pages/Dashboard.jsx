@@ -158,7 +158,7 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
-    document.title = "GreenOakTrust - Dashboard";
+    document.title = "RegentOak - Dashboard";
   }, []);
 
   return (

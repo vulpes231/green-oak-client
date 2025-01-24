@@ -8,6 +8,7 @@ import editProfileReducer from "../features/user/editProfileSlice";
 import getUserReducer from "../features/user/getUserSlice";
 import externalAcctReducer from "../features/user/externalAcctSlice";
 import TransferReducer from "../features/user/TransferSlice";
+import otpReducer from "../features/auth/otpSlice";
 
 const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ const store = configureStore({
     getuser: getUserReducer,
     external: externalAcctReducer,
     transfer: TransferReducer,
+    otp: otpReducer,
   },
 });
 
