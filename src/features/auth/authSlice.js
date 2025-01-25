@@ -17,7 +17,7 @@ export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (userData) => {
     try {
-      const response = await axios.post(`${devurl}/auth`, userData, {
+      const response = await axios.post(`${liveurl}/auth`, userData, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -32,7 +32,7 @@ export const loginUser = createAsyncThunk(
 export const logoutUser = createAsyncThunk("user/logoutUser", async () => {
   try {
     const accessToken = getAccessToken();
-    const response = await axios.get(`${devurl}/logout`, {
+    const response = await axios.get(`${liveurl}/logout`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,

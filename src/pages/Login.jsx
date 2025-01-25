@@ -52,12 +52,13 @@ const Login = () => {
       }
     }
 
-    const reqBody = {
+    const data = {
       username: form.username,
       password: form.password,
     };
+    console.log(data);
 
-    dispatch(loginUser(reqBody));
+    dispatch(loginUser(data));
   }
 
   useEffect(() => {
