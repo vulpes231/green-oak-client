@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../features/user/userSlice";
 import { MdEmail, MdLocationOn, MdMenu, MdVerifiedUser } from "react-icons/md";
 import { getAccessToken } from "../constants";
+import { FaUser } from "react-icons/fa";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ const Profile = () => {
   }, []);
 
   return (
-    <section className=" font-[Roboto]">
+    <section className=" font-[Roboto] p-6 md:p-0">
       <div className=" flex flex-col gap-6">
         <div className="flex flex-col gap-6 md:flex-row md:items-center bg-white p-6 rounded-md shadow-md border border-slate-300">
           <img src={prof} alt="user-profile-image" className="w-[120px]" />
@@ -36,7 +37,7 @@ const Profile = () => {
             ) : user ? (
               <div className="flex flex-col gap-4 capitalize font-medium">
                 <span className="flex items-center gap-1">
-                  <MdVerifiedUser />
+                  <FaUser />
                   <small className="font-medium text-slate-500">
                     {user.fullname}
                   </small>
@@ -60,7 +61,7 @@ const Profile = () => {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-6 mb-20 md:mb-0">
           <EditUserContact />
           <EditPassword />
         </div>

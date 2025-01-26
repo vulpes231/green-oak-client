@@ -43,21 +43,21 @@ const EditUserContact = () => {
       <h3 className="text-xl font-medium">Update contact</h3>
       <div className="flex flex-col gap-2 text-sm font-medium">
         <div className="w-full">
-          <label htmlFor="">Email Address</label>
           <AnimatedInput
             type="email"
             value={form.email}
             onChange={handleInputChange}
             name="email"
+            placeholder={"Email Address"}
           />
         </div>
         <div className="w-full">
-          <label htmlFor="">Phone</label>
           <AnimatedInput
             type="text"
             name="phone"
             value={form.phone}
             onChange={handleInputChange}
+            placeholder={"Enter phone"}
           />
         </div>
       </div>

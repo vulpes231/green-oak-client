@@ -36,7 +36,7 @@ export const getUserTransactions = createAsyncThunk(
   "account/getUserTransactions",
   async () => {
     try {
-      const url = `${devurl}/transaction`;
+      const url = `${liveurl}/transaction`;
       const accessToken = getAccessToken();
 
       const response = await axios.get(url, {

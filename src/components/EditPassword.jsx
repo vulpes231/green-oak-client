@@ -45,21 +45,21 @@ const EditPassword = () => {
       <h3 className="text-xl font-medium">Update password</h3>
       <div className="flex flex-col gap-2">
         <div className="w-full">
-          <label htmlFor="">Current Password</label>
           <AnimatedInput
             type="password"
             value={form.password}
             onChange={handleInputChange}
             name="password"
+            placeholder={"Current Password"}
           />
         </div>
         <div className="w-full">
-          <label htmlFor="">New Password</label>
           <AnimatedInput
             type="password"
             value={form.new_pass}
             onChange={handleInputChange}
             name="new_pass"
+            placeholder={"Confirm Password"}
           />
         </div>
       </div>
