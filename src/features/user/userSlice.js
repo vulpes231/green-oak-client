@@ -63,7 +63,7 @@ export const changePassword = createAsyncThunk(
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
-        withCredentials: true,
+        // withCredentials: true,
       });
       return response.data;
     } catch (error) {

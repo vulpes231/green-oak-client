@@ -48,11 +48,10 @@ const External = () => {
   }, [added, dispatch]);
 
   return (
-    <section className="p-6 lg:p-0 flex flex-col gap-4">
-      <HomeButton />
-      <div>
-        <h3 className="text-2xl mb-5">Add External Account</h3>
-        <form action="" className="font-extralight">
+    <section className="p-6 flex flex-col gap-4">
+      <div className="">
+        <h3 className="text-2xl mb-5 md:text-center">Add External Account</h3>
+        <form action="" className="font-light md:max-w-[380px] md:mx-auto">
           <label htmlFor="">
             Account
             <AnimatedInput
