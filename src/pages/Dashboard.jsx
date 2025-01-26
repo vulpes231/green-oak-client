@@ -31,8 +31,8 @@ const Dashboard = () => {
     (state) => state.account
   );
 
-  console.log(userAccounts);
-  console.log(getAccountError);
+  // console.log(userTrnxs);
+
   useEffect(() => {
     if (!accessToken) {
       navigate("/login");
@@ -64,7 +64,7 @@ const Dashboard = () => {
             className="flex flex-col md:flex-row font-[Roboto] "
           >
             {/* mobile */}
-            <div className="flex flex-col gap-4 w-full bg-white py-10 px-7 shadow-md lg:hidden border-l-8 border-green-700 rounded-md ">
+            <div className="flex flex-col gap-4 w-full bg-white py-10 px-7 shadow-sm lg:hidden border-l-8 border-green-700 rounded-sm ">
               <span className="flex items-center uppercase font-semibold underline gap-1">
                 <h3 className="">{acct.account_type}</h3>
                 <p className="">{`${acct.account_num.slice(0, 4)}XXX`}</p>
@@ -79,7 +79,16 @@ const Dashboard = () => {
                         : "text-slate-500"
                     } text-2xl`}
                   >
-                    - {` ${numeral(acct.available_bal).format("$0,0.00")}`}
+                    <span
+                      className={`${
+                        acct.account_type.includes("cashback")
+                          ? "flex"
+                          : "hidden"
+                      }`}
+                    >
+                      -
+                    </span>{" "}
+                    {` ${numeral(acct.available_bal).format("$0,0.00")}`}
                   </span>
                 </h3>
               </span>
@@ -161,10 +170,6 @@ const Dashboard = () => {
 
   return (
     <section className=" text-[#333] h-[100vh] font-[Roboto] bg-slate-200 min-h-screen">
-      <div className="flex p-4 bg-white lg:hidden justify-between items-center">
-        <HomeButton />
-        <MdMenu className="text-xl cursor-pointer" />
-      </div>
       {/* mobile screen */}
       <div className="lg:hidden relative p-6">
         {/* header */}
@@ -185,22 +190,21 @@ const Dashboard = () => {
         <h3 className="font-medium text-lg md:text-xl mt-5 my-3">
           Recent Activities
         </h3>
-        <div className="flex flex-col gap-6 p-6 bg-white rounded-md shadow-md border">
-          <div className="flex flex-col gap-4">
-            {userTrnxs && userTrnxs.length ? (
-              <Transaction data={latestTransactions} />
-            ) : (
-              <div className="p-6 text-slate-400 text-sm font-light">
-                You have no transactions.
-              </div>
-            )}
-          </div>
+
+        <div className="flex flex-col gap-4">
+          {userTrnxs && userTrnxs.length ? (
+            <Transaction data={latestTransactions} />
+          ) : (
+            <div className="p-6 text-slate-400 text-sm font-light">
+              You have no transactions.
+            </div>
+          )}
         </div>
       </div>
       {/* desktop screen */}
-      <div className="hidden lg:flex flex-col gap-6">
+      <div className="hidden lg:flex flex-col gap-6 min-h-screen bg-slate-200">
         {/* header */}
-        <header className="w-full flex flex-col border-b border-slate-300 bg-white">
+        <header className="w-full flex flex-col border-b border-slate-300 bg-white fixed top-0 left-0">
           <nav className="text-[#fff] bg-[#347338] py-4 px-8 flex justify-between items-center">
             <span className="flex items-center gap-1">
               <img src={logo} alt="log-iumae" width={50} />
@@ -218,8 +222,8 @@ const Dashboard = () => {
             {dLinks}
           </div>
         </header>
-        <div className="grid grid-cols-3 gap-6 text-[#333] lg:max-w-[1200px] lg:mx-auto w-full">
-          <div className="col-span-2 text-left pb-10">
+        <div className="grid grid-cols-3 gap-6 text-[#333] lg:max-w-[1200px] lg:mx-auto w-full p-6 h-full mt-36">
+          <div className="col-span-2 h-full">
             {displayComponent === "dashboard" && <Dash accts={accts} />}
             {displayComponent === "payment" && <Payment />}
             {displayComponent === "transfer" && <Transfer />}

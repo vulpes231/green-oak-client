@@ -24,7 +24,7 @@ export const getUserAccount = createAsyncThunk(
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      console.log(response.data);
+      // console.log(response.data);
       return response.data;
     } catch (error) {
       sendError(error);
@@ -36,7 +36,7 @@ export const getUserTransactions = createAsyncThunk(
   "account/getUserTransactions",
   async () => {
     try {
-      const url = `${liveurl}/transaction`;
+      const url = `${devurl}/transaction`;
       const accessToken = getAccessToken();
 
       const response = await axios.get(url, {
@@ -78,7 +78,7 @@ const accountSlice = createSlice({
       })
       .addCase(getUserTransactions.fulfilled, (state, action) => {
         state.getTrnxLoading = false;
-        state.userTrnxs = action.payload.transactions;
+        state.userTrnxs = action.payload.userTransactions;
         state.getTrnxError = false;
       })
       .addCase(getUserTransactions.rejected, (state, action) => {

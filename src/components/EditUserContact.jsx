@@ -41,7 +41,7 @@ const EditUserContact = () => {
       className="bg-white p-6 rounded-md shadow-md border border-slate-300 flex flex-col gap-4"
     >
       <h3 className="text-xl font-medium">Update contact</h3>
-      <div className="flex flex-col lg:flex-row gap-2 text-sm font-medium">
+      <div className="flex flex-col gap-2 text-sm font-medium">
         <div className="w-full">
           <label htmlFor="">Email Address</label>
           <AnimatedInput

@@ -43,7 +43,7 @@ const EditPassword = () => {
       className="bg-white p-6 rounded-md shadow-md flex flex-col gap-4 border border-slate-300"
     >
       <h3 className="text-xl font-medium">Update password</h3>
-      <div className="flex flex-col lg:flex-row gap-2">
+      <div className="flex flex-col gap-2">
         <div className="w-full">
           <label htmlFor="">Current Password</label>
           <AnimatedInput

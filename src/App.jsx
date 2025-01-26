@@ -16,6 +16,7 @@ import {
 import { getAccessToken } from "./constants";
 import { FaDollarSign, FaExchangeAlt, FaMoneyBill } from "react-icons/fa";
 import { HiUser } from "react-icons/hi";
+import { MdHome } from "react-icons/md";
 
 const App = () => {
   const token = getAccessToken();
@@ -25,7 +26,12 @@ const App = () => {
   return (
     <div>
       {token && (
-        <div className="w-full flex justify-evenly fixed bottom-0 bg-white p-3 left-0 shadow-md border-t border-slate-300">
+        <div className="w-full flex justify-evenly fixed bottom-0 bg-white p-3 left-0 shadow-md border-t border-slate-300 md:hidden">
+          <ActionBtn
+            icon={<MdHome size={20} />}
+            title="Dashboard"
+            path="/dashboard"
+          />
           <ActionBtn
             icon={<FaExchangeAlt size={20} />}
             title="Transfer"

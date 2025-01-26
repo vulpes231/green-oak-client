@@ -5,13 +5,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Link, useNavigate } from "react-router-dom";
 import { FaBookReader, FaCheckCircle, FaPlusCircle } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-
-// import { getExternalAccounts, reset } from "../features/user/externalAcctSlice";
-
 import { sendMoney, reset } from "../features/user/TransferSlice";
 import Modal from "../components/Modal";
 import { generateRandomHash } from "../utils/gen";
-import { MdMenu } from "react-icons/md";
 
 const styles = {
   label: "text-sm font-semibold",
@@ -30,43 +26,21 @@ const Transfer = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // const { accessToken, username } = useSelector((state) => state.auth);
   const { userAccounts } = useSelector((state) => state.account);
-  // const { external } = useSelector((state) => state.external);
 
   const { trfLoad, trfError, success } = useSelector((state) => state.transfer);
-
-  // console.log(trfError);
 
   const fromAccounts =
     userAccounts && userAccounts.length
       ? userAccounts.map((acct) => {
           return (
             <option key={acct._id} value={acct.account_num}>
-              {acct.account_type.toUpperCase()} {acct.account_num} -
-              {acct.available_bal}USD
+              {acct.account_type.toUpperCase()}: $
+              {acct.available_bal.toFixed(2)}{" "}
             </option>
           );
         })
       : null;
-
-  // const toAccounts =
-  //   external.externalAccounts !== undefined
-  //     ? external.externalAccounts.map((acct) => {
-  //         return (
-  //           <option key={acct._id} value={acct.account}>
-  //             {acct.nick} - {acct.account}
-  //           </option>
-  //         );
-  //       })
-  //     : null;
-
-  const handleDateChange = (date) => {
-    setEditedData((prevData) => ({
-      ...prevData,
-      date,
-    }));
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -83,12 +57,6 @@ const Transfer = () => {
     dispatch(sendMoney(form));
   };
 
-  // useEffect(() => {
-  //   if (accessToken && username) {
-  //     dispatch(getExternalAccounts());
-  //   }
-  // }, []);
-
   useEffect(() => {
     if (success) {
       resetInput();
@@ -103,110 +71,82 @@ const Transfer = () => {
   }, []);
 
   return (
-    <section className="flex flex-col gap-4 bg-slate-50 min-h-screen font-[Roboto]">
-      <div className="flex p-4 bg-white lg:hidden justify-between items-center">
-        <HomeButton />
-        <MdMenu className="text-xl cursor-pointer" />
-      </div>
-      <div className="flex flex-col gap-10 p-6 lg:p-10 md:bg-white">
-        <h3 className="text-2xl">Transfer</h3>
-        <form className="font-extralight text-[#333] flex flex-col gap-4">
-          <label className={styles.label} htmlFor="">
-            From
-            <select
-              name="from"
-              className={`border border-stone-400 focus:outline-[#347338] outline-none w-full p-1.5 focus:border-none rounded-sm bg-opacity-25 bg-slate-100`}
-              value={form.from}
-              onChange={handleInputChange}
-            >
-              <option value="">Select Account </option>
-              {fromAccounts}
-            </select>
-          </label>
-          <label className={styles.label} htmlFor="">
-            To
-            {/* <select
-              name="to"
-              className={`w-full border border-[#347338]  py-2 text-lg px-2 md:py-3 outline-none`}
-              value={form.to}
-              onChange={handleInputChange}
-            >
-              <option value="">Select or Add External Account </option>
-              {toAccounts}
-            </select> */}
-            <AnimatedInput
-              placeholder="External Account Number"
-              value={form.to}
-              onChange={handleInputChange}
-              name="to"
-            />
-          </label>
-          <label className={styles.label} htmlFor="">
-            Amount
-            <AnimatedInput
-              placeholder="$ 0.00"
-              value={form.amount}
-              onChange={handleInputChange}
-              name="amount"
-            />
-          </label>
-          <label className={styles.label} htmlFor="">
-            Memo
-            <AnimatedInput
-              placeholder="Memo"
-              value={form.memo}
-              onChange={handleInputChange}
-              name="memo"
-            />
-          </label>
-          <label className={`${styles.label} flex flex-col`} htmlFor="">
-            Date
-            <DatePicker
-              selected={form.date}
-              onChange={handleDateChange}
-              className="border border-stone-400 focus:outline-[#347338] outline-none w-full lg:w-[50%] p-1.5 focus:border-none rounded-sm bg-opacity-25 bg-slate-100"
-              name="date"
-            />
-          </label>
-          {trfError && <span className="text-red-500">{trfError}</span>}
+    <section className="flex flex-col gap-4 ">
+      <form className="font-light text-[#333] flex flex-col gap-4 bg-white p-6 shadow">
+        <h3 className="text-2xl font-medium my-4">Move Money</h3>
+        <div className="flex flex-col md:flex-row w-full gap-4">
+          <select
+            name="from"
+            className={` focus:outline-[#347338] outline-none w-full py-2.5 px-4 focus:border-none rounded-sm bg-slate-100 text-sm`}
+            value={form.from}
+            onChange={handleInputChange}
+          >
+            <option value="">Select Account </option>
+            {fromAccounts}
+          </select>
+          <AnimatedInput
+            placeholder="External Account Number"
+            value={form.to}
+            onChange={handleInputChange}
+            name="to"
+          />
+        </div>
+        <div className="flex flex-col md:flex-row w-full gap-4">
+          <AnimatedInput
+            placeholder="$ 0.00"
+            value={form.amount}
+            onChange={handleInputChange}
+            name="amount"
+          />
+          <AnimatedInput
+            placeholder="Memo"
+            value={form.memo}
+            onChange={handleInputChange}
+            name="memo"
+          />
+        </div>
+        {/* <div className="flex flex-col md:flex-row w-full md:w-[50%] gap-4">
+          <AnimatedInput
+            selected={form.date}
+            onChange={handleInputChange}
+            type={"date"}
+            name="date"
+          />
+        </div> */}
+        {trfError && <span className="text-red-500">{trfError}</span>}
 
-          {success && (
-            <Modal
-              icon={<FaCheckCircle />}
-              text={`Transfer initiated successfully Reference No:${generateRandomHash()}.`}
-            />
-          )}
+        {success && (
+          <Modal
+            icon={<FaCheckCircle />}
+            text={`Transfer initiated successfully Reference No:${generateRandomHash()}.`}
+          />
+        )}
 
+        <div>
           <button
             className={
-              "bg-[#347338] text-[#fff] w-full py-2 font-normal mt-5 text-md rounded-3xl"
+              "bg-[#347338] text-[#fff] py-2 px-10 font-normal mt-5 text-md rounded-3xl"
             }
             // disabled={form.from === form.to}
             onClick={handleSubmit}
           >
-            {trfLoad ? "Initiating Transfer..." : "Send"}
+            {trfLoad ? "Initiating Transfer..." : "Submit"}
           </button>
-        </form>
-        <article className="flex flex-col gap-4 text-xs">
-          <span className="flex items-center gap-1">
-            <FaPlusCircle className="text-[#347338]" />
-            <Link
-              to="/external"
-              className="underline text-[#347338] capitalize "
-            >
-              Add external account
-            </Link>
-          </span>
-          <span className="flex items-center gap-1">
-            <FaBookReader className="text-[#347338]" />
-            <Link
-              to="/external"
-              className="underline text-[#347338] capitalize "
-            >
-              FAQ
-            </Link>
-          </span>
-        </article>
+        </div>
+      </form>
+      <div className="flex flex-col gap-4 text-xs p-6">
+        <span className="flex items-center gap-1">
+          <FaPlusCircle className="text-[#347338]" />
+          <Link to="/external" className="underline text-[#347338] capitalize ">
+            Add external account
+          </Link>
+        </span>
+        <span className="flex items-center gap-1">
+          <FaBookReader className="text-[#347338]" />
+          <Link to="/external" className="underline text-[#347338] capitalize ">
+            FAQ
+          </Link>
+        </span>
       </div>
     </section>
   );
