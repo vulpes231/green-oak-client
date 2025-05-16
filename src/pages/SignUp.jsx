@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { logo } from "../assets";
-import { AnimatedInput, Error, FormLoader, LoginFooter } from "../components";
+import {
+  AnimatedInput,
+  Error,
+  FormLoader,
+  Header,
+  LoginFooter,
+} from "../components";
 import { FaArrowRight } from "react-icons/fa";
 import {
   HiOutlineDocumentText,
@@ -57,6 +63,7 @@ const SignUp = () => {
 
   return (
     <section className="w-full min-h-screen p-6 text-[#333] bg-[#F2F2F2]   ">
+      <Header />
       {/* <div className="background-opacity"></div> */}
       <div className="w-full md:max-w-[700px] mx-auto flex flex-col  items-center z-40">
         <article className="flex flex-col gap-3 items-center md:bg-[#fff] w-full">

@@ -77,7 +77,7 @@ const Header = () => {
           {!toggle && (
             <Button
               title="Sign In"
-              className="bg-[#347338] px-5 py-1.5 rounded-sm text-[#fff] font-light text-sm"
+              className="bg-[#347338] p-2 w-[89px] md:w-[138px] h-[38px] md:h-[40px] rounded-[5px] text-[#fff] font-medium md:font-semibold text-[14px] md:text-[16px]"
               onClick={goToLogin}
             />
           )}

@@ -7,6 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../features/auth/authSlice";
 import { format } from "date-fns";
 
+const styles = {
+  label: "text-[13px] md:text-[14px] text-[#979797] capitalize",
+  link: "text-[12px] text-[#347338]",
+  // input: "text-[16px] font-normal rounded-[5px]",
+};
+
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -99,22 +105,19 @@ const Login = () => {
 
   return (
     <section className=" w-full h-screen  text-[#333] flex flex-col bg-slate-200 font-[Inter]">
-      <div className="w-full md:max-w-[450px] mx-auto flex flex-col gap-2 items-center p-6">
+      <div className="w-full md:max-w-[450px] mx-auto flex flex-col gap-2 items-center p-6 md:p-0">
         <Logo />
-        <span className="flex items-center gap-2 font-light">
+        <span className="flex items-center gap-2 font-normal">
           <FaLock /> Secure Log In
         </span>
 
         {/* form */}
         <form
           onSubmit={handleUserLogin}
-          className="w-full flex flex-col gap-6 font-light md:bg-[#fff] md:p-10 md:rounded-md md:shadow-md mt-5"
+          className="w-full flex flex-col gap-[10px] bg-[#fff] text-[#505050] rounded-[10px] p-6 mt-[20px]"
         >
           <div>
-            <label
-              htmlFor=""
-              className="flex justify-between items-center mb-1 text-sm font-medium"
-            >
+            <label htmlFor="" className={styles.label}>
               Username
             </label>
             <AnimatedInput
@@ -126,10 +129,7 @@ const Login = () => {
           </div>
 
           <div className="relative">
-            <label
-              htmlFor=""
-              className="flex justify-between items-center mb-1 text-sm font-medium"
-            >
+            <label htmlFor="" className={styles.label}>
               Password
             </label>
             <AnimatedInput
@@ -145,18 +145,18 @@ const Login = () => {
           </div>
 
           <div className="flex justify-end">
-            <Link to="" className="text-[#347338] font-light underline text-xs">
+            <Link to="" className={styles.link}>
               Forgot Password
             </Link>
           </div>
-          <button className="bg-[#347338] p-2 text-[#fff] rounded-3xl font-medium font-[Roboto]">
+          <button className="bg-[#347338] p-2 text-[#fff] rounded-[5px] font-medium md:font-semibold font-[Roboto] mt-[26px] ">
             Sign In
           </button>
-          <div className="flex justify-between text-xs font-light">
-            <h4>Don't have an account?</h4>
+          <div className="flex justify-between py-2">
+            <h6 className="text-[14px]">Don't have an account?</h6>
             <Link
               to="/signup"
-              className="underline text-[#347338] flex gap-1 items-center "
+              className={`${styles.link} flex items-center gap-2`}
             >
               Enroll Now <FaArrowRight />
             </Link>

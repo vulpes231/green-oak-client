@@ -3,150 +3,221 @@ import { AnimatedInput, Error, HomeButton } from "../components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Link, useNavigate } from "react-router-dom";
-import { FaBookReader, FaCheckCircle, FaPlusCircle } from "react-icons/fa";
+import {
+  FaBookReader,
+  FaCheckCircle,
+  FaPlusCircle,
+  FaChevronDown,
+} from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { sendMoney, reset } from "../features/user/TransferSlice";
 import Modal from "../components/Modal";
 import { generateRandomHash } from "../utils/gen";
-
-const styles = {
-  label: "text-sm font-semibold",
-};
-
-const initState = {
-  from: "",
-  to: "",
-  amount: "",
-  memo: "",
-  date: new Date(),
-};
+import Authnav from "../components/Authnav";
 
 const Transfer = () => {
-  const [form, setForm] = useState(initState);
+  const [form, setForm] = useState({
+    from: "",
+    to: "",
+    amount: "",
+    memo: "",
+    date: new Date(),
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const { userAccounts } = useSelector((state) => state.account);
-
   const { trfLoad, trfError, success } = useSelector((state) => state.transfer);
 
   const fromAccounts =
-    userAccounts && userAccounts.length
-      ? userAccounts.map((acct) => {
-          return (
-            <option key={acct._id} value={acct.account_num}>
-              {acct.account_type.toUpperCase()}: $
-              {acct.available_bal.toFixed(2)}{" "}
-            </option>
-          );
-        })
-      : null;
+    userAccounts &&
+    userAccounts.map((acct) => (
+      <option key={acct._id} value={acct.account_num}>
+        {acct.account_type.charAt(0).toUpperCase() + acct.account_type.slice(1)}{" "}
+        ••••{acct.account_num.slice(-4)} (${acct.available_bal.toFixed(2)})
+      </option>
+    ));
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const resetInput = () => {
-    setForm(initState);
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(form);
+    setIsSubmitting(true);
     dispatch(sendMoney(form));
   };
 
   useEffect(() => {
     if (success) {
-      resetInput();
-      setTimeout(() => {
+      setIsSubmitting(false);
+      const timer = setTimeout(() => {
         dispatch(reset());
+        setForm(initState);
       }, 3000);
+      return () => clearTimeout(timer);
     }
-  });
+  }, [success, dispatch]);
 
   useEffect(() => {
     document.title = "RegentOak - Transfer";
   }, []);
 
   return (
-    <section className="flex flex-col gap-4 ">
-      <form className="font-light text-[#333] flex flex-col gap-4 bg-white p-6 shadow">
-        <h3 className="text-2xl font-medium my-4">Move Money</h3>
-        <div className="flex flex-col md:flex-row w-full gap-4">
-          <select
-            name="from"
-            className={` focus:outline-[#347338] outline-none w-full py-2.5 px-4 focus:border-none rounded-sm bg-slate-100 text-sm`}
-            value={form.from}
-            onChange={handleInputChange}
-          >
-            <option value="">Select Account </option>
-            {fromAccounts}
-          </select>
-          <AnimatedInput
-            placeholder="External Account Number"
-            value={form.to}
-            onChange={handleInputChange}
-            name="to"
-          />
-        </div>
-        <div className="flex flex-col md:flex-row w-full gap-4">
-          <AnimatedInput
-            placeholder="$ 0.00"
-            value={form.amount}
-            onChange={handleInputChange}
-            name="amount"
-          />
-          <AnimatedInput
-            placeholder="Memo"
-            value={form.memo}
-            onChange={handleInputChange}
-            name="memo"
-          />
-        </div>
-        {/* <div className="flex flex-col md:flex-row w-full md:w-[50%] gap-4">
-          <AnimatedInput
-            selected={form.date}
-            onChange={handleInputChange}
-            type={"date"}
-            name="date"
-          />
-        </div> */}
-        {trfError && <span className="text-red-500">{trfError}</span>}
+    <section className="p-6 mb-24">
+      <Authnav />
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden w-full">
+        <div className="p-6">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Move Money</h2>
 
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="space-y-4">
+              {/* From Account */}
+              <div className="relative">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  From Account
+                </label>
+                <div className="relative">
+                  <select
+                    name="from"
+                    value={form.from}
+                    onChange={handleInputChange}
+                    className="block w-full pl-4 pr-10 py-3 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-lg appearance-none bg-white"
+                    required
+                  >
+                    <option value="">Select your account</option>
+                    {fromAccounts}
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <FaChevronDown className="text-gray-400" />
+                  </div>
+                </div>
+              </div>
+
+              {/* To Account */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  To Account
+                </label>
+                <AnimatedInput
+                  placeholder="Enter external account number"
+                  value={form.to}
+                  onChange={handleInputChange}
+                  name="to"
+                  required
+                  className="w-full"
+                />
+              </div>
+
+              {/* Amount and Memo */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Amount
+                  </label>
+                  <div className="relative">
+                    <AnimatedInput
+                      type="number"
+                      placeholder="$0.00"
+                      value={form.amount}
+                      onChange={handleInputChange}
+                      name="amount"
+                      required
+                      min="0.01"
+                      step="0.01"
+                      className="w-full pl-10"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Memo
+                  </label>
+                  <AnimatedInput
+                    placeholder="Optional note"
+                    value={form.memo}
+                    onChange={handleInputChange}
+                    name="memo"
+                    className="w-full"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Error Message */}
+            {trfError && (
+              <div className="text-red-500 text-sm p-2 bg-red-50 rounded-md">
+                {trfError}
+              </div>
+            )}
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isSubmitting || trfLoad}
+              className="w-full py-3 px-4 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-medium rounded-lg shadow-sm transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              {isSubmitting || trfLoad ? (
+                <span className="inline-flex items-center">
+                  <svg
+                    className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Processing Transfer...
+                </span>
+              ) : (
+                "Submit Transfer"
+              )}
+            </button>
+          </form>
+        </div>
+
+        {/* Success Modal */}
         {success && (
           <Modal
-            icon={<FaCheckCircle />}
-            text={`Transfer initiated successfully Reference No:${generateRandomHash()}.`}
+            icon={<FaCheckCircle className="text-green-500 text-4xl" />}
+            text={`Transfer initiated successfully. Reference No: ${generateRandomHash()}`}
+            onClose={() => dispatch(reset())}
           />
         )}
 
-        <div>
-          <button
-            className={
-              "bg-[#347338] text-[#fff] py-2 px-10 font-normal mt-5 text-md rounded-3xl"
-            }
-            // disabled={form.from === form.to}
-            onClick={handleSubmit}
-          >
-            {trfLoad ? "Initiating Transfer..." : "Submit"}
-          </button>
+        {/* Footer Links */}
+        <div className="border-t border-gray-200 px-6 py-4 bg-gray-50 ">
+          <div className="flex flex-col space-y-3">
+            <Link
+              to="/external"
+              className="inline-flex items-center text-green-600 hover:text-green-800 text-sm font-medium transition-colors"
+            >
+              <FaPlusCircle className="mr-2" />
+              Add external account
+            </Link>
+            <Link
+              to="/faq"
+              className="inline-flex items-center text-green-600 hover:text-green-800 text-sm font-medium transition-colors"
+            >
+              <FaBookReader className="mr-2" />
+              Transfer FAQ
+            </Link>
+          </div>
         </div>
-      </form>
-      <div className="flex flex-col gap-4 text-xs p-6">
-        <span className="flex items-center gap-1">
-          <FaPlusCircle className="text-[#347338]" />
-          <Link to="/external" className="underline text-[#347338] capitalize ">
-            Add external account
-          </Link>
-        </span>
-        <span className="flex items-center gap-1">
-          <FaBookReader className="text-[#347338]" />
-          <Link to="/external" className="underline text-[#347338] capitalize ">
-            FAQ
-          </Link>
-        </span>
       </div>
     </section>
   );

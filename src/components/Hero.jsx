@@ -14,7 +14,10 @@ const Hero = () => {
             Lock in 5.30% APY with a 12-Month Jumbo Certificate.
           </p>
           <span>
-            <Link className="bg-[#347338] px-8 py-3 font-[Inter] text-[#fff] font-medium text-sm rounded-3xl">
+            <Link
+              to={"/signup"}
+              className="bg-[#347338] px-8 py-3 font-[Inter] text-[#fff] font-medium text-sm rounded-3xl"
+            >
               Get Started
             </Link>
           </span>

@@ -3,11 +3,8 @@ import React from "react";
 
 const Dash = ({ accts }) => {
   return (
-    <div className="flex flex-col gap-4">
-      <h3 className="text-xl font-medium bg-white p-4 rounded-lg shadow-sm">
-        Dashboard
-      </h3>
-      <div className="bg-white p-6 rounded-lg shadow-sm flex flex-col gap-4">
+    <div className="flex flex-col gap-4 p-6">
+      <div className="rounded-lg flex flex-col gap-4">
         <h3 className="text-xl font-medium">Accounts</h3>
         <div className="">{accts}</div>
       </div>

@@ -1,57 +1,141 @@
-import React from "react";
+import React, { useState } from "react";
 import numeral from "numeral";
-
-const trnxStyle = {
-  th: "px-4 py-3 text-center font-bold uppercase text-sm md:text-lg",
-  td: "px-4 py-3 text-center capitalize whitespace-nowrap",
-};
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 const Transaction = ({ data }) => {
-  // console.log(data);
+  const [currentPage, setCurrentPage] = useState(1);
+  const transactionsPerPage = 6;
+
+  // Calculate pagination
+  const indexOfLastTransaction = currentPage * transactionsPerPage;
+  const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
+  const currentTransactions =
+    data?.slice(indexOfFirstTransaction, indexOfLastTransaction) || [];
+  const totalPages = Math.ceil((data?.length || 0) / transactionsPerPage);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const nextPage = () =>
+    currentPage < totalPages && setCurrentPage(currentPage + 1);
+  const prevPage = () => currentPage > 1 && setCurrentPage(currentPage - 1);
+
   return (
-    <div className="overflow-auto font-[Roboto] border border-slate-200 shadow">
-      <table className="divide-slate-300 min-w-full ">
-        <thead className="bg-green-700 text-white">
-          <tr>
-            <th className={trnxStyle.th}>Date</th>
-            <th className={trnxStyle.th}>Memo</th>
-            <th className={trnxStyle.th}>Amount</th>
-          </tr>
-        </thead>
-        <tbody className="text-sm font-light  text-slate-600">
-          {data?.map((trnx, index) => {
-            return (
-              <tr
-                key={trnx._id}
-                className={`${
-                  index % 2 !== 0 ? "bg-slate-100" : "bg-white"
-                } border-b border-slate-300`}
-              >
-                <td className={trnxStyle.td}>{trnx.date}</td>
-                <td className={` ${trnxStyle.td}`}>{trnx.desc}</td>
-                <td className={trnxStyle.td}>
-                  <span
-                    className={`${
-                      trnx.trx_type === "deposit"
-                        ? "text-green-500"
-                        : "text-red-500"
-                    } flex items-center gap-1 justify-end font-medium pr-5`}
-                  >
+    <div className="font-[Roboto]">
+      {/* Transaction Table */}
+      <div className="overflow-auto rounded-xl border border-gray-200 shadow-sm">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gradient-to-r from-green-600 to-green-500">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">
+                Date
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">
+                Description
+              </th>
+              <th className="px-6 py-3 text-right text-xs font-semibold text-white uppercase tracking-wider">
+                Amount
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {currentTransactions.length > 0 ? (
+              currentTransactions.map((trnx) => (
+                <tr
+                  key={trnx._id}
+                  className="hover:bg-gray-50 transition-colors"
+                >
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    {trnx.date}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-600 max-w-xs truncate">
+                    {trnx.desc}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-medium">
                     <span
-                      className={
-                        trnx.trx_type === "deposit" ? "hidden" : "flex"
-                      }
+                      className={`inline-flex items-center ${
+                        trnx.trx_type === "deposit"
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
                     >
-                      -
-                    </span>{" "}
-                    {numeral(trnx.amount).format("$0,0.00")}
-                  </span>
+                      {trnx.trx_type !== "deposit" && (
+                        <span className="mr-0.5">-</span>
+                      )}
+                      {numeral(trnx.amount).format("$0,0.00")}
+                    </span>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan="3"
+                  className="px-6 py-4 text-center text-sm text-gray-500"
+                >
+                  No transactions found
                 </td>
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between mt-4 px-2">
+          <div className="text-sm text-gray-500">
+            Showing{" "}
+            <span className="font-medium">{indexOfFirstTransaction + 1}</span>{" "}
+            to{" "}
+            <span className="font-medium">
+              {Math.min(indexOfLastTransaction, data?.length || 0)}
+            </span>{" "}
+            of <span className="font-medium">{data?.length || 0}</span>{" "}
+            transactions
+          </div>
+          <div className="flex space-x-2">
+            <button
+              onClick={prevPage}
+              disabled={currentPage === 1}
+              className={`p-2 rounded-md ${
+                currentPage === 1
+                  ? "text-gray-400 cursor-not-allowed"
+                  : "text-blue-600 hover:bg-blue-50"
+              }`}
+            >
+              <FiChevronLeft className="h-5 w-5" />
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+              (number) => (
+                <button
+                  key={number}
+                  onClick={() => paginate(number)}
+                  className={`px-3 py-1 rounded-md text-sm ${
+                    currentPage === number
+                      ? "bg-blue-600 text-white"
+                      : "text-gray-600 hover:bg-gray-100"
+                  }`}
+                >
+                  {number}
+                </button>
+              )
+            )}
+
+            <button
+              onClick={nextPage}
+              disabled={currentPage === totalPages}
+              className={`p-2 rounded-md ${
+                currentPage === totalPages
+                  ? "text-gray-400 cursor-not-allowed"
+                  : "text-blue-600 hover:bg-blue-50"
+              }`}
+            >
+              <FiChevronRight className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

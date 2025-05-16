@@ -17,6 +17,7 @@ import {
 import { logoutUser } from "../features/auth/authSlice";
 import numeral from "numeral";
 import { MdMenu } from "react-icons/md";
+import Authnav from "../components/Authnav";
 
 const Dashboard = () => {
   const [activeLink, setActiveLink] = useState(dashLinks[0].id);
@@ -57,57 +58,59 @@ const Dashboard = () => {
 
   const accts = userAccounts
     ? userAccounts.map((acct) => {
-        // console.log(acct);
+        const isNegative = acct.account_type.toLowerCase().includes("debit");
+        const isDebitCard = acct.account_type.toLowerCase().includes("debit");
+
         return (
-          <div
-            key={acct._id}
-            className="flex flex-col md:flex-row font-[Roboto] "
-          >
-            {/* mobile */}
-            <div className="flex flex-col gap-4 w-full bg-white py-10 px-7 shadow-sm lg:hidden border-l-8 border-green-700 rounded-sm ">
-              <span className="flex items-center uppercase font-semibold underline gap-1">
-                <h3 className="">{acct.account_type}</h3>
-                <p className="">{`${acct.account_num.slice(0, 4)}XXX`}</p>
-              </span>
-              <span className="flex items-center justify-between capitalize text-sm font-normal text-slate-500">
-                <p className="">available balance</p>
-                <h3>
-                  <span
-                    className={`${
-                      acct.account_type.includes("cashback")
-                        ? "text-red-500"
-                        : "text-slate-500"
-                    } text-2xl`}
-                  >
-                    <span
-                      className={`${
-                        acct.account_type.includes("cashback")
-                          ? "flex"
-                          : "hidden"
-                      }`}
-                    >
-                      -
-                    </span>{" "}
-                    {` ${numeral(acct.available_bal).format("$0,0.00")}`}
-                  </span>
-                </h3>
-              </span>
-            </div>
-            {/* desktop */}
-            <div className="bg-white hidden lg:flex w-full border-l-4 border-green-700">
-              <div className="border border-slate-300 flex flex-col gap-2 p-2 w-[50%] ">
-                <span className="flex justify-between items-center">
-                  <span className="flex items-center gap-2 font-light">
-                    <h3 className="uppercase">{acct.account_type}</h3>
-                    <h3>{`XXXX${acct.account_num.slice(5, -1)}`}</h3>
-                  </span>
-                  <HiDotsVertical />
+          <div key={acct._id} className="flex flex-col font-[Roboto] group ">
+            <div className="flex flex-col gap-3 w-full lg:my-3 p-5 rounded-xl shadow-sm transition-all duration-200 hover:shadow-md border border-gray-100 bg-white">
+              <div className="flex justify-between items-center">
+                <span className="flex items-center gap-2">
+                  <div
+                    className={`w-3 h-3 rounded-full ${
+                      isDebitCard ? "bg-blue-500" : "bg-green-500"
+                    }`}
+                  ></div>
+                  <h3 className="font-medium text-gray-700">
+                    {acct.account_type
+                      .split(" ")
+                      .map(
+                        (word) =>
+                          word.charAt(0).toUpperCase() +
+                          word.slice(1).toLowerCase()
+                      )
+                      .join(" ")}
+                  </h3>
                 </span>
-                <span className="flex justify-between items-center capitalize  text-sm font-medium">
-                  <p>current balance</p>
-                  <h3>{`${numeral(acct.available_bal).format("$0,0.00")}`}</h3>
+                <span className="text-xs font-medium text-gray-400">
+                  {`•••• ${acct.account_num.slice(-4)}`}
                 </span>
               </div>
+
+              <div className="flex justify-between items-center mt-2">
+                <p className="text-xs font-medium text-gray-500 tracking-wider">
+                  AVAILABLE BALANCE
+                </p>
+                <h3
+                  className={`text-xl font-semibold ${
+                    isNegative ? "text-red-500" : "text-gray-800"
+                  }`}
+                >
+                  {isNegative && <span className="text-red-500">-</span>}
+                  {numeral(Math.abs(acct.available_bal)).format("$0,0.00")}
+                </h3>
+              </div>
+
+              {isDebitCard && (
+                <div className="mt-3 pt-3 border-t border-gray-100">
+                  <div className="flex justify-between text-xs text-gray-500">
+                    <span>Status</span>
+                    <span className="bg-[#347338]/10 text-[#347338] p-1 rounded-[5px]">
+                      active
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         );
@@ -169,36 +172,42 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <section className=" text-[#333] h-[100vh] font-[Roboto] bg-slate-200 min-h-screen">
+    <section className="text-[#505050] font-[Roboto] bg-slate-200 min-h-screen">
       {/* mobile screen */}
-      <div className="lg:hidden relative p-6">
+      <div className="lg:hidden relative p-4 bg-gray-50 min-h-screen">
         {/* header */}
+        <Authnav />
 
-        {/* accoutns */}
-        <article className="flex flex-col gap-4">
-          <div className="flex justify-between">
-            <h3 className="font-medium text-lg md:text-xl">My Accounts</h3>
+        {/* accounts */}
+        <article className="flex flex-col gap-6 mt-4">
+          <div className="flex justify-between items-center">
+            <h3 className="font-semibold text-xl text-gray-800">My Accounts</h3>
           </div>
+
           {userAccounts ? (
-            <div className="flex flex-col gap-6">{accts}</div>
+            <div className="flex flex-col gap-4">{accts}</div>
           ) : (
-            <div>No accounts</div>
+            <div className="text-gray-500 text-center py-6">
+              No accounts available
+            </div>
           )}
         </article>
 
         {/* transactions */}
-        <h3 className="font-medium text-lg md:text-xl mt-5 my-3">
-          Recent Activities
-        </h3>
+        <div className="mt-8">
+          <h3 className="font-semibold text-xl text-gray-800 mb-4">
+            Recent Activities
+          </h3>
 
-        <div className="flex flex-col gap-4">
-          {userTrnxs && userTrnxs.length ? (
-            <Transaction data={latestTransactions} />
-          ) : (
-            <div className="p-6 text-slate-400 text-sm font-light">
-              You have no transactions.
-            </div>
-          )}
+          <div className="flex flex-col gap-3 mb-24">
+            {userTrnxs && userTrnxs.length ? (
+              <Transaction data={latestTransactions} />
+            ) : (
+              <div className="p-6 text-center text-gray-400 text-sm">
+                You have no recent transactions
+              </div>
+            )}
+          </div>
         </div>
       </div>
       {/* desktop screen */}
@@ -231,12 +240,12 @@ const Dashboard = () => {
           </div>
 
           {/* sidebar */}
-          <aside className="col-span-1">
+          <aside className="col-span-1 p-6">
             <div className="flex flex-col ">
               {contentLinks.map((cont) => {
                 return (
                   <div
-                    className="flex justify-between bg-green-700 text-white py-2.5 border-b border-slate-300 px-4 capitalize font-normal text-sm cursor-pointer items-center"
+                    className="flex justify-between bg-green-700 rounded-[10px] text-white py-2.5 border-b border-slate-300 px-4 capitalize font-normal text-sm cursor-pointer items-center"
                     key={cont.id}
                   >
                     <span>{cont.name}</span>
