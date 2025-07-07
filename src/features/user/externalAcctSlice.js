@@ -1,114 +1,99 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { getAccessToken, liveurl, sendError } from "../../constants";
 
 // const devurl = "http://localhost:3500";
-const liveurl = "https://greenoak.onrender.com";
+// const liveurl = "https://greenoak.onrender.com";
 
 const initialState = {
-  addLoading: false,
-  addError: false,
-  added: false,
-  getLoading: false,
-  getError: false,
-  external: [],
+	acctAddLoading: false,
+	acctAddError: false,
+	acctAdded: false,
+	getExternalAcctLoading: false,
+	getExternalAcctError: false,
+	externalAccts: [],
 };
 
 export const addAccount = createAsyncThunk(
-  "external/addAccount",
-  async (formData, { getState }) => {
-    const url = `${liveurl}/external`;
-    const { accessToken } = getState().auth;
-    try {
-      // console.log("1");
-      const response = await axios.post(url, formData, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      // console.log("2");
-      console.log(response.data);
-      return response.data;
-    } catch (error) {
-      if (error.response) {
-        console.error("Error response:", error.response);
-        const errorMessage = error.response.data.message || error.response.data;
-        // console.log(errorMessage);
-        throw new Error(errorMessage);
-      } else {
-        throw error;
-      }
-    }
-  }
+	"external/addAccount",
+	async (formData) => {
+		const url = `${liveurl}/external`;
+		const accessToken = getAccessToken();
+		try {
+			// console.log("1");
+			const response = await axios.post(url, formData, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${accessToken}`,
+				},
+			});
+
+			return response.data;
+		} catch (error) {
+			sendError(error);
+		}
+	}
 );
 
 export const getExternalAccounts = createAsyncThunk(
-  "external/getExternalAccounts",
-  async (_, { getState }) => {
-    const { accessToken, username } = getState().auth;
-    const url = `${liveurl}/external/${username}`;
-    try {
-      const response = await axios.get(url, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+	"external/getExternalAccounts",
+	async (username) => {
+		const accessToken = getAccessToken();
+		const url = `${liveurl}/external/${username}`;
+		try {
+			const response = await axios.get(url, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${accessToken}`,
+				},
+			});
 
-      return response.data;
-    } catch (error) {
-      if (error.response) {
-        const errorMessage = error.response.data.message;
-        throw new Error(errorMessage);
-      } else {
-        throw error;
-      }
-    }
-  }
+			return response.data;
+		} catch (error) {
+			sendError(error);
+		}
+	}
 );
 
 const externalAccountSlice = createSlice({
-  name: "external",
-  initialState,
-  reducers: {
-    reset(state) {
-      state.added = false;
-      state.addError = false;
-      state.addLoading = false;
-      state.getLoading = false;
-      state.getError = false;
-      state.external = [];
-    },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(addAccount.pending, (state) => {
-        state.addLoading = true;
-      })
-      .addCase(addAccount.fulfilled, (state, action) => {
-        state.addLoading = false;
-        state.addError = false;
-        state.added = true;
-      })
-      .addCase(addAccount.rejected, (state, action) => {
-        state.addLoading = false;
-        state.addError = action.error.message;
-        state.added = false;
-      })
-      .addCase(getExternalAccounts.pending, (state) => {
-        state.getLoading = true;
-      })
-      .addCase(getExternalAccounts.fulfilled, (state, action) => {
-        state.getLoading = false;
-        state.getError = false;
-        state.external = action.payload;
-      })
-      .addCase(getExternalAccounts.rejected, (state, action) => {
-        state.getLoading = false;
-        state.getError = action.error.message;
-        state.external = [];
-      });
-  },
+	name: "external",
+	initialState,
+	reducers: {
+		resetAddExternal(state) {
+			state.acctAdded = false;
+			state.acctAddError = false;
+			state.acctAddLoading = false;
+		},
+	},
+	extraReducers: (builder) => {
+		builder
+			.addCase(addAccount.pending, (state) => {
+				state.acctAddLoading = true;
+			})
+			.addCase(addAccount.fulfilled, (state, action) => {
+				state.acctAddLoading = false;
+				state.acctAddError = false;
+				state.acctAdded = true;
+			})
+			.addCase(addAccount.rejected, (state, action) => {
+				state.acctAddLoading = false;
+				state.acctAddError = action.error.message;
+				state.acctAdded = false;
+			})
+			.addCase(getExternalAccounts.pending, (state) => {
+				state.getLoading = true;
+			})
+			.addCase(getExternalAccounts.fulfilled, (state, action) => {
+				state.getLoading = false;
+				state.getError = false;
+				state.externalAccts = action.payload;
+			})
+			.addCase(getExternalAccounts.rejected, (state, action) => {
+				state.getLoading = false;
+				state.getError = action.error.message;
+				state.externalAccts = [];
+			});
+	},
 });
-export const { reset } = externalAccountSlice.actions;
+export const { resetAddExternal } = externalAccountSlice.actions;
 export default externalAccountSlice.reducer;
