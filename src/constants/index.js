@@ -20,7 +20,7 @@ const navLinks = [
 const dashLinks = [
 	{
 		id: "account",
-		title: "Account",
+		title: "Accounts",
 	},
 	{
 		id: "payment",

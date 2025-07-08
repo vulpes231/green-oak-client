@@ -88,7 +88,7 @@ const Login = () => {
 		return () => clearTimeout(timeout);
 	}, [error, dispatch]);
 
-	const curDate = format(new Date(), "dd:MMM:yyyy");
+	const curDate = format(new Date(), "dd MMM, yyyy");
 	const curTime = format(new Date(), "hh:mm a");
 
 	useEffect(() => {

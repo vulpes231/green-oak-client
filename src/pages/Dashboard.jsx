@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { HiUser, HiDotsVertical } from "react-icons/hi";
-import { FaDollarSign, FaExchangeAlt, FaMoneyBill } from "react-icons/fa";
-import { IoIosArrowForward } from "react-icons/io";
+
+import { IoIosArrowForward, IoMdClock } from "react-icons/io";
 import { ActionBtn, Dash, HomeButton, Transaction } from "../components";
 import { contentLinks, dashLinks, getAccessToken } from "../constants";
 import { useNavigate } from "react-router-dom";
-import { logo, user } from "../assets";
+import { logo } from "../assets";
 import Payment from "./Payment";
 import Transfer from "./Transfer";
 import Profile from "./Profile";
@@ -16,40 +15,31 @@ import {
 } from "../features/user/accountSlice";
 import { logoutUser } from "../features/auth/authSlice";
 import numeral from "numeral";
-import { MdMenu } from "react-icons/md";
 import Authnav from "../components/Authnav";
 import External from "./External";
 
 const Dashboard = () => {
-	const [activeLink, setActiveLink] = useState(dashLinks[0].id);
-	const [displayComponent, setDisplayComponent] = useState("dashboard");
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-
 	const accessToken = getAccessToken();
-	const username = sessionStorage.getItem("username");
+
+	const [activeLink, setActiveLink] = useState(() => {
+		if (typeof window !== "undefined") {
+			return localStorage.getItem("activeLink") || "account";
+		}
+		return "account";
+	});
 
 	const { userAccounts, userTrnxs, getAccountError } = useSelector(
 		(state) => state.account
 	);
-
-	// console.log(userTrnxs);
-
-	useEffect(() => {
-		if (!accessToken) {
-			navigate("/login");
-		}
-	}, [accessToken]);
-
-	useEffect(() => {
-		if (accessToken) {
-			dispatch(getUserAccount());
-			dispatch(getUserTransactions());
-		}
-	}, [dispatch, accessToken]);
+	const { logoutLoading, logoutError, loggedOut } = useSelector(
+		(state) => state.logout
+	);
 
 	const curDate = sessionStorage.getItem("loginDate");
 	const curTime = sessionStorage.getItem("loginTime");
+	const username = sessionStorage.getItem("username");
 
 	const sortedTransactions = userTrnxs
 		? [...userTrnxs].sort((a, b) => new Date(b.date) - new Date(a.date))
@@ -118,53 +108,28 @@ const Dashboard = () => {
 		  })
 		: null;
 
-	const showDashboard = () => {
-		setDisplayComponent("dashboard");
+	const handleActive = (id) => {
+		setActiveLink(id);
+		if (typeof window !== "undefined") {
+			localStorage.setItem("activeLink", id);
+		}
 	};
 
-	const showPayment = () => {
-		setDisplayComponent("payment");
-	};
-	const showTransfer = () => {
-		setDisplayComponent("transfer");
-	};
-	const showProfile = () => {
-		setDisplayComponent("profile");
-	};
-	const showExternal = () => {
-		setDisplayComponent("external");
-	};
-
-	const logoutCurrentUser = () => {
+	const logoutCurrentUser = (e) => {
+		e.preventDefault();
 		dispatch(logoutUser());
 	};
 
 	const dLinks = dashLinks.map((dsh) => {
-		const isActive = activeLink === dsh.id;
-
 		return (
 			<span
 				className={
-					isActive
-						? "bg-slate-100 text-md capitalize rounded-sm py-3 px-6 font-medium text-green-500 cursor-pointer"
-						: "text-md capitalize py-3 px-6 font-light cursor-pointer"
+					activeLink === dsh.id
+						? "bg-green-700 text-[14px] font-semibold capitalize rounded-3xl  text-white cursor-pointer py-2 px-6"
+						: "text-[13px] capitalize py-3 px-6 font-normal cursor-pointer text-[#979797]"
 				}
 				key={dsh.id}
-				onClick={() => {
-					setActiveLink(dsh.id);
-
-					if (dsh.id.includes("account")) {
-						showDashboard();
-					} else if (dsh.id.includes("payment")) {
-						showPayment();
-					} else if (dsh.id.includes("transfer")) {
-						showTransfer();
-					} else if (dsh.id.includes("profile")) {
-						showProfile();
-					} else if (dsh.id.includes("external")) {
-						showExternal();
-					}
-				}}
+				onClick={() => handleActive(dsh.id)}
 			>
 				<span>{dsh.title}</span>
 			</span>
@@ -172,7 +137,33 @@ const Dashboard = () => {
 	});
 
 	useEffect(() => {
-		document.title = "RegentOak - Dashboard";
+		document.title = "RegentOak | Dashboard";
+	}, []);
+
+	useEffect(() => {
+		if (!accessToken) {
+			navigate("/login");
+		}
+	}, [accessToken]);
+
+	useEffect(() => {
+		if (accessToken) {
+			dispatch(getUserAccount());
+			dispatch(getUserTransactions());
+		}
+	}, [dispatch, accessToken]);
+
+	useEffect(() => {
+		if (typeof window !== "undefined") {
+			const handleStorageChange = (e) => {
+				if (e.key === "activeLink") {
+					setActiveLink(e.newValue);
+				}
+			};
+
+			window.addEventListener("storage", handleStorageChange);
+			return () => window.removeEventListener("storage", handleStorageChange);
+		}
 	}, []);
 
 	return (
@@ -227,23 +218,32 @@ const Dashboard = () => {
 							<p className="font-medium capitalize text-[18px]">
 								welcome, {username}
 							</p>
-							<p className="font-normal text-[12px]">
-								Last Login: {curDate} at {curTime}
-							</p>
+							<div className="font-normal text-[12px] flex items-center gap-1">
+								<IoMdClock />{" "}
+								<h6>
+									Last Login: {curDate} at {curTime}
+								</h6>
+							</div>
 						</span>
 					</nav>
 
-					<div className="flex items-center gap-5 font-medium text-center ">
+					<div className="flex items-center gap-5 font-medium text-center bg-[#fff] px-3">
 						{dLinks}
 					</div>
 				</header>
 				<div className="grid grid-cols-3 gap-6 text-[#333] lg:max-w-[1200px] lg:mx-auto w-full p-6 h-full mt-36">
 					<div className="col-span-2 h-full">
-						{displayComponent === "dashboard" && <Dash accts={accts} />}
-						{displayComponent === "payment" && <Payment />}
-						{displayComponent === "transfer" && <Transfer />}
-						{displayComponent === "profile" && <Profile />}
-						{displayComponent === "external" && <External />}
+						{activeLink === "account" ? (
+							<Dash accts={accts} />
+						) : activeLink === "payment" ? (
+							<Payment />
+						) : activeLink === "transfer" ? (
+							<Transfer />
+						) : activeLink === "profile" ? (
+							<Profile />
+						) : (
+							activeLink === "external" && <External />
+						)}
 					</div>
 
 					{/* sidebar */}
@@ -260,7 +260,10 @@ const Dashboard = () => {
 									</div>
 								);
 							})}
-							<button className="flex justify-between bg-green-700 rounded-[10px] text-white py-2.5 border-b border-slate-300 px-4 capitalize font-normal text-sm cursor-pointer items-center hover:bg-green-800">
+							<button
+								onClick={(e) => logoutCurrentUser(e)}
+								className="flex justify-between bg-green-700 rounded-[10px] text-white py-2.5 border-b border-slate-300 px-4 capitalize font-normal text-sm cursor-pointer items-center hover:bg-green-800"
+							>
 								Logout
 								<IoIosArrowForward />
 							</button>

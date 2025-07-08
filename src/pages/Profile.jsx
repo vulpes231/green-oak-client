@@ -45,14 +45,14 @@ const Profile = () => {
 
 						<div className="flex-1 space-y-4">
 							{getUserLoading ? (
-								<div>loading...</div>
+								<div>Getting User Information...</div>
 							) : user ? (
 								<>
-									<h1 className="text-2xl md:text-3xl font-bold text-gray-800">
+									<h1 className="text-2xl md:text-3xl font-bold text-gray-800 capitalize">
 										{user.fullname}
 									</h1>
 
-									<div className="space-y-3">
+									<div className="space-y-1">
 										<div className="flex items-center gap-3">
 											<MdEmail className="text-gray-500 text-xl" />
 											<span className="text-gray-600">{user.email}</span>
@@ -63,12 +63,6 @@ const Profile = () => {
 												{user.address || "No address provided"}
 											</span>
 										</div>
-										{/* <div className="flex items-center gap-3">
-                      <MdVerifiedUser className="text-green-500 text-xl" />
-                      <span className="text-green-600 text-sm font-medium">
-                        Verified Account
-                      </span>
-                    </div> */}
 									</div>
 								</>
 							) : (
