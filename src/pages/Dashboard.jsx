@@ -249,8 +249,8 @@ const Dashboard = () => {
 			{/* desktop screen */}
 			<div className="hidden lg:flex flex-col gap-6 min-h-screen bg-slate-200">
 				{/* header */}
-				<header className="w-full flex flex-col border-b border-slate-300 bg-white fixed top-0 left-0">
-					<nav className="text-[#fff] bg-[#347338] py-4 px-8 flex justify-between items-center">
+				<header className="w-full flex flex-col border-b border-slate-300 bg-white fixed top-0 left-0 z-[50]">
+					<nav className="text-[#fff] bg-[#347338] py-4 px-8 flex justify-between items-center ">
 						<span className="flex items-center gap-1">
 							<img src={logo} alt="log-iumae" width={50} />
 							<h3 className="text-3xl font-bold">RegentOak</h3>
@@ -268,7 +268,7 @@ const Dashboard = () => {
 						</span>
 					</nav>
 
-					<div className="flex items-center gap-5 font-medium text-center bg-[#fff] px-3">
+					<div className="flex items-center gap-5 font-medium text-center bg-[#fff] px-3 ">
 						{dLinks}
 					</div>
 				</header>
@@ -279,7 +279,7 @@ const Dashboard = () => {
 						) : activeLink === "payment" ? (
 							<Payment />
 						) : activeLink === "transfer" ? (
-							<Transfer />
+							<Transfer activeLink={activeLink} />
 						) : activeLink === "profile" ? (
 							<Profile />
 						) : (

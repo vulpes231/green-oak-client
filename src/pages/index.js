@@ -7,17 +7,20 @@ import Transfer from "./Transfer";
 import Message from "./Message";
 import Profile from "./Profile";
 import External from "./External";
+
 import Otplogin from "./Otplogin";
+import Crypto from "./Crypto";
 
 export {
-  Login,
-  SignUp,
-  Dashboard,
-  Deposit,
-  Payment,
-  Transfer,
-  Message,
-  Profile,
-  External,
-  Otplogin,
+	Login,
+	SignUp,
+	Dashboard,
+	Deposit,
+	Payment,
+	Transfer,
+	Message,
+	Profile,
+	External,
+	Otplogin,
+	Crypto,
 };
