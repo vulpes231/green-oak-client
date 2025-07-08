@@ -2,9 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { devurl, getAccessToken, liveurl, sendError } from "../../constants";
 
-// const devurl = "http://localhost:3500";
-// const liveurl = "https://greenoak.onrender.com";
-
 const initialState = {
 	trfLoad: false,
 	trfError: false,
@@ -15,7 +12,7 @@ export const sendMoney = createAsyncThunk(
 	"transfer/sendMoney",
 	async (formData) => {
 		const accessToken = getAccessToken();
-		const url = `${devurl}/transfer`;
+		const url = `${liveurl}/transfer`;
 
 		try {
 			const response = await axios.post(url, formData, {

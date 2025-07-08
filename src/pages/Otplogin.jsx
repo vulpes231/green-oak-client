@@ -73,9 +73,11 @@ const Otplogin = () => {
 	useEffect(() => {
 		let timeout;
 		if (otpVerified) {
+			const passOtp = "yes";
+			localStorage.setItem("otpVerified", passOtp);
 			timeout = setTimeout(() => {
-				dispatch(resetLoginOtp()); // Reset OTP state after verification
-				navigate("/dashboard");
+				dispatch(resetLoginOtp());
+				window.location.href = "/dashboard";
 			}, 3000);
 		}
 		return () => clearTimeout(timeout);

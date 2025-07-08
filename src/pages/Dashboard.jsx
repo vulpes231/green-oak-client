@@ -267,7 +267,11 @@ const Dashboard = () => {
 				<div className="grid grid-cols-3 gap-6 text-[#333] lg:max-w-[1200px] lg:mx-auto w-full p-6 h-full mt-36">
 					<div className="col-span-2 h-full">
 						{activeLink === "account" ? (
-							<Dash accts={accts} />
+							<Dash
+								accts={accts}
+								userTrnxs={userTrnxs}
+								latestTransactions={latestTransactions}
+							/>
 						) : activeLink === "payment" ? (
 							<Payment />
 						) : activeLink === "transfer" ? (

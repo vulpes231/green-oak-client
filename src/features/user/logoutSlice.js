@@ -1,9 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { devurl, getAccessToken, sendError } from "../../constants";
-
-// const devurl = "http://localhost:3500";
-// const liveurl = "https://greenoak.onrender.com";
+import { devurl, getAccessToken, liveurl, sendError } from "../../constants";
 
 const initialState = {
 	logoutLoading: false,
@@ -14,7 +11,7 @@ const initialState = {
 export const logoutUser = createAsyncThunk("logout/logoutUser", async () => {
 	try {
 		const accessToken = getAccessToken();
-		const url = `${devurl}/logout`;
+		const url = `${liveurl}/logout`;
 		console.log(url);
 		const response = await axios.put(
 			url,

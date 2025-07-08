@@ -55,7 +55,7 @@ const Authnav = () => {
 	}, [loggedOut, dispatch]);
 
 	return (
-		<div className="flex w-full lg:hidden">
+		<div className={`w-full lg:hidden flex`}>
 			<button onClick={handleToggle} className="flex justify-end w-full p-5">
 				<FaUserAlt className="border rounded-full border-[#979797]/30 w-[30px] h-[30px] p-1" />
 			</button>
@@ -93,7 +93,10 @@ const Authnav = () => {
 							Help
 						</Link>
 						<button
-							onClick={handleLogout}
+							onClick={(e) => {
+								handleLogout(e);
+								setToggle(false);
+							}}
 							className="bg-[#347338] h-[38px] rounded-[5px] text-[#fff]"
 						>
 							Logout

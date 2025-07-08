@@ -37,9 +37,9 @@ export const addAccount = createAsyncThunk(
 
 export const getExternalAccounts = createAsyncThunk(
 	"external/getExternalAccounts",
-	async (username) => {
+	async () => {
 		const accessToken = getAccessToken();
-		const url = `${devurl}/external`;
+		const url = `${liveurl}/external`;
 		try {
 			const response = await axios.get(url, {
 				headers: {

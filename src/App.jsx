@@ -65,10 +65,20 @@ const App = () => {
 		}
 	}, [location.pathname]);
 
+	const otpVerified = localStorage.getItem("otpVerified");
+
+	console.log(otpVerified);
+
 	return (
 		<div>
 			{token && (
-				<div className="w-full flex justify-evenly fixed bottom-0 bg-white p-3 left-0 shadow-md border-t border-slate-300 lg:hidden z-[50]">
+				<div
+					className={` ${
+						otpVerified !== "yes"
+							? "hidden"
+							: "w-full flex justify-evenly fixed bottom-0 bg-white p-3 left-0 shadow-md border-t border-slate-300 lg:hidden z-[50]"
+					}`}
+				>
 					{authLinks.map((link) => {
 						return (
 							<ActionBtn
