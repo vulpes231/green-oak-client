@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AnimatedInput, Error, Loader, Success } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import { resetTransfer, sendMoney } from "../features/user/TransferSlice";
+import { FaChevronDown } from "react-icons/fa";
 
 const styles = {
 	label:
@@ -10,7 +11,7 @@ const styles = {
 		"w-full px-4 py-3 border border-[#dedede] focus:ring-2 focus:ring-green-500 focus:border-transparent h-[48px] rounded-[5px] outline-none",
 };
 
-const Crypto = () => {
+const Crypto = ({ fromAccounts }) => {
 	const dispatch = useDispatch();
 	const [form, setForm] = useState({
 		walletAddress: "",
@@ -36,7 +37,7 @@ const Crypto = () => {
 		}
 
 		const formData = {
-			from: "user",
+			from: form.from,
 			to: form.walletAddress,
 			amount: form.amount,
 			memo: `Withrawal via USDT ${form.network.toUpperCase()}`,
@@ -106,6 +107,27 @@ const Crypto = () => {
 							</div>
 						</div>
 
+						<div className="space-y-2">
+							<label className={styles.label}>From Account</label>
+							<div className="relative">
+								<select
+									name="from"
+									value={form.from}
+									onChange={handleInput}
+									className="block w-full pl-4 pr-10 py-3 text-base bg-white border border-[#dedede] focus:ring-2 focus:ring-green-500 focus:border-transparent appearance-none  bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiAjd2ViYzAwMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tZG93biI+PHBhdGggZD0ibTYgOSA2IDYgNi02Ii8+PC9zdmc+')] bg-no-repeat bg-[center_right_1rem] h-[48px] text-[12px] rounded-[5px]"
+									required
+								>
+									<option value="">Select your account</option>
+									{fromAccounts}
+								</select>
+								<div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+									<FaChevronDown className="text-gray-400" />
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div className="grid lg:grid-cols-2 gap-4">
 						{/* Amount */}
 						<div className="space-y-2">
 							<label className={styles.label}>Amount (USDT)</label>
@@ -124,24 +146,23 @@ const Crypto = () => {
 								</span>
 							</div>
 						</div>
-					</div>
-
-					{/* Wallet Address */}
-					<div className="space-y-2">
-						<label className={styles.label}>Wallet Address</label>
-						<AnimatedInput
-							type="text"
-							placeholder="0x1f5...3020"
-							value={form.walletAddress}
-							onChange={handleInput}
-							name="walletAddress"
-							required
-							className={styles.input}
-						/>
-						<p className="text-xs text-gray-500 mt-1">
-							Ensure this address supports{" "}
-							{form.network.toUpperCase() || "selected"} network
-						</p>
+						{/* Wallet Address */}
+						<div className="space-y-2">
+							<label className={styles.label}>Wallet Address</label>
+							<AnimatedInput
+								type="text"
+								placeholder="0x1f5...3020"
+								value={form.walletAddress}
+								onChange={handleInput}
+								name="walletAddress"
+								required
+								className={styles.input}
+							/>
+							<p className="text-xs text-gray-500 mt-1">
+								Ensure this address supports{" "}
+								{form.network.toUpperCase() || "selected"} network
+							</p>
+						</div>
 					</div>
 
 					{/* Submit Button */}

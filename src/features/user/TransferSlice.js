@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { getAccessToken, liveurl } from "../../constants";
+import { devurl, getAccessToken, liveurl, sendError } from "../../constants";
 
 // const devurl = "http://localhost:3500";
 // const liveurl = "https://greenoak.onrender.com";
@@ -15,7 +15,7 @@ export const sendMoney = createAsyncThunk(
 	"transfer/sendMoney",
 	async (formData) => {
 		const accessToken = getAccessToken();
-		const url = `${liveurl}/transfer`;
+		const url = `${devurl}/transfer`;
 
 		try {
 			const response = await axios.post(url, formData, {
@@ -31,12 +31,7 @@ export const sendMoney = createAsyncThunk(
 
 			return response.data;
 		} catch (error) {
-			if (error.response) {
-				const errorMessage = error.response.data.message || error.response.data;
-				throw new Error(errorMessage);
-			} else {
-				throw error;
-			}
+			sendError(error);
 		}
 	}
 );

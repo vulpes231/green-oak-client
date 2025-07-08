@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from "react";
-
 import { IoIosArrowForward, IoMdClock } from "react-icons/io";
-import {
-	ActionBtn,
-	Dash,
-	Error,
-	HomeButton,
-	Loader,
-	Success,
-	Transaction,
-} from "../components";
+import { Dash, Error, Loader, Success, Transaction } from "../components";
 import { contentLinks, dashLinks, getAccessToken } from "../constants";
 import { useNavigate } from "react-router-dom";
 import { logo } from "../assets";
@@ -21,10 +12,11 @@ import {
 	getUserAccount,
 	getUserTransactions,
 } from "../features/user/accountSlice";
-import { logoutUser, resetLogout } from "../features/auth/authSlice";
+
 import numeral from "numeral";
 import Authnav from "../components/Authnav";
 import External from "./External";
+import { logoutUser, resetLogout } from "../features/user/logoutSlice";
 
 const Dashboard = () => {
 	const dispatch = useDispatch();
@@ -125,7 +117,7 @@ const Dashboard = () => {
 		}
 	};
 
-	const logoutCurrentUser = (e) => {
+	const handleLogout = (e) => {
 		e.preventDefault();
 		console.log("Clicked logout");
 		dispatch(logoutUser());
@@ -302,7 +294,7 @@ const Dashboard = () => {
 								);
 							})}
 							<button
-								onClick={(e) => logoutCurrentUser(e)}
+								onClick={handleLogout}
 								className="flex justify-between bg-green-700 rounded-[10px] text-white py-2.5 border-b border-slate-300 px-4 capitalize font-normal text-sm cursor-pointer items-center hover:bg-green-800"
 							>
 								Logout
@@ -316,16 +308,12 @@ const Dashboard = () => {
 			{loggedOut && (
 				<Success
 					text="Logged out."
-					// onClose={() => setOtpVerified(false)}
+					onClose={() => dispatch(resetLogout())}
 					duration={3000}
 				/>
 			)}
 			{error && (
-				<Error
-					text={error}
-					// onClose={() => setOtpVerified(false)}
-					duration={3000}
-				/>
+				<Error text={error} onClose={() => setError("")} duration={3000} />
 			)}
 		</section>
 	);

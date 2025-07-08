@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { getAccessToken, liveurl, sendError } from "../../constants";
+import { devurl, getAccessToken, liveurl, sendError } from "../../constants";
 
 // const devurl = "http://localhost:3500";
 // const liveurl = "https://greenoak.onrender.com";
@@ -39,7 +39,7 @@ export const getExternalAccounts = createAsyncThunk(
 	"external/getExternalAccounts",
 	async (username) => {
 		const accessToken = getAccessToken();
-		const url = `${liveurl}/external/${username}`;
+		const url = `${devurl}/external`;
 		try {
 			const response = await axios.get(url, {
 				headers: {

@@ -88,18 +88,18 @@ const Transfer = ({ activeLink }) => {
 		return () => clearTimeout(timer);
 	}, [trfError, dispatch]);
 
-	useEffect(() => {
-		let timer;
-		if (trfSuccess) {
-			setIsSubmitting(false);
-			timer = setTimeout(() => {
-				dispatch(resetTransfer());
-				setForm(initState);
-				window.location.reload();
-			}, 3000);
-		}
-		return () => clearTimeout(timer);
-	}, [trfSuccess, dispatch]);
+	// useEffect(() => {
+	// 	let timer;
+	// 	if (trfSuccess) {
+	// 		setIsSubmitting(false);
+	// 		timer = setTimeout(() => {
+	// 			dispatch(resetTransfer());
+	// 			setForm({ from: "", to: "", amount: "", memo: "", date: new Date() });
+	// 			window.location.reload();
+	// 		}, 3000);
+	// 	}
+	// 	return () => clearTimeout(timer);
+	// }, [trfSuccess, dispatch]);
 
 	useEffect(() => {
 		document.title = "RegentOak | Transfer Money";
@@ -223,7 +223,7 @@ const Transfer = ({ activeLink }) => {
 						</div>
 					</div>
 				) : (
-					<Crypto />
+					<Crypto fromAccounts={fromAccounts} />
 				)}
 			</div>
 			{/* Footer Links */}
@@ -251,11 +251,14 @@ const Transfer = ({ activeLink }) => {
 				</div>
 			</div>
 			{/* Success Modal */}
-			{trfSuccess && (
+			{!showCrypto && trfSuccess && (
 				<Modal
 					icon={<FaCheckCircle className="text-green-500 text-4xl" />}
 					text={`Transfer initiated successfully. Reference No: ${generateRandomHash()}`}
-					onClose={() => dispatch(reset())}
+					onClose={() => {
+						dispatch(resetTransfer());
+						window.location.reload();
+					}}
 				/>
 			)}
 			{/* Error Message */}
