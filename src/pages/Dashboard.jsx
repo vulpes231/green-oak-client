@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 
 import { IoIosArrowForward, IoMdClock } from "react-icons/io";
-import { ActionBtn, Dash, HomeButton, Transaction } from "../components";
+import {
+	ActionBtn,
+	Dash,
+	Error,
+	HomeButton,
+	Loader,
+	Success,
+	Transaction,
+} from "../components";
 import { contentLinks, dashLinks, getAccessToken } from "../constants";
 import { useNavigate } from "react-router-dom";
 import { logo } from "../assets";
@@ -13,7 +21,7 @@ import {
 	getUserAccount,
 	getUserTransactions,
 } from "../features/user/accountSlice";
-import { logoutUser } from "../features/auth/authSlice";
+import { logoutUser, resetLogout } from "../features/auth/authSlice";
 import numeral from "numeral";
 import Authnav from "../components/Authnav";
 import External from "./External";
@@ -29,10 +37,12 @@ const Dashboard = () => {
 		}
 		return "account";
 	});
+	const [error, setError] = useState("");
 
 	const { userAccounts, userTrnxs, getAccountError } = useSelector(
 		(state) => state.account
 	);
+
 	const { logoutLoading, logoutError, loggedOut } = useSelector(
 		(state) => state.logout
 	);
@@ -117,6 +127,7 @@ const Dashboard = () => {
 
 	const logoutCurrentUser = (e) => {
 		e.preventDefault();
+		console.log("Clicked logout");
 		dispatch(logoutUser());
 	};
 
@@ -152,6 +163,36 @@ const Dashboard = () => {
 			dispatch(getUserTransactions());
 		}
 	}, [dispatch, accessToken]);
+
+	useEffect(() => {
+		if (logoutError) {
+			setError(logoutError);
+		}
+	}, [logoutError]);
+
+	useEffect(() => {
+		let timeout;
+		if (error) {
+			timeout = setTimeout(() => {
+				dispatch(resetLogout());
+				setError("");
+			}, 3000);
+		}
+		return () => clearTimeout(timeout);
+	}, [error, dispatch]);
+
+	useEffect(() => {
+		let timeout;
+		if (loggedOut) {
+			timeout = setTimeout(() => {
+				dispatch(resetLogout());
+				sessionStorage.clear();
+				localStorage.clear();
+				window.location.href = "/login";
+			}, 3000);
+		}
+		return () => clearTimeout(timeout);
+	}, [loggedOut, dispatch]);
 
 	useEffect(() => {
 		if (typeof window !== "undefined") {
@@ -271,6 +312,21 @@ const Dashboard = () => {
 					</aside>
 				</div>
 			</div>
+			{logoutLoading && <Loader text={"Logging Out..."} />}
+			{loggedOut && (
+				<Success
+					text="Logged out."
+					// onClose={() => setOtpVerified(false)}
+					duration={3000}
+				/>
+			)}
+			{error && (
+				<Error
+					text={error}
+					// onClose={() => setOtpVerified(false)}
+					duration={3000}
+				/>
+			)}
 		</section>
 	);
 };
