@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { logoutUser, resetLogout } from "../features/user/logoutSlice";
 import Loader from "./Loader";
 import Success from "./Success";
+import Logo from "./Logo";
 
 const Authnav = () => {
 	const dispatch = useDispatch();
@@ -45,7 +46,6 @@ const Authnav = () => {
 		let timeout;
 		if (loggedOut) {
 			timeout = setTimeout(() => {
-				dispatch(resetLogout());
 				sessionStorage.clear();
 				localStorage.clear();
 				window.location.href = "/login";
@@ -56,9 +56,12 @@ const Authnav = () => {
 
 	return (
 		<div className={`w-full lg:hidden flex`}>
-			<button onClick={handleToggle} className="flex justify-end w-full p-5">
-				<FaUserAlt className="border rounded-full border-[#979797]/30 w-[30px] h-[30px] p-1" />
-			</button>
+			<div className="flex items-center justify-between w-full">
+				<Logo />
+				<button onClick={handleToggle} className="flex justify-end w-full p-5">
+					<FaUserAlt className="border rounded-full border-[#979797]/30 w-[30px] h-[30px] p-1" />
+				</button>
+			</div>
 
 			<div>
 				{toggle && (

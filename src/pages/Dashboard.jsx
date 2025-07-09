@@ -51,7 +51,7 @@ const Dashboard = () => {
 
 	const accts = userAccounts
 		? userAccounts.map((acct) => {
-				const isNegative = acct.account_type.toLowerCase().includes("debit");
+				const isNegative = acct.available_bal < 0;
 				const isDebitCard = acct.account_type.toLowerCase().includes("debit");
 
 				return (
@@ -177,7 +177,6 @@ const Dashboard = () => {
 		let timeout;
 		if (loggedOut) {
 			timeout = setTimeout(() => {
-				dispatch(resetLogout());
 				sessionStorage.clear();
 				localStorage.clear();
 				window.location.href = "/login";
@@ -209,7 +208,9 @@ const Dashboard = () => {
 				{/* accounts */}
 				<article className="flex flex-col gap-6 mt-4">
 					<div className="flex justify-between items-center">
-						<h3 className="font-semibold text-xl text-gray-800">My Accounts</h3>
+						<h3 className="font-semibold text-[16px] text-[#505050]">
+							My Accounts
+						</h3>
 					</div>
 
 					{userAccounts ? (
@@ -223,7 +224,7 @@ const Dashboard = () => {
 
 				{/* transactions */}
 				<div className="mt-8">
-					<h3 className="font-semibold text-xl text-gray-800 mb-4">
+					<h3 className="font-semibold text-[16px] text-[#505050] py-3">
 						Recent Activities
 					</h3>
 

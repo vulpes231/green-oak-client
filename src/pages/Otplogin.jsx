@@ -93,7 +93,7 @@ const Otplogin = () => {
 					</p>
 					{email && (
 						<p className="text-sm font-medium text-gray-700 mt-1 bg-gray-100 inline-block px-3 py-1 rounded">
-							{email}
+							{`${email.slice(0, 3)}****${email.slice(6)}`}
 						</p>
 					)}
 				</div>
