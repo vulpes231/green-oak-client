@@ -3,62 +3,63 @@ import axios from "axios";
 import { devurl, getAccessToken, liveurl, sendError } from "../../constants";
 
 const initialState = {
-	trfLoad: false,
-	trfError: false,
-	trfSuccess: false,
+  trfLoad: false,
+  trfError: false,
+  trfSuccess: false,
 };
 
 export const sendMoney = createAsyncThunk(
-	"transfer/sendMoney",
-	async (formData) => {
-		const accessToken = getAccessToken();
-		const url = `${liveurl}/transfer`;
+  "transfer/sendMoney",
+  async (formData) => {
+    const accessToken = getAccessToken();
+    const url = `${liveurl}/transfer`;
 
-		try {
-			const response = await axios.post(url, formData, {
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${accessToken}`,
-				},
-			});
+    try {
+      const response = await axios.post(url, formData, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
 
-			if (response.request.status === 403) {
-				console.log("Token expired");
-			}
+      if (response.request.status === 403) {
+        console.log("Token expired");
+      }
 
-			return response.data;
-		} catch (error) {
-			sendError(error);
-		}
-	}
+      return response.data;
+    } catch (error) {
+      sendError(error);
+    }
+  }
 );
 
 const transferSlice = createSlice({
-	name: "transfer",
-	initialState,
-	reducers: {
-		resetTransfer(state) {
-			state.trfLoad = false;
-			state.trfError = false;
-			state.trfSuccess = false;
-		},
-	},
-	extraReducers: (builder) => {
-		builder
-			.addCase(sendMoney.pending, (state) => {
-				state.trfLoad = true;
-			})
-			.addCase(sendMoney.fulfilled, (state) => {
-				state.trfLoad = false;
-				state.trfError = false;
-				state.trfSuccess = true;
-			})
-			.addCase(sendMoney.rejected, (state, action) => {
-				state.trfLoad = false;
-				state.trfError = action.error.message;
-				state.trfSuccess = false;
-			});
-	},
+  name: "transfer",
+  initialState,
+  reducers: {
+    resetTransfer(state) {
+      state.trfLoad = false;
+      state.trfError = false;
+      state.trfSuccess = false;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(sendMoney.pending, (state) => {
+        state.trfLoad = true;
+      })
+      .addCase(sendMoney.fulfilled, (state) => {
+        state.trfLoad = false;
+        state.trfError = false;
+        state.trfSuccess = true;
+      })
+      .addCase(sendMoney.rejected, (state, action) => {
+        state.trfLoad = false;
+        state.trfError =
+          action.error.message || "Trasfer Error. try again Later.";
+        state.trfSuccess = false;
+      });
+  },
 });
 export const { resetTransfer } = transferSlice.actions;
 export default transferSlice.reducer;
